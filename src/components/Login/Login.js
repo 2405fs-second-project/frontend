@@ -27,9 +27,7 @@ const Login = () => {
               <div>비밀번호 찾기</div>
             </div>
           </div>
-          <Link to="/mypage">
-            <button className="login_button">로그인</button>
-          </Link>
+          <button className="login_button">로그인</button>
           <Link to="/signup1">
             <button className="signup_button">회원가입</button>
           </Link>
