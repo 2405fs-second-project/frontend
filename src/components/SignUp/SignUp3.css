@@ -1,0 +1,63 @@
+.signup_3 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 32px 1050px 0 1050px;
+  color: #5a6561;
+}
+
+.signup_box_3 {
+  width: 480px;
+  height: 434px;
+}
+
+.signup_3 h2 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.info_1,
+.info_2,
+.info_3 {
+  font-size: 0.75rem;
+}
+
+.info_2 {
+  padding: 0;
+}
+
+.button button {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  color: #3e52bb;
+}
+
+.button span {
+  color: #3e52bb;
+  border-bottom: 1px solid #3e52bb;
+  margin-left: 5px;
+}
+
+.member_benefit,
+.go_login {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.go_login {
+  background-color: #333;
+  color: #fff;
+}
+
+.member_benefit {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
