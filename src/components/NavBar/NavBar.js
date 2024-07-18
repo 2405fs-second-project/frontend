@@ -20,7 +20,7 @@ const NavBar = () => {
       </div>
       <div className="navbar_center">
         <ul className="nav_links">
-          <a href="#season_off" className="season_off">
+          <a href="/" className="season_off">
             시즌오프
           </a>
           <Link to="/">남성</Link>
@@ -54,9 +54,11 @@ const NavBar = () => {
           <button className="interesting_btn">
             <img className="interesting_logo" src={interesting} />
           </button>
-          <button className="bag_btn">
-            <img className="bag_logo" src={bag} />
-          </button>
+          <Link to="/cart">
+            <button className="bag_btn">
+              <img className="bag_logo" src={bag} />
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
