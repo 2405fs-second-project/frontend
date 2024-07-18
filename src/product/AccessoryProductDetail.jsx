@@ -33,10 +33,9 @@ const AccessoryProductDetail = () => {
 
   return (
     <>
-      <div className="navbar"></div>
       <div className="wrapper">
         <div className="product_detail">
-          {WomanDetail.map((product, index) => (
+          {AccessoryDetail.map((product, index) => (
             <div className="product" key={index}>
               <img className="product_image" src={product.image} alt="" />
               <div className="product_info">

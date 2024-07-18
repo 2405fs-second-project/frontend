@@ -2,11 +2,6 @@ body {
   font-family: "Pretendard", "Karla", sans-serif;
 }
 
-.navbar {
-  background-color: #333;
-  height: 56px;
-}
-
 .wrapper {
   padding-top: 56px;
   display: flex;

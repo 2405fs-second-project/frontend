@@ -20,12 +20,11 @@ const WomanForm = () => {
   ];
   return (
     <>
-      <div className="navbar"></div>
       <div className="container">
         <div className="products">
           {products.map((products, index) => (
             <div className="product_wrapper" key={index}>
-              <Link to="/womandetailone">
+              <Link to="/womandetail">
                 <img className="product_img" src={products.image} alt="" />
               </Link>
               <div className="product_name">{products.title}</div>

@@ -1,0 +1,118 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  background-color: #363636;
+  color: white;
+
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.navbar_left {
+  display: flex;
+  align-items: center;
+}
+
+.navbar_center {
+  display: flex;
+  align-items: center;
+  margin-left: 220px;
+  flex-grow: 1;
+}
+
+.navbar_right {
+  display: flex;
+  align-items: center;
+}
+
+.nav_links {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav_links a {
+  color: #999;
+  text-decoration: none;
+  font-size: 0.7rem;
+  padding-left: 25px;
+}
+
+.nav_links a:hover {
+  color: white;
+  text-decoration: none;
+  font-size: 0.7rem;
+  padding-left: 25px;
+  transition: all 0.3s ease-in-out;
+}
+
+@keyframes changeRed {
+  from {
+    color: #999;
+  }
+  to {
+    color: red;
+  }
+}
+
+.season_off {
+  animation: changeRed 1s infinite alternate;
+}
+
+.home_logo {
+  width: 150px;
+  cursor: pointer;
+}
+
+.nav_icons {
+  display: flex;
+  gap: 5px;
+}
+
+.navbar_right button {
+  width: 56px;
+  height: 56px;
+  background-color: #363636;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nav_icons button:hover {
+  background-color: #202020;
+}
+
+.korea_logo {
+  width: 20px;
+  height: 20px;
+}
+
+.search_logo {
+  width: 24px;
+  height: 24px;
+}
+
+.radio_logo {
+  width: 40px;
+  height: 29px;
+}
+
+.bell_logo {
+  width: 55px;
+  height: 45px;
+}
+
+.human_logo {
+  width: 55px;
+  height: 45px;
+}
+.interesting_logo {
+  width: 55px;
+  height: 45px;
+}
+.bag_logo {
+  width: 55px;
+  height: 45px;
+}

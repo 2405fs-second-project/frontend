@@ -33,7 +33,6 @@ const MenDetail = () => {
 
   return (
     <>
-      <div className="navbar"></div>
       <div className="wrapper">
         <div className="product_detail">
           {MenDetail.map((product, index) => (
