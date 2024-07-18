@@ -16,6 +16,7 @@ import WomanDetail from "./womanproduct/WomanDetail";
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
+import { CartInProvider } from "./service/CartService";
 
 const App = () => {
   const location = useLocation();
@@ -24,22 +25,24 @@ const App = () => {
   return (
     <>
       <NavBar />
-      <Routes>
-        <Route path="/" element={<MenForm />} />
-        <Route path="/menproduct" element={<MenDetail />} />
-        <Route path="/womanform" element={<WomanForm />} />
-        <Route path="/womandetail" element={<WomanDetail />} />
-        <Route path="/accessoryform" element={<AccessoryProductForm />} />
-        <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
-        <Route path="/mypage" element={<MyPage />} />
-        <Route path="/signup1" element={<Signup1 />} />
-        <Route path="/signup2" element={<Signup2 />} />
-        <Route path="/signup3" element={<Signup3 />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/order" element={<Order />} />
-      </Routes>
+      <CartInProvider>
+        <Routes>
+          <Route path="/" element={<MenForm />} />
+          <Route path="/menproduct" element={<MenDetail />} />
+          <Route path="/womanform" element={<WomanForm />} />
+          <Route path="/womandetail" element={<WomanDetail />} />
+          <Route path="/accessoryform" element={<AccessoryProductForm />} />
+          <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/signup1" element={<Signup1 />} />
+          <Route path="/signup2" element={<Signup2 />} />
+          <Route path="/signup3" element={<Signup3 />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product" element={<Product />} />
+          <Route path="/order" element={<Order />} />
+        </Routes>
+      </CartInProvider>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>
   );

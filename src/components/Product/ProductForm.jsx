@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { ProductContext } from "./service/ProductService.jsx";
+import { ProductContext } from "../../service/ProductService.jsx";
 import "./ProductForm.css";
 
 export const ProductForm = () => {

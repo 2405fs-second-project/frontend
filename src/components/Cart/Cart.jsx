@@ -1,6 +1,8 @@
 import React from "react";
 import { CartList } from "./CartList.jsx";
+
 import "./Cart.css";
+import { CartInProvider } from "../../service/CartService.jsx";
 
 const Cart = () => {
   let cart_page = "홈,장바구니";
