@@ -1,16 +1,16 @@
 .signup_2 {
   width: 448px;
   height: 739px;
-  margin: 32px 1050px 0 1050px;
+  margin: 30px 740px 0 740px;
 }
 
 .signup_2 h3 {
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
   font-weight: 700;
 }
 
 .signup_2 p {
-  font-size: 0.75rem;
+  font-size: 12px; /* 0.75rem을 px로 변환 */
   color: #5a6561;
 }
 
@@ -21,24 +21,24 @@
 }
 
 .signup_info label {
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
   color: #574c4a;
 }
 
 .signup_info input {
   margin: 4px 0 0 0;
-  padding: 0 16px 0 16px;
-  font-size: 0.875rem;
+  padding: 0 16px; /* 오른쪽과 왼쪽 padding을 px로 변환 */
+  font-size: 14px; /* 0.875rem을 px로 변환 */
   height: 46px;
   border: 1px solid rgb(176 184 193);
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
 }
 
 .signup_2 button {
   width: 448px;
   height: 48px;
   margin-top: 24px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px; /* 오른쪽과 왼쪽 padding을 px로 변환 */
   cursor: pointer;
   background-color: #ccc;
   border: none;

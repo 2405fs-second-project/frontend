@@ -1,10 +1,10 @@
 .header {
-  padding-left: 1.5rem;
-  padding-bottom: 1rem;
-  padding-top: 1rem;
+  padding-left: 24px;
+  padding-bottom: 16px;
+  padding-top: 16px;
   display: block;
   border-bottom: 1px solid #e5e8eb;
-  padding: 5px 0 5px 24px;
+  padding: 5px 0 5px 24px; /* 이 부분은 rem 단위를 px로 변환하기 위한 것이 아니므로 유지합니다. */
   margin: 0 -16px 16px 6px;
   color: #5a6587;
   font-size: 15px;
@@ -14,7 +14,7 @@
 main {
   display: flex;
   height: 1261px;
-  margin: 40px 500px 0 500px;
+  margin: 40px 300px 0 300px;
   gap: 2rem;
 }
 
@@ -33,7 +33,7 @@ main {
 .edit_info_header div {
   width: 65px;
   height: 20px;
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
 }
 
 .edit_pw {
@@ -52,11 +52,11 @@ main {
 .info_box h6,
 .faq,
 .logout {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
+  line-height: 20px; /* 1.25rem을 px로 변환 */
   font-weight: 700;
   border: 1px solid #e6e8eb;
-  width: 456.656px;
+  width: 457px; /* 456.656px를 반올림하여 정수로 표현 */
   height: 20px;
   padding: 16px;
   margin: 0;
@@ -72,10 +72,10 @@ main {
   display: flex;
   flex-direction: column;
   border: 1px solid #e6e8eb;
-  width: 456.656px;
+  width: 457px; /* 456.656px를 반올림하여 정수로 표현 */
   height: 20px;
   padding: 16px;
-  font-size: 0.78rem;
+  font-size: 12px; /* 0.78rem을 px로 변환 */
   color: #7b858c;
   cursor: pointer;
 }
@@ -89,7 +89,7 @@ main {
 }
 
 .side_info_box {
-  width: 1013.34px;
+  width: 1013px; /* 1013.34px를 반올림하여 정수로 표현 */
   padding: 5px 0 16px 0;
 }
 
@@ -106,13 +106,13 @@ main {
 }
 
 .side_header_1 {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
+  line-height: 20px; /* 1.25rem을 px로 변환 */
   font-weight: 700;
 }
 
 .side_info_box label {
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
 }
 
 .edit_id {
@@ -121,12 +121,12 @@ main {
 }
 
 .edit_id input {
-  width: 462.672px;
+  width: 463px; /* 462.672px를 반올림하여 정수로 표현 */
   height: 46px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   border: 1px solid #c2c9cf;
-  margin: 4px 0 0 0;
-  border-radius: 0.375rem;
+  margin: 4px 0;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   cursor: default;
   pointer-events: none;
   background-color: #f1f4f6;
@@ -147,12 +147,12 @@ main {
 }
 
 .number_input input {
-  width: 120.891px;
+  width: 121px; /* 120.891px를 반올림하여 정수로 표현 */
   height: 30px;
-  padding: 8px 16px 8px 16px;
+  padding: 8px 16px;
   border: 1px solid #c2c9cf;
-  margin: 0 0 0 0;
-  border-radius: 0.375rem;
+  margin: 0;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   cursor: default;
   pointer-events: none;
   background-color: #f1f4f6;
@@ -161,9 +161,9 @@ main {
 .re_authenticate button {
   background-color: #ffffff;
   border: 1px solid #6f7379;
-  border-radius: 0.375rem;
-  padding: 0 16px 0 16px;
-  width: 492.531px;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  padding: 0 16px;
+  width: 493px; /* 492.531px를 반올림하여 정수로 표현 */
   color: #888d95;
   height: 46px;
   font-weight: 400;
@@ -172,7 +172,7 @@ main {
 
 .re_authenticate p {
   column-gap: 0.25rem;
-  font-size: 0.75rem;
+  font-size: 12px; /* 0.75rem을 px로 변환 */
   margin-bottom: 20px;
 }
 
@@ -187,7 +187,7 @@ main {
 .edit_info_delivery div {
   width: 65px;
   height: 20px;
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
 }
 
 .address_button {
@@ -197,10 +197,10 @@ main {
 .existing_address {
   width: 116px;
   height: 46px;
-  padding: 0 20px 0 20px;
-  border-radius: 0.375rem;
+  padding: 0 20px;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
   background-color: #ffffff;
   cursor: pointer;
 }
@@ -209,10 +209,10 @@ main {
   margin-left: 16px;
   width: 116px;
   height: 46px;
-  padding: 0 20px 0 20px;
-  border-radius: 0.375rem;
+  padding: 0 20px;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
-  font-size: 0.875rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
   background-color: #ffffff;
   cursor: pointer;
 }
@@ -237,9 +237,9 @@ main {
 .delivery_info input {
   width: 280px;
   height: 46px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   margin-top: 4px;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
 }
 
@@ -260,10 +260,10 @@ main {
   width: 60px;
   height: 32px;
   padding: 8px 16px;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
-  font-size: 0.9375rem;
-  line-height: 1.375rem;
+  font-size: 15px; /* 0.9375rem을 px로 변환 */
+  line-height: 22px; /* 1.375rem을 px로 변환 */
 }
 
 .address_input {
@@ -275,8 +275,8 @@ main {
 .address_input input {
   width: 490px;
   height: 46px;
-  padding: 0 16px 0 16px;
-  border-radius: 0.375rem;
+  padding: 0 16px;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
   cursor: default;
   pointer-events: none;
@@ -286,7 +286,7 @@ main {
 .address_input button {
   width: 105px;
   height: 48px;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: none;
   cursor: pointer;
 }
@@ -298,9 +298,9 @@ main {
 .detail_address input {
   width: 610px;
   height: 46px;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
 }
 
 .delivery_request {
@@ -313,9 +313,9 @@ main {
   margin-top: 5px;
   width: 610px;
   height: 46px;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   border: 1px solid #bcc3cb;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
 }
 
 .register_address {
@@ -328,7 +328,7 @@ main {
   background-color: #191f28;
   color: white;
   border: 1px solid #191f28;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   margin-bottom: 16px;
 }
 
@@ -342,6 +342,6 @@ main {
   background-color: #ffffff;
   color: #20252e;
   border: 1px solid #898c91;
-  border-radius: 0.375rem;
+  border-radius: 6px; /* 0.375rem을 px로 변환 */
   margin-top: 10px;
 }

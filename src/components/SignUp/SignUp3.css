@@ -1,19 +1,19 @@
 .signup_3 {
   width: 480px;
   height: 434px;
-  margin: 32px 1050px 0 1050px;
+  margin: 32px 740px 0 740px;
   color: #5a6561;
 }
 
 .signup_3 h2 {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 14px; /* 0.875rem을 px로 변환 */
+  line-height: 20px; /* 1.25rem을 px로 변환 */
 }
 
 .info_1,
 .info_2,
 .info_3 {
-  font-size: 0.75rem;
+  font-size: 12px; /* 0.75rem을 px로 변환 */
 }
 
 .info_2 {
