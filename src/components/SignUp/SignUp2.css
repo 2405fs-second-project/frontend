@@ -1,7 +1,12 @@
 .signup_2 {
+  display: flex;
+  justify-content: center;
+  margin: 32px 1050px 0 1050px;
+}
+
+.signup_box_2 {
   width: 448px;
   height: 739px;
-  margin: 32px 1050px 0 1050px;
 }
 
 .signup_2 h3 {
@@ -27,7 +32,7 @@
 
 .signup_info input {
   margin: 4px 0 0 0;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   font-size: 0.875rem;
   height: 46px;
   border: 1px solid rgb(176 184 193);
@@ -38,7 +43,7 @@
   width: 448px;
   height: 48px;
   margin-top: 24px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   cursor: pointer;
   background-color: #ccc;
   border: none;
@@ -50,4 +55,10 @@
 .signup_2 button.active {
   background-color: #000;
   color: #fff;
+}
+
+.error {
+  color: red;
+  font-size: 0.75rem;
+  margin-top: 4px;
 }

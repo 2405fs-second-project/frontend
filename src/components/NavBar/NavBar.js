@@ -20,20 +20,16 @@ const NavBar = () => {
       </div>
       <div className="navbar_center">
         <ul className="nav_links">
-          <a href="#season_off" className="season_off">
+          <a href="/" className="season_off">
             시즌오프
           </a>
-          <a href="#men">남성</a>
-          <Link to="/womanform">
-            <a href="#women">여성</a>
-          </Link>
-          <Link to="/accessoryform">
-            <a href="#accessories">악세서리</a>
-          </Link>
-          <a href="#lookbook">룩북</a>
-          <a href="#article">기사</a>
-          <a href="#store">매장</a>
-          <a href="#brand">브랜드</a>
+          <Link to="/">남성</Link>
+          <Link to="/womanform">여성</Link>
+          <Link to="/accessoryform">악세서리</Link>
+          <Link to="/">룩북</Link>
+          <Link to="/">기사</Link>
+          <Link to="/">매장</Link>
+          <Link to="/">브랜드</Link>
         </ul>
       </div>
       <div className="navbar_right">

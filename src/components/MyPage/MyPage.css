@@ -1,44 +1,48 @@
+.my_page {
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
-  padding-left: 1.5rem;
-  padding-bottom: 1rem;
-  padding-top: 1rem;
-  display: block;
+  display: flex;
+  justify-content: start;
+  padding-left: 24px;
   border-bottom: 1px solid #e5e8eb;
-  padding: 5px 0 5px 24px;
-  margin: 0 -16px 16px 6px;
   color: #5a6587;
   font-size: 15px;
   font-weight: bolder;
 }
 
+.my_page_all {
+  display: flex;
+  justify-content: center;
+}
+
 main {
   display: flex;
-  height: 1261px;
-  margin: 40px 500px 0 500px;
-  gap: 2rem;
+  width: 1350px;
+  gap: 32px;
 }
 
 .info_box {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  max-width: 480px;
 }
 
 .edit_info_header {
   display: flex;
-  width: 1030px;
   justify-content: space-between;
   margin-bottom: 20px;
+  width: 1013px;
 }
 
 .edit_info_header div {
-  width: 65px;
-  height: 20px;
   font-size: 0.875rem;
 }
 
 .edit_pw {
-  width: 100px;
-  height: 20px;
   border: none;
   background-color: #ffffff;
 }
@@ -56,10 +60,9 @@ main {
   line-height: 1.25rem;
   font-weight: 700;
   border: 1px solid #e6e8eb;
-  width: 456.656px;
-  height: 20px;
   padding: 16px;
   margin: 0;
+  height: 20px;
 }
 
 .faq,
@@ -72,10 +75,9 @@ main {
   display: flex;
   flex-direction: column;
   border: 1px solid #e6e8eb;
-  width: 456.656px;
-  height: 20px;
   padding: 16px;
   font-size: 0.78rem;
+  height: 20px;
   color: #7b858c;
   cursor: pointer;
 }
@@ -89,20 +91,22 @@ main {
 }
 
 .side_info_box {
-  width: 1013.34px;
+  flex: 2;
   padding: 5px 0 16px 0;
+  max-width: 720px;
+  min-width: 0;
 }
 
 .side_header {
   display: flex;
   justify-content: space-between;
+  width: 1013px;
 }
 
 .side_info_box_line {
   border-bottom: 1px solid #e5e8eb;
-  width: 1020px;
-  height: 1px;
   margin: 10px 0;
+  width: 1013px;
 }
 
 .side_header_1 {
@@ -118,12 +122,13 @@ main {
 .edit_id {
   display: flex;
   gap: 20px;
+  width: 1013px;
 }
 
 .edit_id input {
-  width: 462.672px;
   height: 46px;
-  padding: 0 16px 0 16px;
+  width: 463px;
+  padding: 0 16px;
   border: 1px solid #c2c9cf;
   margin: 4px 0 0 0;
   border-radius: 0.375rem;
@@ -143,13 +148,15 @@ main {
 
 .number_input {
   display: flex;
+  width: 120px;
   gap: 15px;
 }
 
 .number_input input {
-  width: 120.891px;
+  width: 120px;
+  flex: 1;
   height: 30px;
-  padding: 8px 16px 8px 16px;
+  padding: 8px 16px;
   border: 1px solid #c2c9cf;
   margin: 0 0 0 0;
   border-radius: 0.375rem;
@@ -162,8 +169,8 @@ main {
   background-color: #ffffff;
   border: 1px solid #6f7379;
   border-radius: 0.375rem;
-  padding: 0 16px 0 16px;
-  width: 492.531px;
+  padding: 0 16px;
+  width: 490px;
   color: #888d95;
   height: 46px;
   font-weight: 400;
@@ -171,22 +178,20 @@ main {
 }
 
 .re_authenticate p {
-  column-gap: 0.25rem;
+  column-gap: 4px;
   font-size: 0.75rem;
   margin-bottom: 20px;
 }
 
 .edit_info_delivery {
   display: flex;
-  width: 1030px;
   justify-content: space-between;
+  width: 1013px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
 
 .edit_info_delivery div {
-  width: 65px;
-  height: 20px;
   font-size: 0.875rem;
 }
 
@@ -194,10 +199,11 @@ main {
   display: flex;
 }
 
-.existing_address {
+.existing_address,
+.new_address {
   width: 116px;
   height: 46px;
-  padding: 0 20px 0 20px;
+  padding: 0 20px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
   font-size: 0.875rem;
@@ -207,14 +213,6 @@ main {
 
 .new_address {
   margin-left: 16px;
-  width: 116px;
-  height: 46px;
-  padding: 0 20px 0 20px;
-  border-radius: 0.375rem;
-  border: 1px solid #bcc3cb;
-  font-size: 0.875rem;
-  background-color: #ffffff;
-  cursor: pointer;
 }
 
 .existing_address.active,
@@ -227,6 +225,7 @@ main {
 .delivery_info {
   display: flex;
   margin-top: 20px;
+  width: 720px;
 }
 
 .delivery_info div {
@@ -237,7 +236,7 @@ main {
 .delivery_info input {
   width: 280px;
   height: 46px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   margin-top: 4px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
@@ -253,17 +252,19 @@ main {
 
 .delivery_number {
   display: flex;
+  width: 60px;
   gap: 15px;
 }
 
 .delivery_number input {
-  width: 60px;
+  flex: 1;
   height: 32px;
   padding: 8px 16px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
   font-size: 0.9375rem;
   line-height: 1.375rem;
+  width: 60px;
 }
 
 .address_input {
@@ -272,10 +273,14 @@ main {
   margin-top: 4px;
 }
 
+.input_address {
+  margin-top: 16px;
+}
+
 .address_input input {
   width: 490px;
   height: 46px;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
   cursor: default;
@@ -300,7 +305,7 @@ main {
   height: 46px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
 }
 
 .delivery_request {
@@ -311,11 +316,11 @@ main {
 
 .delivery_request input {
   margin-top: 5px;
-  width: 610px;
   height: 46px;
   border-radius: 0.375rem;
   border: 1px solid #bcc3cb;
-  padding: 0 16px 0 16px;
+  padding: 0 16px;
+  width: 610px;
 }
 
 .register_address {
@@ -344,4 +349,17 @@ main {
   border: 1px solid #898c91;
   border-radius: 0.375rem;
   margin-top: 10px;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  main {
+    margin: 40px 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    margin: 40px 128px;
+  }
 }
