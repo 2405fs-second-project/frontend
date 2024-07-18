@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/CartPrice.css";
+import "./CartPrice.css";
 
 export const CartPrice = () => {
   return (
