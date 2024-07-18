@@ -58,9 +58,11 @@ const NavBar = () => {
           <button className="interesting_btn">
             <img className="interesting_logo" src={interesting} />
           </button>
-          <button className="bag_btn">
-            <img className="bag_logo" src={bag} />
-          </button>
+          <Link to="/cart">
+            <button className="bag_btn">
+              <img className="bag_logo" src={bag} />
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

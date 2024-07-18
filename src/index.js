@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import AppWithRouter from "./App"; // App 대신 AppWithRouter를 가져옵니다
+import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
