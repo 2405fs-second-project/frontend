@@ -11,16 +11,28 @@ import Signup1 from "./components/SignUp/SignUp1";
 import Signup2 from "./components/SignUp/SignUp2";
 import Signup3 from "./components/SignUp/SignUp3";
 import Login from "./components/Login/Login";
-import Footer from "./components/NavBar/Footer"; // 수정된 경로
+import Footer from "./components/NavBar/Footer";
+import AccessoryProductForm from "./product/AccessoryProductForm";
+import AccessoryProductDetail from "./product/AccessoryProductDetail";
+import MenDetail from "./menproduct/MenDetail";
+import MenForm from "./menproduct/MenForm";
+import WomanForm from "./womanproduct/WomanForm";
+import WomanDetail from "./womanproduct/WomanDetail";
 
 const App = () => {
   const location = useLocation();
-  const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"]; // 푸터를 숨기고 싶은 경로들
+  const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
 
   return (
     <>
       <NavBar />
       <Routes>
+        <Route path="/" element={<MenForm />} />
+        <Route path="/menproduct" element={<MenDetail />} />
+        <Route path="/womanform" element={<WomanForm />} />
+        <Route path="/womandetail" element={<WomanDetail />} />
+        <Route path="/accessoryform" element={<AccessoryProductForm />} />
+        <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />

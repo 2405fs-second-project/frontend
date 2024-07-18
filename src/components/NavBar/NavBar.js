@@ -24,8 +24,12 @@ const NavBar = () => {
             시즌오프
           </a>
           <a href="#men">남성</a>
-          <a href="#women">여성</a>
-          <a href="#accessories">악세서리</a>
+          <Link to="/womanform">
+            <a href="#women">여성</a>
+          </Link>
+          <Link to="/accessoryform">
+            <a href="#accessories">악세서리</a>
+          </Link>
           <a href="#lookbook">룩북</a>
           <a href="#article">기사</a>
           <a href="#store">매장</a>
