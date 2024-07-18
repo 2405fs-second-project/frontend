@@ -37,6 +37,9 @@
   padding-top: 30px;
   padding-bottom: 30px;
   font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .amount {
@@ -91,6 +94,9 @@ button.cancel_all {
 
 .pay_member {
   margin-top: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .pay_member_no {
   all: unset;
@@ -103,6 +109,7 @@ button.cancel_all {
   font-size: 14px;
   margin-right: 20px;
   cursor: pointer;
+  text-align: center;
 }
 .pay_member_yes {
   all: unset;
@@ -115,8 +122,13 @@ button.cancel_all {
   font-size: 14px;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 }
-
+.pay_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .pay_continue {
   all: unset;
   font-size: 13px;

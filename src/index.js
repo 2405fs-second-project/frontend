@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import AppWithRouter from "./App"; // App 대신 AppWithRouter를 가져옵니다
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <AppWithRouter />
   </React.StrictMode>
 );
 

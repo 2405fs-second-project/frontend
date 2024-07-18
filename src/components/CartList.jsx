@@ -60,9 +60,11 @@ export const CartList = () => {
             </>
           )}
         </div>
-        <button className="pay_continue" onClick={handleHome}>
-          계속 쇼핑하기
-        </button>
+        <div className="pay_btn">
+          <button className="pay_continue" onClick={handleHome}>
+            계속 쇼핑하기
+          </button>
+        </div>
       </div>
     </div>
   );
