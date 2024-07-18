@@ -1,5 +1,5 @@
 import React from "react";
-import { ProductProvider } from "./service/ProductService.jsx";
+import { ProductProvider } from "../../service/ProductService.jsx";
 import { ProductForm } from "./ProductForm";
 import { ProductList } from "./ProductList";
 import "./Product.css";
