@@ -1,8 +1,15 @@
 .signup_3 {
-  width: 480px;
-  height: 434px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 32px 1050px 0 1050px;
   color: #5a6561;
+}
+
+.signup_box_3 {
+  width: 480px;
+  height: 434px;
 }
 
 .signup_3 h2 {

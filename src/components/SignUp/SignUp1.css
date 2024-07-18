@@ -1,27 +1,26 @@
 .signup_1 {
   display: flex;
   justify-content: center;
-  width: 448px;
-  height: 635px;
-  margin: 32px 1050px 0 1050px;
 }
 
-.signup_box {
+.signup_box_1 {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 2rem;
-  max-width: 600px;
+  width: 448px;
+  height: 635px;
   background-color: #fff;
 }
 
-.signup_box h2 {
+.signup_box_1 h2 {
   width: 448px;
   height: 20px;
 }
 
-.signup_box h2,
-.signup_box h3 {
+.signup_box_1 h2,
+.signup_box_1 h3 {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
