@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
-import Home from "./components/Home/Home";
 import Signup1 from "./components/SignUp/SignUp1";
 import Signup2 from "./components/SignUp/SignUp2";
 import Signup3 from "./components/SignUp/SignUp3";
@@ -23,7 +22,6 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/mypage" element={<MyPage />} />
-        <Route path="/" element={<Home />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/signup3" element={<Signup3 />} />
