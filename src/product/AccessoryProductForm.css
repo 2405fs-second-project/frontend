@@ -1,0 +1,43 @@
+body {
+  font-family: "Pretendard", "Karla", sans-serif;
+}
+
+.navbar {
+  background-color: #333;
+  height: 56px;
+}
+
+.container {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.products {
+  padding-top: 40px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.product_img {
+  width: 25%;
+}
+
+.product_name,
+.product_color_type {
+  color: #333d4b;
+  font-size: 15px;
+  padding-bottom: 5px;
+  font-weight: bolder;
+}
+
+.product_normal_price {
+  padding-bottom: 3px;
+  font-size: 15px;
+}
+
+.products:last-child {
+  margin-bottom: 100px;
+}
