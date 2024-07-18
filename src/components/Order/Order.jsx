@@ -1,9 +1,9 @@
 import React from "react";
-import "../pages/Order.css";
+import "./Order.css";
 
 function Order() {
   return (
-    <main>
+    <div>
       <div className="order_info">
         <h6 className="info_title">주문자 정보</h6>
         <div className="person_info">
@@ -123,7 +123,7 @@ function Order() {
         </div>
         <div className="order_products"></div>
       </div>
-    </main>
+    </div>
   );
 }
 
