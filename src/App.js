@@ -28,7 +28,7 @@ const App = () => {
       <CartInProvider>
         <Routes>
           <Route path="/" element={<MenForm />} />
-          <Route path="/menproduct" element={<MenDetail />} />
+          <Route path="/menproduct/:id" element={<MenDetail />} />
           <Route path="/womanform" element={<WomanForm />} />
           <Route path="/womandetail" element={<WomanDetail />} />
           <Route path="/accessoryform" element={<AccessoryProductForm />} />
