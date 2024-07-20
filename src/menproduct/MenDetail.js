@@ -1,12 +1,11 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./MenDetail.css";
-import { CartInContext } from "../service/CartService";
 import { useParams } from "react-router-dom";
 
 const MenDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
-  const { addToCart } = useContext(CartInContext);
+
   const { id } = useParams();
   const [productdetail, setProductdetail] = useState(null);
   useEffect(() => {

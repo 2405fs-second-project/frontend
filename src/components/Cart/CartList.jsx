@@ -1,17 +1,47 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CartList.css";
 import { CartPrice } from "./CartPrice";
-import { CartItem } from "./CartItem";
-import { CartInContext } from "../../service/CartService";
+import { CartItem } from "../Cart/CartItem";
 
 export const CartList = () => {
-  const { cartItems, setCartItems } = useContext(CartInContext);
-  console.log("Current cartItems:", cartItems);
+  const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState(new Set());
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [itemQuantities, setItemQuantities] = useState(cartItems.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {}));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+
+  const fetchCartItems = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/cart/items?userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch cart items");
+      }
+      const data = await response.json();
+      return data; // 데이터 반환
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+      return []; // 에러 발생 시 빈 배열 반환
+    }
+  };
+
+  useEffect(() => {
+    const loadCartItems = async () => {
+      const userId = 1; // 예시 userId
+      const result = await fetchCartItems(userId);
+      setCartItems(result);
+      setItemQuantities(result.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {}));
+    };
+
+    loadCartItems();
+  }, []);
+
   const handleQuantityChange = (itemId, value) => {
     setItemQuantities((prevQuantities) => ({
       ...prevQuantities,
@@ -19,40 +49,42 @@ export const CartList = () => {
     }));
   };
 
-  // 가격 총합 계산 함수
-  const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + Number(item.price) * (itemQuantities[item.id] || 1), 0);
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
   };
+
+  const handleDeleteSelected = () => {
+    setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
+    setSelectedItems(new Set());
+  };
+
+  const calculateTotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
+  };
+
   const handleNavigation = (path) => {
     navigate(path);
   };
-  const handleDeleteSelected = () => {
-    // 현재 선택된 항목 확인
-    console.log("Selected Items to Delete:", selectedItems);
-
-    // cartItems에서 선택된 항목 제거
-    setCartItems((prevItems) => {
-      const newItems = prevItems.filter((item) => !selectedItems.has(item.id));
-      console.log("New Cart Items:", newItems); // 새 항목 확인
-      return newItems;
-    });
-
-    // 삭제 후 선택된 항목 초기화
-    setSelectedItems(new Set());
-  };
-  let count_label = "장바구니";
 
   return (
     <div className="cart_form">
       <div className="count">
-        <h6 className="count_label">{count_label}</h6>
+        <h6 className="count_label">장바구니</h6>
         <div className="count_num">{cartItems.length}</div>
       </div>
       <div className="select">
         <div className="select_all">
           <div className="select_all_box">
-            <input type="checkbox" id="checkall"></input>
-            <label for="checkall">전체선택</label>
+            <input type="checkbox" id="checkall" />
+            <label htmlFor="checkall">전체선택</label>
           </div>
         </div>
         <button className="cancel_all" onClick={handleDeleteSelected}>
@@ -66,6 +98,8 @@ export const CartList = () => {
             item={item}
             quantity={itemQuantities[item.id]}
             onQuantityChange={handleQuantityChange}
+            isSelected={selectedItems.has(item.id)}
+            onCheckboxChange={handleCheckboxChange}
           />
         ))}
       </div>
