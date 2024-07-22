@@ -44,11 +44,16 @@ const SignUp2 = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:8080/api/register", formData);
+      await axios.post("http://localhost:8081/api/register", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       setMessage("User registered successfully");
       navigate("/login");
     } catch (error) {
-      setMessage("Error registering user");
+      const errorMessage = error.response?.data || "Error registering user";
+      setMessage(errorMessage);
     }
   };
 
