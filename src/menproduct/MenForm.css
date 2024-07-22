@@ -1,7 +1,12 @@
 body {
   font-family: "Pretendard", "Karla", sans-serif;
 }
-
+.product_wrapper {
+  width: 361px;
+  height: 662px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+}
 .container {
   padding: 0 20px;
   display: flex;
@@ -16,8 +21,9 @@ body {
   flex-direction: row;
 }
 
-.product_img {
-  width: 25%;
+.product_men_img {
+  width: 361px;
+  height: 542px;
 }
 
 .product_name,

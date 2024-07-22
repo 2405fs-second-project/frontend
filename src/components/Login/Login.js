@@ -19,7 +19,7 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/login", { email, password });
+      await axios.post("http://localhost:8081/api/login", { email, password });
       setMessage("로그인 성공");
       navigate("/home");
     } catch (error) {
