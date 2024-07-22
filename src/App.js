@@ -1,5 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import axios from "axios";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -20,6 +26,12 @@ import Order from "./components/Order/Order";
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
+
+  const BASE_URL = "http//localhost:8081/api/users";
+
+  const api = axios.create({
+    baseURL: BASE_URL,
+  });
 
   return (
     <>
