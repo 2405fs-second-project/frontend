@@ -35,7 +35,7 @@ const MenForm = () => {
               </Link>
               <div className="product_name">{products.name}</div>
               <div className="product_color_type">{products.color}</div>
-              <div className="product_normal_price">{formatNumber(products.price)}</div>
+              <div className="product_normal_price">₩{formatNumber(products.price)}</div>
             </div>
           ))}
         </div>

@@ -10,7 +10,7 @@ import human from "../../assets/Human.png";
 import interesting from "../../assets/Interesting.png";
 import bag from "../../assets/Bag.png";
 
-const NavBar = () => {
+const NavBar = ({ cartItems }) => {
   return (
     <nav className="navbar">
       <div className="navbar_left">
