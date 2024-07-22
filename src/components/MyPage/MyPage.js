@@ -373,9 +373,6 @@ const MyPage = () => {
                 <form onSubmit={handleUpdateShip}>
                   <div className="edit_info_header">
                     <div>[ 나의 정보 ]</div>
-                    {/* <button className="edit_pw">
-                      <span>비밀번호 변경</span>
-                    </button> */}
                   </div>
                   <div className="myInfo">
                     <div className="myInfo-detail">
@@ -399,9 +396,6 @@ const MyPage = () => {
                       <div>
                         <div className="edit_info_delivery">
                           <div>[ 배송 정보 ]</div>
-                          {/* <button className="edit_pw">
-                            <span>배송지 목록</span>
-                          </button> */}
                         </div>
                         <div className="address_button"></div>
                       </div>

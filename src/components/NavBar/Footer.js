@@ -5,6 +5,7 @@ import facebook from "../../assets/Facebook.png";
 import youTube from "../../assets/YouTube.png";
 import pinterest from "../../assets/Pinterest.png";
 import soundCloud from "../../assets/SoundCloud.png";
+import axios from "axios";
 
 const Footer = () => {
   return (

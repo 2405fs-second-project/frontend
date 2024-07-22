@@ -9,6 +9,7 @@ import bell from "../../assets/Bell.png";
 import human from "../../assets/Human.png";
 import interesting from "../../assets/Interesting.png";
 import bag from "../../assets/Bag.png";
+import axios from "axios";
 
 const NavBar = () => {
   return (

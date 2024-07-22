@@ -1,6 +1,7 @@
 import React from "react";
 import "./SignUp3.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Signup_3 = () => {
   return (
