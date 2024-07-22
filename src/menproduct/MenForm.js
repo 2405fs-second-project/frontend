@@ -11,7 +11,7 @@ const MenForm = () => {
     // 서버에서 제품 목록을 가져오는 함수
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/home");
+        const response = await fetch("http://localhost:8081/home");
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }

@@ -76,7 +76,7 @@ const MenDetail = () => {
               <br />
               {productdetail.code}
             </div>
-            <span className="product_price">{formatNumber(productdetail.price)}</span>
+            <span className="product_price">₩ {formatNumber(productdetail.price)}</span>
             <div className="product_guide">
               사용자 가이드 <br />
               상품 정보 고시

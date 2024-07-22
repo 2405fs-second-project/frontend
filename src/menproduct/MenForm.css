@@ -5,7 +5,7 @@ body {
   width: 361px;
   height: 662px;
   margin-bottom: 20px;
-  margin-right: 20px;
+  margin-right: 0.5rem;
 }
 .container {
   padding: 0 20px;
@@ -17,6 +17,7 @@ body {
 .products {
   padding-top: 40px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   flex-direction: row;
 }

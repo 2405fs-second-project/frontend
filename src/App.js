@@ -4,7 +4,6 @@ import {
   Route,
   Routes,
   useLocation,
-
 } from "react-router-dom";
 import axios from "axios";
 
@@ -27,14 +26,11 @@ import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
 
-
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
 
-
   const BASE_URL = "http//localhost:8081/api/users";
-
 
   const api = axios.create({
     baseURL: BASE_URL,
