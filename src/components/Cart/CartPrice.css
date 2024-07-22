@@ -12,10 +12,12 @@
 }
 
 .font_bold {
+  text-align: right;
   font-size: 14px;
   font-weight: 700;
 }
 .font_bold_total {
+  text-align: right;
   font-size: 18px;
   font-weight: 700;
   padding-top: 16px;
