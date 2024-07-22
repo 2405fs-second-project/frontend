@@ -71,7 +71,7 @@ export const ProductProvider = ({ children }) => {
       console.log(`${key}: ${value}`);
     }
 
-    fetch("http://localhost:8080/products/post", {
+    fetch("http://localhost:8081/products/post", {
       method: "POST",
       body: formData,
     })
