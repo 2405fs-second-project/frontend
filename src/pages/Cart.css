@@ -1,0 +1,25 @@
+main {
+  margin: 0px;
+  display: block;
+}
+
+.cart_page {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  height: 57px;
+  border-bottom: 1px solid rgb(229, 232, 235);
+}
+@media (min-width: 768px) {
+  .cart_page {
+    padding-left: 1.5rem;
+  }
+}
+.cart_form {
+  max-width: 1280px;
+  box-sizing: border-box;
+  display: block;
+  unicode-bidi: isolate;
+  margin-left: auto;
+  margin-right: auto;
+}

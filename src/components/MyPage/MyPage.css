@@ -1,44 +1,81 @@
+.my_page {
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
+  display: flex;
+  justify-content: start;
   padding-left: 24px;
-  padding-bottom: 16px;
-  padding-top: 16px;
-  display: block;
   border-bottom: 1px solid #e5e8eb;
-  padding: 5px 0 5px 24px; /* 이 부분은 rem 단위를 px로 변환하기 위한 것이 아니므로 유지합니다. */
-  margin: 0 -16px 16px 6px;
   color: #5a6587;
   font-size: 15px;
   font-weight: bolder;
 }
 
+.my_page_all {
+  display: flex;
+  justify-content: center;
+}
+
 main {
   display: flex;
-  height: 1261px;
-  margin: 40px 300px 0 300px;
-  gap: 2rem;
+  width: 1350px;
+  padding-top: 30px;
+  gap: 32px;
 }
 
 .info_box {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  max-width: 480px;
+}
+
+.myinfo-img-register {
+  display: flex;
+}
+
+.myinfo-img {
+  width: 160px;
+  height: 160px;
+}
+
+.info-upload {
+  margin-top: 129px;
+  margin-left: 10px;
+  width: 100px;
+  height: 30px;
+  background-color: #ffffff;
+  border: 1px solid #898c91;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background: rgb(77, 77, 77);
+    color: #fff;
+  }
+}
+
+#file {
+  display: none;
 }
 
 .edit_info_header {
+  font-weight: bolder;
   display: flex;
-  width: 1030px;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  width: 1013px;
 }
 
 .edit_info_header div {
-  width: 65px;
-  height: 20px;
-  font-size: 14px; /* 0.875rem을 px로 변환 */
+  font-size: 18px;
 }
 
 .edit_pw {
-  width: 100px;
-  height: 20px;
   border: none;
   background-color: #ffffff;
 }
@@ -52,14 +89,13 @@ main {
 .info_box h6,
 .faq,
 .logout {
-  font-size: 14px; /* 0.875rem을 px로 변환 */
-  line-height: 20px; /* 1.25rem을 px로 변환 */
+  font-size: 15px;
+  line-height: 20px;
   font-weight: 700;
   border: 1px solid #e6e8eb;
-  width: 457px; /* 456.656px를 반올림하여 정수로 표현 */
-  height: 20px;
   padding: 16px;
   margin: 0;
+  height: 20px;
 }
 
 .faq,
@@ -72,10 +108,9 @@ main {
   display: flex;
   flex-direction: column;
   border: 1px solid #e6e8eb;
-  width: 457px; /* 456.656px를 반올림하여 정수로 표현 */
-  height: 20px;
   padding: 16px;
-  font-size: 12px; /* 0.78rem을 px로 변환 */
+  font-size: 12.48px;
+  height: 20px;
   color: #7b858c;
   cursor: pointer;
 }
@@ -89,44 +124,104 @@ main {
 }
 
 .side_info_box {
-  width: 1013px; /* 1013.34px를 반올림하여 정수로 표현 */
+  flex: 2;
   padding: 5px 0 16px 0;
+  max-width: 720px;
+  min-width: 0;
 }
 
 .side_header {
   display: flex;
   justify-content: space-between;
+  width: 1013px;
 }
 
 .side_info_box_line {
   border-bottom: 1px solid #e5e8eb;
-  width: 1020px;
-  height: 1px;
   margin: 10px 0;
+  width: 1013px;
 }
 
 .side_header_1 {
-  font-size: 14px; /* 0.875rem을 px로 변환 */
-  line-height: 20px; /* 1.25rem을 px로 변환 */
+  margin-left: 10px;
+  font-size: 20px;
+  line-height: 30px;
   font-weight: 700;
 }
 
 .side_info_box label {
-  font-size: 14px; /* 0.875rem을 px로 변환 */
+  font-size: 14px;
+}
+
+.product_img {
+  border: 1px solid #ddd;
+  height: 100px;
+}
+
+.order_group {
+  margin-top: 20px;
+  padding-left: 10px;
+  border-radius: 5px;
+}
+
+.order_group h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.order_item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px; /* 항목 간의 간격 */
+}
+
+.order_img {
+  position: relative;
+  border: 1px solid #6f7379;
+  width: 100px;
+  height: auto; /* 비율을 유지하며 높이를 자동으로 설정 */
+  margin-right: 22px; /* 이미지와 텍스트 사이의 간격 */
+}
+
+.order_group .order_item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.order_group .order_item p {
+  margin: 6px 0;
+}
+
+#order_date {
+  color: #6f7379;
+  font-size: 13px;
+}
+
+#product_cancel,
+#buy_null,
+#return_cancel {
+  color: #6f7379;
+  font-size: 16px;
+  margin-left: 10px;
 }
 
 .edit_id {
   display: flex;
   gap: 20px;
+  width: 1013px;
 }
 
 .edit_id input {
-  width: 463px; /* 462.672px를 반올림하여 정수로 표현 */
   height: 46px;
+  width: 300px;
   padding: 0 16px;
   border: 1px solid #c2c9cf;
-  margin: 4px 0;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  margin: 4px 0 0 0;
+  border-radius: 6px;
   cursor: default;
   pointer-events: none;
   background-color: #f1f4f6;
@@ -139,20 +234,23 @@ main {
 
 .phone_number {
   margin-top: 20px;
+  margin-bottom: 25px;
 }
 
 .number_input {
   display: flex;
-  gap: 15px;
+  margin-top: 10px;
+  width: 335px;
 }
 
 .number_input input {
-  width: 121px; /* 120.891px를 반올림하여 정수로 표현 */
+  width: 120px;
+  flex: 1;
   height: 30px;
   padding: 8px 16px;
   border: 1px solid #c2c9cf;
-  margin: 0;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  margin: 0 0 0 0;
+  border-radius: 6px;
   cursor: default;
   pointer-events: none;
   background-color: #f1f4f6;
@@ -161,9 +259,9 @@ main {
 .re_authenticate button {
   background-color: #ffffff;
   border: 1px solid #6f7379;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   padding: 0 16px;
-  width: 493px; /* 492.531px를 반올림하여 정수로 표현 */
+  width: 490px;
   color: #888d95;
   height: 46px;
   font-weight: 400;
@@ -171,50 +269,41 @@ main {
 }
 
 .re_authenticate p {
-  column-gap: 0.25rem;
-  font-size: 12px; /* 0.75rem을 px로 변환 */
+  column-gap: 4px;
+  font-size: 12px;
   margin-bottom: 20px;
 }
 
 .edit_info_delivery {
+  font-weight: bolder;
   display: flex;
-  width: 1030px;
   justify-content: space-between;
+  width: 1013px;
   margin-bottom: 20px;
   margin-top: 20px;
 }
 
 .edit_info_delivery div {
-  width: 65px;
-  height: 20px;
-  font-size: 14px; /* 0.875rem을 px로 변환 */
+  font-size: 18px;
 }
 
 .address_button {
   display: flex;
 }
 
-.existing_address {
-  width: 116px;
+.existing_address,
+.new_address {
   height: 46px;
   padding: 0 20px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
-  font-size: 14px; /* 0.875rem을 px로 변환 */
+  font-size: 14px;
   background-color: #ffffff;
   cursor: pointer;
 }
 
 .new_address {
   margin-left: 16px;
-  width: 116px;
-  height: 46px;
-  padding: 0 20px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
-  border: 1px solid #bcc3cb;
-  font-size: 14px; /* 0.875rem을 px로 변환 */
-  background-color: #ffffff;
-  cursor: pointer;
 }
 
 .existing_address.active,
@@ -226,7 +315,8 @@ main {
 
 .delivery_info {
   display: flex;
-  margin-top: 20px;
+  flex-direction: row;
+  width: 720px;
 }
 
 .delivery_info div {
@@ -235,35 +325,39 @@ main {
 }
 
 .delivery_info input {
-  width: 280px;
+  width: 300px;
   height: 46px;
   padding: 0 16px;
-  margin-top: 4px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  margin-top: 10px;
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
 }
 
-.delivery_name {
-  margin-left: 16px;
+.delivery_number_info {
+  margin-left: 20px;
 }
 
 .delivery_number_text {
-  margin: 16px 0;
+  width: 500px;
 }
 
 .delivery_number {
   display: flex;
-  gap: 15px;
+  width: 335px;
 }
 
 .delivery_number input {
-  width: 60px;
-  height: 32px;
-  padding: 8px 16px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  width: 300px;
+  height: 46px;
+  padding: 0 16px;
+  margin-top: 10px;
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
-  font-size: 15px; /* 0.9375rem을 px로 변환 */
-  line-height: 22px; /* 1.375rem을 px로 변환 */
+}
+
+.edit_complete button {
+  background: rgb(77, 77, 77);
+  color: #fff;
 }
 
 .address_input {
@@ -272,11 +366,15 @@ main {
   margin-top: 4px;
 }
 
+.input_address {
+  margin-top: 16px;
+}
+
 .address_input input {
   width: 490px;
   height: 46px;
   padding: 0 16px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
   cursor: default;
   pointer-events: none;
@@ -286,7 +384,7 @@ main {
 .address_input button {
   width: 105px;
   height: 48px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   border: none;
   cursor: pointer;
 }
@@ -296,9 +394,9 @@ main {
 }
 
 .detail_address input {
-  width: 610px;
+  width: 660px;
   height: 46px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
   padding: 0 16px;
 }
@@ -311,25 +409,40 @@ main {
 
 .delivery_request input {
   margin-top: 5px;
-  width: 610px;
   height: 46px;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   border: 1px solid #bcc3cb;
   padding: 0 16px;
+  width: 660px;
 }
 
 .register_address {
   margin: 16px 0;
 }
 
+/* 버튼 기본 스타일 */
 .edit_complete button {
   width: 220px;
   height: 48px;
   background-color: #191f28;
   color: white;
-  border: 1px solid #191f28;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
-  margin-bottom: 16px;
+  margin-bottom: 15px;
+  padding: 10px 20px; /* 버튼 내부 여백 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  text-decoration: none; /* 텍스트 장식 없음 */
+  display: inline-block; /* 인라인 블록 요소 */
+  font-size: 16px; /* 폰트 크기 */
+  margin: 15px 2px;
+  cursor: pointer; /* 마우스 포인터 변경 */
+  border-radius: 5px; /* 버튼 모서리 둥글게 */
+  transition: background-color 0.3s, transform 0.3s; /* 배경색 및 변형에 애니메이션 추가 */
+}
+
+/* 버튼 hover 스타일 */
+.edit_complete button:hover {
+  background: rgb(77, 77, 77);
+  color: #fff;
+  transform: scale(1); /* hover 상태에서 버튼 크기 확대 */
 }
 
 .marketing_consent {
@@ -342,6 +455,19 @@ main {
   background-color: #ffffff;
   color: #20252e;
   border: 1px solid #898c91;
-  border-radius: 6px; /* 0.375rem을 px로 변환 */
+  border-radius: 6px;
   margin-top: 10px;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  main {
+    margin: 40px 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  main {
+    margin: 40px 128px;
+  }
 }

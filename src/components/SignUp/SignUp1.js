@@ -31,7 +31,7 @@ const Signup = () => {
 
   return (
     <div className="signup_1">
-      <div className="signup_box">
+      <div className="signup_box_1">
         <h2>주식회사 왁스아웃 통합회원 가입 안내</h2>
         <div className="info_text">
           <p>주식회사 왁스아웃 통합회원 가입을 환영합니다.</p>

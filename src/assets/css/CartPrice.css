@@ -1,0 +1,23 @@
+.amount_total {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+.amount_total_label {
+  text-align: left;
+}
+.amount_total_price {
+  margin-left: 64px;
+}
+
+.font_bold {
+  font-size: 14px;
+  font-weight: 700;
+}
+.font_bold_total {
+  font-size: 18px;
+  font-weight: 700;
+  padding-top: 16px;
+  color: rgb(51, 61, 75);
+}
