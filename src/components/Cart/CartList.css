@@ -63,64 +63,6 @@ button.cancel_all {
   cursor: pointer;
 }
 
-.item_rows {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.item_check {
-  margin-right: 170px;
-}
-.item_file {
-  background-color: aqua;
-  width: 160px;
-  height: 180px;
-  margin-right: 30px;
-}
-.item_des {
-  width: 30%;
-}
-.item_des_bold {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-family: "Pretendard", "Karla", sans-serif;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-.item_des_thin {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  font-family: "Pretendard", "Karla", sans-serif;
-  font-size: 14px;
-}
-
-.item_quantity {
-  font-family: "Pretendard", "Karla", sans-serif;
-  margin-right: 0px;
-  & label {
-    margin-right: 10px;
-  }
-  & input {
-    margin-right: 140px;
-    width: 30px;
-  }
-}
-.item_delete button {
-  all: unset;
-  font-size: 13.5px;
-  color: #333d4b;
-  text-decoration: underline;
-  cursor: pointer;
-}
-.item_price {
-  font-family: "Pretendard", "Karla", sans-serif;
-  font-weight: 700;
-  font-size: 15px;
-  margin-left: 140px;
-}
 .pay_member {
   margin-top: 64px;
   display: flex;
@@ -181,31 +123,6 @@ button.cancel_all {
     border: 1px solid rgb(209, 214, 219);
     position: relative;
     margin-right: 10px;
-  }
-  &:checked + label:before {
-    content: "";
-    background-color: rgb(54, 54, 54); /* 체크된 상태일 때 배경색을 변경 */
-    background-image: url("/src/assets/check.svg");
-    background-size: cover; /* 이미지 크기 조정 */
-    background-position: center; /* 이미지 위치 조정 */
-    background-repeat: no-repeat; /* 이미지 반복하지 않음 */
-    border: 1px solid rgb(54, 54, 54);
-  }
-}
-
-#checkrow {
-  display: none; /* 기본 체크박스 숨김 */
-  & + label:before {
-    content: ""; /* 가상 요소의 내용을 정의 */
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background-color: white;
-    border-radius: 20%;
-    border: 1px solid rgb(209, 214, 219);
-    position: relative;
-    margin-right: 10px;
-    cursor: pointer;
   }
   &:checked + label:before {
     content: "";
