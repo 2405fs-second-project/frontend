@@ -23,7 +23,7 @@ const NavBar = () => {
           <a href="/" className="season_off">
             시즌오프
           </a>
-          <Link to="/">남성</Link>
+          <Link to="/menform">남성</Link>
           <Link to="/womanform">여성</Link>
           <Link to="/accessoryform">악세서리</Link>
           <Link to="/">룩북</Link>
