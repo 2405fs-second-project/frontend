@@ -13,11 +13,19 @@ import MenDetail from "./menproduct/MenDetail";
 import MenForm from "./menproduct/MenForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
+import axios from "axios";
 
 import { Cart, Product, Order } from "./pages";
+
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
+
+  const BASE_URL = "";
+
+  const api = axios.create({
+    baseURL: BASE_URL,
+  }); 
 
   return (
     <>
