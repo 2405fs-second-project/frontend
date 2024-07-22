@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./SignUp2.css";
-import { Link } from "react-router-dom";
 
-const Signup_2 = () => {
+const SignUp2 = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -13,25 +14,41 @@ const Signup_2 = () => {
   const [errors, setErrors] = useState({
     passwordMismatch: false,
   });
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     if (name === "password" || name === "confirmPassword") {
-      if (formData.password !== value && name === "confirmPassword") {
-        setErrors({
-          ...errors,
-          passwordMismatch: formData.password !== "" && value !== "",
-        });
-      } else if (formData.password === value && name === "confirmPassword") {
-        setErrors({ ...errors, passwordMismatch: false });
-      } else if (name === "password" && formData.confirmPassword !== "") {
-        setErrors({
-          ...errors,
-          passwordMismatch: value !== formData.confirmPassword,
-        });
-      }
+      setErrors({
+        ...errors,
+        passwordMismatch:
+          name === "confirmPassword" && formData.password !== value,
+      });
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setMessage("비밀번호가 일치하지 않습니다");
+      return;
+    }
+    try {
+      await axios.post("http://localhost:8080/api/register", formData);
+      setMessage("User registered successfully");
+      navigate("/login");
+    } catch (error) {
+      setMessage("Error registering user");
     }
   };
 
@@ -48,70 +65,79 @@ const Signup_2 = () => {
         <h3>계정 정보 입력</h3>
         <p>고객님이 사용하실 계정 정보를 입력해주세요.</p>
         <div className="signup_info">
-          <div>
-            <label>이름</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>핸드폰번호</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>아이디 (이메일)</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="이메일을 입력해주세요."
-            />
-          </div>
-          <div>
-            <label>비밀번호</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>비밀번호 확인</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
-            {errors.passwordMismatch &&
-              formData.password &&
-              formData.confirmPassword && (
-                <div className="error">비밀번호가 일치하지 않습니다</div>
-              )}
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>이름</label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>핸드폰번호</label>
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>아이디 (이메일)</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="이메일을 입력해주세요."
+                required
+              />
+            </div>
+            <div>
+              <label>비밀번호</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label>비밀번호 확인</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              {errors.passwordMismatch &&
+                formData.password &&
+                formData.confirmPassword && (
+                  <div className="error">비밀번호가 일치하지 않습니다</div>
+                )}
+            </div>
+            <button
+              type="submit"
+              className={isFormValid() ? "active" : ""}
+              disabled={!isFormValid()}
+            >
+              통합 회원가입
+            </button>
+          </form>
+          {message && <p>{message}</p>}
+          <Link to="/login">
+            <button>로그인 페이지로 이동</button>
+          </Link>
         </div>
-        <Link to="/signup3">
-          <button
-            type="submit"
-            className={isFormValid() ? "active" : ""}
-            disabled={!isFormValid()}
-          >
-            통합 회원가입
-          </button>
-        </Link>
       </div>
     </div>
   );
 };
 
-export default Signup_2;
+export default SignUp2;
