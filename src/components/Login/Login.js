@@ -19,13 +19,11 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:8080/api/login", { email, password });
+      await axios.post("http://localhost:8081/api/login", { email, password });
       setMessage("로그인 성공");
       navigate("/home");
     } catch (error) {
-      setMessage(
-        "아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요."
-      );
+      setMessage("아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요.");
     }
   };
 

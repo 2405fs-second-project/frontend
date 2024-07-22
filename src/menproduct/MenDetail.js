@@ -11,7 +11,7 @@ const MenDetail = () => {
     return new Intl.NumberFormat().format(number);
   };
   useEffect(() => {
-    fetch(`http://localhost:8080/products/detail/${id}`)
+    fetch(`http://localhost:8081/products/detail/${id}`)
       .then((response) => response.json())
       .then((data) => setProductdetail(data))
       .catch((error) => console.error("Error fetching product:", error));
@@ -28,7 +28,7 @@ const MenDetail = () => {
   const handleCartInClick = async () => {
     if (productdetail && selectedSize) {
       try {
-        const response = await fetch("http://localhost:8080/cart/add", {
+        const response = await fetch("http://localhost:8081/cart/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
