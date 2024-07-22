@@ -1,12 +1,11 @@
 import React from "react";
-import axios from "axios";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   useLocation,
-  Form,
 } from "react-router-dom";
+import axios from "axios";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -20,8 +19,10 @@ import MenDetail from "./menproduct/MenDetail";
 import MenForm from "./menproduct/MenForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
+import Cart from "./components/Cart/Cart";
+import Product from "./components/Product/Product";
+import Order from "./components/Order/Order";
 
-import { Cart, Product, Order } from "./pages";
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
@@ -37,7 +38,7 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<MenForm />} />
-        <Route path="/menproduct" element={<MenDetail />} />
+        <Route path="/menproduct/:id" element={<MenDetail />} />
         <Route path="/womanform" element={<WomanForm />} />
         <Route path="/womandetail" element={<WomanDetail />} />
         <Route path="/accessoryform" element={<AccessoryProductForm />} />

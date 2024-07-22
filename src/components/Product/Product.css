@@ -1,0 +1,33 @@
+.product_page {
+  font-family: "Pretendard", "Karla", sans-serif;
+  display: flex;
+  align-items: center;
+  height: 57px;
+  border-bottom: 1px solid rgb(229, 232, 235);
+}
+@media (min-width: 768px) {
+  .product_page {
+    padding-left: 1.5rem;
+  }
+}
+.product_form {
+  display: flex;
+  justify-content: left;
+  margin-left: 20px;
+}
+
+.product_in {
+  padding: 10px;
+  border-right: 1px solid rgb(229, 232, 235);
+}
+
+.product_search {
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.info_title {
+  font-size: 10px;
+  margin: 0px;
+  padding: 0px;
+}
