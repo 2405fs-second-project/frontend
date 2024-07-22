@@ -11,7 +11,7 @@ const MyPage = () => {
   const [updatePhone, setUpdatePhone] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-  const userId = 2; // 사용자 ID (예제에서는 1로 설정)
+  const userId = 1; // 사용자 ID (예제에서는 1로 설정)
 
   // 사용자 정보를 가져오는 함수
   const handleFetchUser = async () => {
