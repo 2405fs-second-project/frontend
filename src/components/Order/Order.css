@@ -217,3 +217,8 @@
   margin: 1rem 0rem 1rem 0rem;
   font-size: 0.9rem;
 }
+
+.select_direct_input {
+  margin: 1rem 0rem 1rem 0rem;
+  width: 98%;
+}

@@ -9,7 +9,42 @@ export const CartList = () => {
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [itemQuantities, setItemQuantities] = useState(cartItems.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {}));
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
+
+  const calculateTotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
+  };
+
+  const handleNavigation = (path) => {
+    navigate(path);
+  };
+  const handleSelectAllChange = () => {
+    setSelectAll((prevSelectAll) => {
+      const newSelectAll = !prevSelectAll;
+      if (newSelectAll) {
+        // 전체 선택
+        const allItemIds = new Set(cartItems.map((item) => item.id));
+        setSelectedItems(allItemIds);
+      } else {
+        // 전체 선택 해제
+        setSelectedItems(new Set());
+      }
+      return newSelectAll;
+    });
+  };
+
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(itemId)) {
+        newSet.delete(itemId);
+      } else {
+        newSet.add(itemId);
+      }
+      return newSet;
+    });
+  };
 
   const fetchCartItems = async (userId) => {
     try {
@@ -49,29 +84,32 @@ export const CartList = () => {
     }));
   };
 
-  const handleCheckboxChange = (itemId) => {
-    setSelectedItems((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(itemId)) {
-        newSet.delete(itemId);
-      } else {
-        newSet.add(itemId);
+  const handleDeleteSelected = async () => {
+    const selectedIds = Array.from(selectedItems);
+    const requestData = {
+      ids: selectedIds,
+    };
+    console.log("Request Data:", JSON.stringify(requestData, null, 2));
+    try {
+      const response = await fetch("http://localhost:8080/cart/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedIds }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete selected items");
       }
-      return newSet;
-    });
-  };
 
-  const handleDeleteSelected = () => {
-    setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
-    setSelectedItems(new Set());
-  };
-
-  const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
-  };
-
-  const handleNavigation = (path) => {
-    navigate(path);
+      // 서버에서 성공적으로 삭제되면 상태를 업데이트
+      setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
+      setSelectedItems(new Set());
+      setSelectAll(false); // 전체 선택 체크박스도 해제
+    } catch (error) {
+      console.error("Error deleting selected items:", error);
+    }
   };
 
   return (
@@ -83,8 +121,8 @@ export const CartList = () => {
       <div className="select">
         <div className="select_all">
           <div className="select_all_box">
-            <input type="checkbox" id="checkall" />
-            <label htmlFor="checkall">전체선택</label>
+            <input type="checkbox" id="checkall" checked={selectAll} onChange={handleSelectAllChange} />
+            <label for="checkall">전체선택</label>
           </div>
         </div>
         <button className="cancel_all" onClick={handleDeleteSelected}>
@@ -116,10 +154,10 @@ export const CartList = () => {
             </>
           ) : (
             <>
-              <button className="pay_member_no" onClick={() => handleNavigation("/login")}>
+              <button className="pay_member_no" onClick={() => handleNavigation("/order")}>
                 비회원 구매
               </button>
-              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
+              <button className="pay_member_yes" onClick={() => handleNavigation("/login")}>
                 회원 구매
               </button>
             </>

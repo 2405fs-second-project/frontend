@@ -5,6 +5,11 @@ function Order() {
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
   const handleClick = (buttonId) => {
     setActiveButton(buttonId);
   };
@@ -147,12 +152,15 @@ function Order() {
                 <label for="adress">배송시 요청사항</label>
               </div>
               <div class="select_field">
-                <select id="request">
-                  <option>배송전 미리 연락 바랍니다.</option>
-                  <option>부재시 경비실에 맡겨 주세요.</option>
-                  <option>부재시 전화 주시거나 문자 남겨주세요.</option>
-                  <option>직접입력</option>
+                <select id="request" value={selectedOption} onChange={handleChange}>
+                  <option value="">배송전 미리 연락 바랍니다.</option>
+                  <option value="부재시 경비실에 맡겨 주세요.">부재시 경비실에 맡겨 주세요.</option>
+                  <option value="부재시 전화 주시거나 문자 남겨주세요.">부재시 전화 주시거나 문자 남겨주세요.</option>
+                  <option value="직접입력">직접입력</option>
                 </select>
+                {selectedOption === "직접입력" && (
+                  <input type="text" class="select_direct_input" placeholder="배송시 요청사항을 입력해주세요." />
+                )}
               </div>
             </div>
           </div>

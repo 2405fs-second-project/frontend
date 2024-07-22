@@ -5,9 +5,11 @@ import { useParams } from "react-router-dom";
 const MenDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
-
   const { id } = useParams();
   const [productdetail, setProductdetail] = useState(null);
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+  };
   useEffect(() => {
     fetch(`http://localhost:8080/products/detail/${id}`)
       .then((response) => response.json())
@@ -74,7 +76,7 @@ const MenDetail = () => {
               <br />
               {productdetail.code}
             </div>
-            <span className="product_price">{productdetail.price}</span>
+            <span className="product_price">{formatNumber(productdetail.price)}</span>
             <div className="product_guide">
               사용자 가이드 <br />
               상품 정보 고시

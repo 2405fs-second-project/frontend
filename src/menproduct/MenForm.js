@@ -4,7 +4,9 @@ import "./MenForm.css";
 
 const MenForm = () => {
   const [products, setProducts] = useState([]);
-
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat().format(number);
+  };
   useEffect(() => {
     // 서버에서 제품 목록을 가져오는 함수
     const fetchProducts = async () => {
@@ -33,7 +35,7 @@ const MenForm = () => {
               </Link>
               <div className="product_name">{products.name}</div>
               <div className="product_color_type">{products.color}</div>
-              <div className="product_normal_price">{products.price}</div>
+              <div className="product_normal_price">{formatNumber(products.price)}</div>
             </div>
           ))}
         </div>

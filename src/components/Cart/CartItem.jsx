@@ -35,7 +35,7 @@ export const CartItem = ({ item, quantity, onQuantityChange, isSelected, onCheck
         </div>
         <div className="item_quantity">
           <label for={`quantity_${item.id}`}>수량:</label>
-          <input type="number" id={`quantity_${item.id}`} value={quantity} onChange={handleQuantityChange} />
+          <input type="number" id={`quantity_${item.id}`} value={item.quantity} onChange={handleQuantityChange} />
         </div>
         <div className="item_delete">
           <button>삭제</button>
