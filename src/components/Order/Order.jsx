@@ -36,7 +36,12 @@ function Order() {
                 <label for="name">이름</label>
               </div>
               <div className="person_name_box">
-                <input type="text" id="name" class="input_field" placeholder="이름을 입력해주세요." />
+                <input
+                  type="text"
+                  id="name"
+                  class="input_field"
+                  placeholder="이름을 입력해주세요."
+                />
               </div>
             </div>
             <div className="person_phone">
@@ -87,7 +92,12 @@ function Order() {
                 <label for="name">수령인 이름*</label>
               </div>
               <div className="person_name_box">
-                <input type="text" id="name" class="input_field" placeholder="수령인 이름을 적어주세요." />
+                <input
+                  type="text"
+                  id="name"
+                  class="input_field"
+                  placeholder="수령인 이름을 적어주세요."
+                />
               </div>
             </div>
             <div className="person_phone">
@@ -138,11 +148,22 @@ function Order() {
               </div>
 
               <div className="info_group">
-                <input type="text" id="adress" class="input_field" disabled value="" />
+                <input
+                  type="text"
+                  id="adress"
+                  class="input_field"
+                  disabled
+                  value=""
+                />
                 <button className="adress_search">검색</button>
               </div>
               <div className="info_group">
-                <input type="text" id="adress" class="input_field" placeholder="상세 주소 입력" />
+                <input
+                  type="text"
+                  id="adress"
+                  class="input_field"
+                  placeholder="상세 주소 입력"
+                />
               </div>
             </div>
           </div>
@@ -152,30 +173,54 @@ function Order() {
                 <label for="adress">배송시 요청사항</label>
               </div>
               <div class="select_field">
-                <select id="request" value={selectedOption} onChange={handleChange}>
+                <select
+                  id="request"
+                  value={selectedOption}
+                  onChange={handleChange}
+                >
                   <option value="">배송전 미리 연락 바랍니다.</option>
-                  <option value="부재시 경비실에 맡겨 주세요.">부재시 경비실에 맡겨 주세요.</option>
-                  <option value="부재시 전화 주시거나 문자 남겨주세요.">부재시 전화 주시거나 문자 남겨주세요.</option>
+                  <option value="부재시 경비실에 맡겨 주세요.">
+                    부재시 경비실에 맡겨 주세요.
+                  </option>
+                  <option value="부재시 전화 주시거나 문자 남겨주세요.">
+                    부재시 전화 주시거나 문자 남겨주세요.
+                  </option>
                   <option value="직접입력">직접입력</option>
                 </select>
                 {selectedOption === "직접입력" && (
-                  <input type="text" class="select_direct_input" placeholder="배송시 요청사항을 입력해주세요." />
+                  <input
+                    type="text"
+                    class="select_direct_input"
+                    placeholder="배송시 요청사항을 입력해주세요."
+                  />
                 )}
               </div>
             </div>
           </div>
           <h6 className="info_title">결제수단 선택</h6>
           <div className="payments_info">
-            <button onClick={() => handleClick(1)} className={activeButton === 1 ? "buttonActive" : "button"}>
+            <button
+              onClick={() => handleClick(1)}
+              className={activeButton === 1 ? "buttonActive" : "button"}
+            >
               신용카드
             </button>
-            <button onClick={() => handleClick(2)} className={activeButton === 2 ? "buttonActive" : "button"}>
+            <button
+              onClick={() => handleClick(2)}
+              className={activeButton === 2 ? "buttonActive" : "button"}
+            >
               에스크로 계좌이체
             </button>
-            <button onClick={() => handleClick(3)} className={activeButton === 3 ? "buttonActive" : "button"}>
+            <button
+              onClick={() => handleClick(3)}
+              className={activeButton === 3 ? "buttonActive" : "button"}
+            >
               카카오페이
             </button>
-            <button onClick={() => handleClick(4)} className={activeButton === 4 ? "buttonActive" : "button"}>
+            <button
+              onClick={() => handleClick(4)}
+              className={activeButton === 4 ? "buttonActive" : "button"}
+            >
               네이버페이
             </button>
           </div>
@@ -247,7 +292,10 @@ function Order() {
               <label htmlFor="check_order2">제3자 제공동의</label>
             </div>
 
-            <button className={`goto_order ${isButtonActive ? "active" : ""}`} disabled={!isButtonActive}>
+            <button
+              className={`goto_order ${isButtonActive ? "active" : ""}`}
+              disabled={!isButtonActive}
+            >
               주문하기
             </button>
           </div>

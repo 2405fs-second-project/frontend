@@ -6,7 +6,16 @@ export const ProductContext = createContext();
 
 export const ProductProvider = ({ children }) => {
   const gender_options = ["남성", "여성", "악세사리"];
-  const kind_options = ["자켓", "스웨트", "니트", "셔츠", "티셔츠", "바지", "반바지", "언더웨어"];
+  const kind_options = [
+    "자켓",
+    "스웨트",
+    "니트",
+    "셔츠",
+    "티셔츠",
+    "바지",
+    "반바지",
+    "언더웨어",
+  ];
 
   const [selectedGender, setSelectedGender] = useState(gender_options[0]);
   const [selectedKind, setSelectedKind] = useState(kind_options[0]);
@@ -62,7 +71,7 @@ export const ProductProvider = ({ children }) => {
       console.log(`${key}: ${value}`);
     }
 
-    fetch("http://localhost:8080/products/post", {
+    fetch("http://localhost:8081/products/post", {
       method: "POST",
       body: formData,
     })

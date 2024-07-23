@@ -17,6 +17,7 @@ body {
 .products {
   padding-top: 40px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   flex-wrap: wrap;
   flex-direction: row;
