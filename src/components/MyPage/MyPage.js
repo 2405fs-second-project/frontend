@@ -11,7 +11,7 @@ const MyPage = () => {
   const [updatePhone, setUpdatePhone] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-  const userId = 2; // 사용자 ID (예제에서는 1로 설정)
+  const userId = 1; // 사용자 ID (예제에서는 1로 설정)
 
   // 사용자 정보를 가져오는 함수
   const handleFetchUser = async () => {
@@ -178,13 +178,12 @@ const MyPage = () => {
                           <div key={order_item.product_id} className="order_item">
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFile}`}
-                              alt=""
+                              src={order_item.productFileUrl}
+                              alt="상품 이미지"
                             ></img>{" "}
                             <div className="order_info">
                               <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.pay_state}</p>
-
                               <p>주문 번호 : {order_item.order_number}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
@@ -288,9 +287,6 @@ const MyPage = () => {
                 <form onSubmit={handleUpdateShip}>
                   <div className="edit_info_header">
                     <div>[ 나의 정보 ]</div>
-                    {/* <button className="edit_pw">
-                      <span>비밀번호 변경</span>
-                    </button> */}
                   </div>
                   <div className="myInfo">
                     <div className="myInfo-detail">
@@ -314,9 +310,6 @@ const MyPage = () => {
                       <div>
                         <div className="edit_info_delivery">
                           <div>[ 배송 정보 ]</div>
-                          {/* <button className="edit_pw">
-                            <span>배송지 목록</span>
-                          </button> */}
                         </div>
                         <div className="address_button"></div>
                       </div>

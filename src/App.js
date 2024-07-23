@@ -6,7 +6,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import axios from "axios";
-
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -21,7 +20,6 @@ import MenForm from "./menproduct/MenForm";
 import MainForm from "./components/Main/MainForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
-
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
