@@ -224,15 +224,14 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFile}`}
-                              alt=""
+                              src={order_item.productFileUrl}
+                              alt="상품 이미지"
                             ></img>{" "}
                             <div className="order_info">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
                               <p>주문 상태 : {order_item.pay_state}</p>
-
                               <p>주문 번호 : {order_item.order_number}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
