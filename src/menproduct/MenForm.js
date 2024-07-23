@@ -31,11 +31,17 @@ const MenForm = () => {
           {products.map((products, index) => (
             <div className="product_wrapper" key={index}>
               <Link to={`/menproduct/${products.id}`}>
-                <img className="product_men_img" src={products.file} alt="사진오류" />
+                <img
+                  className="product_men_img"
+                  src={products.file}
+                  alt="사진오류"
+                />
               </Link>
               <div className="product_name">{products.name}</div>
               <div className="product_color_type">{products.color}</div>
-              <div className="product_normal_price">{formatNumber(products.price)}</div>
+              <div className="product_normal_price">
+                {formatNumber(products.price)}
+              </div>
             </div>
           ))}
         </div>
