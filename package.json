@@ -1,6 +1,7 @@
 {
   "name": "second",
   "version": "0.1.0",
+  "proxy": "http://localhost:8081",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
@@ -14,7 +15,6 @@
     "react-table": "^7.8.0",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:8081",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

@@ -1,7 +1,6 @@
 import React from "react";
 import "./SignUp3.css";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const Signup_3 = () => {
   return (
@@ -29,9 +28,7 @@ const Signup_3 = () => {
           <h2>응모를 통하여 한정 상품을 구매 하실 수 있습니다.</h2>
         </div>
         <div>
-          <button className="member_benefit">
-            더 자세한 회원 혜택 바로가기
-          </button>
+          <button className="member_benefit">더 자세한 회원 혜택 바로가기</button>
           <Link to="/login">
             <button className="go_login">로그인 하기</button>
           </Link>

@@ -48,7 +48,7 @@ export const CartList = () => {
 
   const fetchCartItems = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8080/cart/items?userId=${userId}`, {
+      const response = await fetch(`http://localhost:8081/cart/items?userId=${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export const CartList = () => {
     };
     console.log("Request Data:", JSON.stringify(requestData, null, 2));
     try {
-      const response = await fetch("http://localhost:8080/cart/delete", {
+      const response = await fetch("http://localhost:8081/cart/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
