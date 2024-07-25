@@ -1,0 +1,105 @@
+.login {
+  display: flex;
+  justify-content: center;
+  padding-top: 56px;
+}
+
+.login_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 448px;
+  height: 420px;
+  padding: 16px;
+}
+
+.login_box h2 {
+  text-align: center;
+  font-size: 30px;
+  line-height: 36px;
+  margin: 0;
+  margin-bottom: 30px;
+  color: #333d4b;
+}
+
+.id_box,
+.pw_box {
+  display: flex;
+  flex-direction: column;
+  width: 448px;
+  height: 80px;
+  margin-bottom: 16px; /* 1rem = 16px */
+}
+
+.id_box label,
+.pw_box label {
+  font-size: 14px; /* 0.875rem = 14px */
+  line-height: 20px; /* 1.25rem = 20px */
+  height: 20px;
+  color: #574c4a;
+}
+
+.id_box input,
+.pw_box input {
+  padding: 0 16px 0 16px; /* 1rem = 16px */
+  height: 50px;
+  font-size: 15px; /* 0.9375rem = 15px */
+  line-height: 22px; /* 1.375rem = 22px */
+  border: 1px solid rgb(176 184 193);
+  border-radius: 6px; /* 0.375rem = 6px */
+}
+
+.check_box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  color: #574c4a;
+}
+
+.check_left {
+  display: flex;
+  color: #5a6561;
+  font-size: 13px; /* 0.8125rem = 13px */
+}
+
+.check_right {
+  display: flex;
+  color: #5a6561;
+  font-size: 13px; /* 0.8125rem = 13px */
+}
+
+.login_button,
+.signup_button {
+  width: 450px;
+  height: 48px;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.login_button {
+  background-color: #333;
+  color: #fff;
+}
+
+.signup_button {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #363636;
+}
+
+.help_link {
+  font-size: 14px;
+  color: #888;
+  cursor: pointer;
+  margin: 10px 172px 0 172px;
+}
+
+.blank {
+  border-right: 1px solid #5a6561;
+  padding: 0 5px 0 5px;
+  margin-right: 5px;
+}
