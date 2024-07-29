@@ -1,0 +1,35 @@
+.payment_complete_form {
+  font-family: "Pretendard", "Karla", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.payment_complete {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.payment_number_info {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+.payment_info {
+  text-align: center;
+  margin-top: 38px;
+  font-size: 18px;
+}
+
+.go_to_home {
+  margin-top: 40px;
+  font-size: 18px;
+}
+
+.order_number_highlight {
+  color: red; /* 텍스트를 빨간색으로 설정 */
+  font-weight: bold; /* 텍스트를 굵게 설정 */
+}

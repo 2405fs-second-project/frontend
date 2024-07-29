@@ -11,30 +11,37 @@ const MyPage = () => {
   const [updatePhone, setUpdatePhone] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-  const userId = 1; // 사용자 ID (예제에서는 1로 설정)
+  const userId = 3; // 사용자 ID (예제에서는 1로 설정)
 
   // 사용자 정보를 가져오는 함수
   const handleFetchUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/users/${userId}`);
+      const response = await axios.get(
+        `http://localhost:8081/api/users/${userId}`
+      );
       setUser(response.data);
 
       // 배송 정보 가져오기
       if (response.data) {
-        setUpdateName(response.data.update_name || "");
-        setUpdateAddress(response.data.update_address || "");
-        setUpdatePhone(response.data.update_phone || "");
-        setShippingInfo(response.data.shipping_info || "");
+        setUpdateName(response.data.updateName || "");
+        setUpdateAddress(response.data.updateAddress || "");
+        setUpdatePhone(response.data.updatePhone || "");
+        setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
-      console.error(`Failed to fetch user with id ${userId}:`, error.response ? error.response.data : error.message);
+      console.error(
+        `Failed to fetch user with id ${userId}:`,
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
   // 주문 내역을 가져오는 함수
   const handleFetchOrderItems = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/order-items/user/${userId}`);
+      const response = await axios.get(
+        `http://localhost:8081/api/order-items/user/${userId}`
+      );
       console.log(response.data);
       setOrderItems(response.data);
     } catch (error) {
@@ -66,23 +73,23 @@ const MyPage = () => {
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result.split(",")[1];
-      try {
-        if (user) {
-          await axios.post(`http://localhost:8081/api/users/${user.id}/upload`, {
-            image: base64Image,
-          });
-          handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
-        }
-      } catch (error) {
-        console.error("Failed to upload image:", error.response ? error.response.data : error.message);
-      }
-    };
+    const formData = new FormData();
+    formData.append("file", file); // 'file'이라는 이름으로 파일을 추가합니다.
 
-    if (file) {
-      reader.readAsDataURL(file);
+    try {
+      if (user) {
+        await axios.post(
+          `http://localhost:8081/api/users/${user.id}/upload`,
+          formData,
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
+      }
+    } catch (error) {
+      console.error(
+        "Failed to upload image:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -92,12 +99,15 @@ const MyPage = () => {
 
     try {
       if (user) {
-        const response = await axios.post(`http://localhost:8081/api/users/${user.id}/shipping`, {
-          update_name: updateName,
-          update_address: updateAddress,
-          update_phone: updatePhone,
-          shipping_info: shippingInfo,
-        });
+        const response = await axios.post(
+          `http://localhost:8081/api/users/${user.id}/shipping`,
+          {
+            updateName: updateName,
+            updateAddress: updateAddress,
+            updatePhone: updatePhone,
+            shippingInfo: shippingInfo,
+          }
+        );
 
         if (response.status === 200) {
           console.log("배송 정보가 성공적으로 업데이트되었습니다.");
@@ -105,7 +115,10 @@ const MyPage = () => {
         }
       }
     } catch (error) {
-      console.error("배송 정보 업데이트 실패:", error.response ? error.response.data : error.message);
+      console.error(
+        "배송 정보 업데이트 실패:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -119,7 +132,7 @@ const MyPage = () => {
 
   // 주문 상태에 따라 필터링
   const filterOrderItemsByState = (state) => {
-    return orderItems.filter((item) => item.pay_state === state);
+    return orderItems.filter((item) => item.payState === state);
   };
 
   const groupedOrderItems = groupByOrderId(orderItems);
@@ -134,32 +147,39 @@ const MyPage = () => {
           <div className="info_box">
             <h6>나의 주문</h6>
             <div className="order_box">
-              <a className={view === "order" ? "active" : ""} onClick={() => handleViewClick("order")}>
+              <a
+                className={view === "order" ? "active" : ""}
+                onClick={() => handleViewClick("order")}
+              >
                 전체 주문 내역
               </a>
-              <a className={view === "cancel" ? "active" : ""} onClick={() => handleViewClick("cancel")}>
+              <a
+                className={view === "cancel" ? "active" : ""}
+                onClick={() => handleViewClick("cancel")}
+              >
                 주문 취소 내역
               </a>
-              <a className={view === "exchange" ? "active" : ""} onClick={() => handleViewClick("exchange")}>
+              <a
+                className={view === "exchange" ? "active" : ""}
+                onClick={() => handleViewClick("exchange")}
+              >
                 교환 · 반품 내역
               </a>
             </div>
             <h6>나의 정보</h6>
             <div className="member_box">
-              <a className={view === "memberInfo" ? "active" : ""} onClick={() => handleViewClick("memberInfo")}>
+              <a
+                className={view === "memberInfo" ? "active" : ""}
+                onClick={() => handleViewClick("memberInfo")}
+              >
                 회원 정보
-              </a>
-              <a className={view === "points" ? "active" : ""} onClick={() => handleViewClick("points")}>
-                적립금 & 쿠폰
-              </a>
-            </div>
-            <div className="faq">
-              <a className={view === "faq" ? "active" : ""} onClick={() => handleViewClick("faq")}>
-                자주 하는 질문
               </a>
             </div>
             <div className="logout">
-              <a className={view === "logout" ? "active" : ""} onClick={() => handleViewClick("logout")}>
+              <a
+                className={view === "logout" ? "active" : ""}
+                onClick={() => handleViewClick("logout")}
+              >
                 로그아웃
               </a>
             </div>
@@ -173,18 +193,26 @@ const MyPage = () => {
                 <div className="ordered_list">
                   {Object.keys(groupedOrderItems).length > 0 ? (
                     Object.keys(groupedOrderItems).map((orderId) => (
-                      <div key={orderId} className={`order_group order_${orderId}`}>
+                      <div
+                        key={orderId}
+                        className={`order_group order_${orderId}`}
+                      >
                         {groupedOrderItems[orderId].map((order_item) => (
-                          <div key={order_item.product_id} className="order_item">
+                          <div
+                            key={order_item.productId}
+                            className="order_item"
+                          >
                             <img
                               className="order_img"
                               src={order_item.productFileUrl}
                               alt="상품 이미지"
                             ></img>{" "}
-                            <div className="order_info">
-                              <p id="order_date">결제 : {order_item.orderDate}</p>
-                              <p>주문 상태 : {order_item.pay_state}</p>
-                              <p>주문 번호 : {order_item.order_number}</p>
+                            <div className="order_infomation">
+                              <p id="order_date">
+                                결제 : {order_item.orderDate}
+                              </p>
+                              <p>주문 상태 : {order_item.payState}</p>
+                              <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
                             </div>
@@ -204,20 +232,34 @@ const MyPage = () => {
                   <div className="side_header_1">주문 취소 내역</div>
                 </div>
                 <div className="ordered_list">
-                  {Object.keys(groupByOrderId(filterOrderItemsByState("결제취소"))).length > 0 ? (
-                    Object.keys(groupByOrderId(filterOrderItemsByState("결제취소"))).map((orderId) => (
-                      <div key={orderId} className={`order_group order_${orderId}`}>
-                        {groupByOrderId(filterOrderItemsByState("결제취소"))[orderId].map((order_item) => (
-                          <div key={order_item.product_id} className="order_item">
+                  {Object.keys(
+                    groupByOrderId(filterOrderItemsByState("주문취소"))
+                  ).length > 0 ? (
+                    Object.keys(
+                      groupByOrderId(filterOrderItemsByState("주문취소"))
+                    ).map((orderId) => (
+                      <div
+                        key={orderId}
+                        className={`order_group order_${orderId}`}
+                      >
+                        {groupByOrderId(filterOrderItemsByState("주문취소"))[
+                          orderId
+                        ].map((order_item) => (
+                          <div
+                            key={order_item.productId}
+                            className="order_item"
+                          >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFile}`}
+                              src={order_item.productFileUrl}
                               alt=""
                             ></img>{" "}
-                            <div className="order_info">
-                              <p id="order_date">결제 : {order_item.orderDate}</p>
-                              <p>주문 상태 : {order_item.pay_state}</p>
-                              <p>주문 번호 : {order_item.order_number}</p>
+                            <div className="order_infomation">
+                              <p id="order_date">
+                                결제 : {order_item.orderDate}
+                              </p>
+                              <p>주문 상태 : {order_item.payState}</p>
+                              <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
                             </div>
@@ -238,25 +280,43 @@ const MyPage = () => {
                 </div>
                 <div className="ordered_list">
                   {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료")))
+                    groupByOrderId(
+                      filterOrderItemsByState("교환완료").concat(
+                        filterOrderItemsByState("반품완료")
+                      )
+                    )
                   ).length > 0 ? (
                     Object.keys(
-                      groupByOrderId(filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료")))
+                      groupByOrderId(
+                        filterOrderItemsByState("교환완료").concat(
+                          filterOrderItemsByState("반품완료")
+                        )
+                      )
                     ).map((orderId) => (
-                      <div key={orderId} className={`order_group order_${orderId}`}>
+                      <div
+                        key={orderId}
+                        className={`order_group order_${orderId}`}
+                      >
                         {groupByOrderId(
-                          filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료"))
+                          filterOrderItemsByState("교환완료").concat(
+                            filterOrderItemsByState("반품완료")
+                          )
                         )[orderId].map((order_item) => (
-                          <div key={order_item.product_id} className="order_item">
+                          <div
+                            key={order_item.productId}
+                            className="order_item"
+                          >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFile}`}
+                              src={order_item.productFileUrl}
                               alt=""
                             ></img>{" "}
-                            <div className="order_info">
-                              <p id="order_date">결제 : {order_item.orderDate}</p>
-                              <p>주문 상태 : {order_item.pay_state}</p>
-                              <p>주문 번호 : {order_item.order_number}</p>
+                            <div className="order_infomation">
+                              <p id="order_date">
+                                결제 : {order_item.orderDate}
+                              </p>
+                              <p>주문 상태 : {order_item.payState}</p>
+                              <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
                             </div>
@@ -275,13 +335,18 @@ const MyPage = () => {
                 <div className="myinfo-img-register">
                   <img
                     className="myinfo-img"
-                    src={`data:image/jpeg;base64,${user.profile_picture_url}`}
-                    alt="프로필을 추가 ➡️➡️➡️ "
+                    src={`http://localhost:8081${user.profilePictureUrl}`}
+                    alt="프로필을 추가 하세요"
                   />
                   <label htmlFor="file">
                     <div className="info-upload">파일 업로드</div>
                   </label>
-                  <input type="file" name="file" id="file" onChange={handleImageUpload} />
+                  <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    onChange={handleImageUpload}
+                  />
                 </div>
                 <div className="side_info_box_line"> </div>
                 <form onSubmit={handleUpdateShip}>
@@ -303,7 +368,7 @@ const MyPage = () => {
                       <div className="phone_number">
                         <label>핸드폰 번호</label>
                         <div className="number_input">
-                          <input type="text" value={user.phone_num} readOnly />
+                          <input type="text" value={user.phoneNum} readOnly />
                         </div>
                       </div>
                       <div className="side_info_box_line"> </div>
@@ -316,21 +381,33 @@ const MyPage = () => {
                       <div className="delivery_info">
                         <div className="delivery_name">
                           <label>수령인 이름</label>
-                          <input type="text" value={updateName} onChange={(e) => setUpdateName(e.target.value)} />
+                          <input
+                            type="text"
+                            value={updateName}
+                            onChange={(e) => setUpdateName(e.target.value)}
+                          />
                         </div>
                         <div className="delivery_number_info">
                           <div className="delivery_number_text">
                             <label>수령인 전화번호</label>
                           </div>
                           <div className="delivery_number">
-                            <input type="text" value={updatePhone} onChange={(e) => setUpdatePhone(e.target.value)} />
+                            <input
+                              type="text"
+                              value={updatePhone}
+                              onChange={(e) => setUpdatePhone(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
                       <div className="input_address">
                         <label>기본 주소</label>
                         <div className="detail_address">
-                          <input type="text" value={updateAddress} onChange={(e) => setUpdateAddress(e.target.value)} />
+                          <input
+                            type="text"
+                            value={updateAddress}
+                            onChange={(e) => setUpdateAddress(e.target.value)}
+                          />
                         </div>
                       </div>
                       <div className="delivery_request">
