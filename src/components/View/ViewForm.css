@@ -1,7 +1,12 @@
 body {
   font-family: "Pretendard", "Karla", sans-serif;
 }
-
+.product_wrapper {
+  width: 361px;
+  height: 662px;
+  margin-bottom: 20px;
+  margin-right: 0.5rem;
+}
 .container {
   padding: 0 20px;
   display: flex;
@@ -12,16 +17,20 @@ body {
 .products {
   padding-top: 40px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  flex-wrap: wrap;
   flex-direction: row;
 }
 
-.product_img {
-  width: 25%;
+.product_men_img {
+  width: 361px;
+  height: 542px;
 }
 
 .product_name,
-.product_color_type {
+.product_color_type,
+.product_normal_price {
   color: #333d4b;
   font-size: 15px;
   padding-bottom: 5px;
