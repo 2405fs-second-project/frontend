@@ -17,6 +17,7 @@ import AccessoryProductForm from "./product/AccessoryProductForm";
 import AccessoryProductDetail from "./product/AccessoryProductDetail";
 import MenDetail from "./menproduct/MenDetail";
 import MenForm from "./menproduct/MenForm";
+import MainForm from "./components/Main/MainForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
 import Cart from "./components/Cart/Cart";
@@ -37,7 +38,8 @@ const App = () => {
     <>
       <NavBar />
       <Routes>
-        <Route path="/" element={<MenForm />} />
+        <Route path="/" element={<MainForm />} />
+        <Route path="/menform" element={<MenForm />} />
         <Route path="/menproduct/:id" element={<MenDetail />} />
         <Route path="/womanform" element={<WomanForm />} />
         <Route path="/womandetail" element={<WomanDetail />} />

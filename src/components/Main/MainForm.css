@@ -1,0 +1,51 @@
+.Main_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.first_row {
+  display: flex;
+  justify-content: center;
+}
+
+.first_row img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 10px;
+}
+
+.sceond_row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+.sceond_row img {
+  max-width: 34%;
+  height: auto;
+}
+
+.third_row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.third_row img {
+  max-width: 25%;
+  height: auto;
+}
+
+.fourth_row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
+}
+
+.fourth_row img {
+  max-width: 50%;
+  height: auto;
+}

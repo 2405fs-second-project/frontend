@@ -11,7 +11,7 @@ const MenForm = () => {
     // 서버에서 제품 목록을 가져오는 함수
     const fetchProducts = async () => {
       try {
-        const response = await fetch("/home");
+        const response = await fetch("http://localhost:8081/home");
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
@@ -31,11 +31,17 @@ const MenForm = () => {
           {products.map((products, index) => (
             <div className="product_wrapper" key={index}>
               <Link to={`/menproduct/${products.id}`}>
-                <img className="product_men_img" src={products.file} alt="사진오류" />
+                <img
+                  className="product_men_img"
+                  src={products.file}
+                  alt="사진오류"
+                />
               </Link>
               <div className="product_name">{products.name}</div>
               <div className="product_color_type">{products.color}</div>
-              <div className="product_normal_price">{formatNumber(products.price)}</div>
+              <div className="product_normal_price">
+                ₩{formatNumber(products.price)}
+              </div>
             </div>
           ))}
         </div>
