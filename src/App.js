@@ -14,16 +14,13 @@ import MainForm from "./components/Main/MainForm";
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
+import OrderComplete from "./components/Order/OrderComplete";
 
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
 
-  const BASE_URL = "http//localhost:8081/api/users";
-
-  const api = axios.create({
-    baseURL: BASE_URL,
-  });
+  const api = axios.create({});
 
   return (
     <>
@@ -40,6 +37,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/ordercomplete" element={<OrderComplete />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>
