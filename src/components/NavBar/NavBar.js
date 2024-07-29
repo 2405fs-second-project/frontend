@@ -11,6 +11,32 @@ import interesting from "../../assets/Interesting.png";
 import bag from "../../assets/Bag.png";
 
 const NavBar = ({ cartItems }) => {
+  const sellerid = 9; //userid값 기본설정
+  const renderUserLink = () => {
+    if (sellerid) {
+      return sellerid === 9 ? ( //userid값이 9인지 확인하기
+        <Link to="/product">
+          <button className="human_btn">
+            <img className="human_logo" src={human} />
+          </button>
+        </Link>
+      ) : (
+        <Link to="/mypage">
+          <button className="human_btn">
+            <img className="human_logo" src={human} />
+          </button>
+        </Link>
+      );
+    } else {
+      return (
+        <Link to="/login">
+          <button className="human_btn">
+            <img className="human_logo" src={human} />
+          </button>
+        </Link>
+      );
+    }
+  };
   return (
     <nav className="navbar">
       <div className="navbar_left">
@@ -23,9 +49,9 @@ const NavBar = ({ cartItems }) => {
           <a href="/" className="season_off">
             시즌오프
           </a>
-          <Link to="/menform">남성</Link>
-          <Link to="/womanform">여성</Link>
-          <Link to="/accessoryform">악세서리</Link>
+          <Link to="/viewform?gender=male">남성</Link>
+          <Link to="/viewform?gender=female">여성</Link>
+          <Link to="/viewform?gender=accessory">악세서리</Link>
           <Link to="/">룩북</Link>
           <Link to="/">기사</Link>
           <Link to="/">매장</Link>
@@ -46,11 +72,7 @@ const NavBar = ({ cartItems }) => {
           <button className="bell_btn">
             <img className="bell_logo" src={bell} />
           </button>
-          <Link to="/login">
-            <button className="human_btn">
-              <img className="human_logo" src={human} />
-            </button>
-          </Link>
+          {renderUserLink()}
           <button className="interesting_btn">
             <img className="interesting_logo" src={interesting} />
           </button>

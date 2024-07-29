@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
-import "./MenDetail.css";
+import "./ViewDetail.css";
 import { useParams } from "react-router-dom";
 
-const MenDetail = () => {
+const ViewDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
   const [productdetail, setProductdetail] = useState(null);
   const formatNumber = (number) => {
+    console.log(number); // 디버깅을 위해 숫자 출력
     return new Intl.NumberFormat().format(number);
   };
   useEffect(() => {
-    fetch(`http://localhost:8081/products/detail/${id}`)
+    fetch(`/api/product/detail/${id}`)
       .then((response) => response.json())
-      .then((data) => setProductdetail(data))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setProductdetail(data[0]); // 배열의 첫 번째 객체로 설정
+        }
+      })
       .catch((error) => console.error("Error fetching product:", error));
   }, [id]);
-
   const handleToggle = (index) => {
     setIsExpanded((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
   };
@@ -161,4 +165,4 @@ const MenDetail = () => {
   );
 };
 
-export default MenDetail;
+export default ViewDetail;
