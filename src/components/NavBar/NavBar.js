@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // 추가된 부분
 import { useAuth } from "../../context/AuthContext";
 import "./NavBar.css";
 import logo from "../../assets/WhiteLogo.png";
@@ -16,6 +17,56 @@ import bag from "../../assets/Bag.png";
 
 const NavBar = () => {
   const { user } = useAuth();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // 검색 입력 값을 저장하는 상태
+  const [searchResults, setSearchResults] = useState([]); // 검색 결과를 저장하는 상태
+
+  const handleSearchClick = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleSearchClose = () => {
+    setIsSearchOpen(false);
+  };
+
+  // 추가된 부분
+  const handleLogoClick = () => {
+    setIsSearchOpen(false);
+  };
+
+  // 추가된 부분: 검색 핸들러 함수(검색 API를 호출하여 결과를 가져오는 함수)
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/product/search`,
+        {
+          params: {
+            name: searchQuery,
+          },
+        }
+      );
+      console.log("검색 결과:", response.data);
+      setSearchResults(response.data);
+      setSearchQuery(""); // 검색 후 입력 창 초기화
+
+      if (response.data.length === 0) {
+        alert("검색 결과가 없습니다.");
+      }
+    } catch (error) {
+      console.error("검색 중 오류가 발생했습니다!", error);
+      alert("검색 중 오류가 발생했습니다.");
+    }
+  };
+
+  // 추가된 부분: 엔터 키를 눌렀을 때 검색을 실행하는 함수
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(e);
+    }
+  };
+
+
 
   return (
     <nav className="navbar">
@@ -81,11 +132,18 @@ const NavBar = () => {
       </div>
       {isSearchOpen && (
         <div className={`search_bar ${isSearchOpen ? "open" : ""}`}>
-          <img src={blackLogo} className="home_logo_search" />
+          <div onClick={handleLogoClick}>
+            <Link to="/">
+              <img src={blackLogo} className="home_logo_search" />
+            </Link>
+          </div>
           <div className="search_input_wrapper">
             <img src={blackSearch} className="search_icon" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown} // 추가된 부분
               placeholder="검색하기"
               className="search_input"
             />
@@ -94,6 +152,15 @@ const NavBar = () => {
             닫기
             <img src={xLogo} className="close_icon" />
           </button>
+        </div>
+      )}
+      {isSearchOpen && searchResults.length > 0 && (
+        <div className="search_results">
+          <ul>
+            {searchResults.map((product) => (
+              <li key={product.code}>{product.name}</li>
+            ))}
+          </ul>
         </div>
       )}
     </nav>
