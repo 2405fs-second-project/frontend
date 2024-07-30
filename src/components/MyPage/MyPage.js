@@ -11,7 +11,7 @@ const MyPage = () => {
   const [updatePhone, setUpdatePhone] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-  const userId = 3; // 사용자 ID (예제에서는 1로 설정)
+  const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 사용자 ID를 가져옴
 
   // 사용자 정보를 가져오는 함수
   const handleFetchUser = async () => {
@@ -43,7 +43,7 @@ const MyPage = () => {
         `http://localhost:8081/api/order-items/user/${userId}`
       );
       console.log(response.data);
-      setOrderItems(response.data);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
         `Failed to fetch order items for user with id ${userId}:`,
@@ -124,10 +124,12 @@ const MyPage = () => {
 
   // 주문 아이템을 order_id별로 그룹화하는 함수
   const groupByOrderId = (items) => {
-    return items.reduce((acc, item) => {
-      (acc[item.order_id] = acc[item.order_id] || []).push(item);
-      return acc;
-    }, {});
+    return Array.isArray(items)
+      ? items.reduce((acc, item) => {
+          (acc[item.order_id] = acc[item.order_id] || []).push(item);
+          return acc;
+        }, {})
+      : {};
   };
 
   // 주문 상태에 따라 필터링
@@ -136,6 +138,12 @@ const MyPage = () => {
   };
 
   const groupedOrderItems = groupByOrderId(orderItems);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+  };
 
   return (
     <div className="my_page">
@@ -176,12 +184,7 @@ const MyPage = () => {
               </a>
             </div>
             <div className="logout">
-              <a
-                className={view === "logout" ? "active" : ""}
-                onClick={() => handleViewClick("logout")}
-              >
-                로그아웃
-              </a>
+              <a onClick={handleLogout}>로그아웃</a>
             </div>
           </div>
           <div>
@@ -211,8 +214,8 @@ const MyPage = () => {
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
-                              <p>주문 상태 : {order_item.payState}</p>
-                              <p>주문 번호 : {order_item.orderNumber}</p>
+                              <p>주문 상태 : {order_item.pay_state}</p>
+                              <p>주문 번호 : {order_item.order_number}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
                             </div>

@@ -1,6 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-import axios from "axios";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+
+import { AuthProvider } from "./context/AuthContext";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -11,6 +17,8 @@ import Footer from "./components/NavBar/Footer";
 import ViewDetail from "./components/View/ViewDetail";
 import ViewForm from "./components/View/ViewForm";
 import MainForm from "./components/Main/MainForm";
+import WomanForm from "./womanproduct/WomanForm";
+import WomanDetail from "./womanproduct/WomanDetail";
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
@@ -20,16 +28,18 @@ const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
 
-  const api = axios.create({});
-
   return (
     <>
       <NavBar />
       <Routes>
         <Route path="/" element={<MainForm />} />
-        <Route path="/viewform" element={<ViewForm />} />
-        <Route path="/viewdetail/:id" element={<ViewDetail />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/menform" element={<MenForm />} />
+        <Route path="/menproduct/:id" element={<MenDetail />} />
+        <Route path="/womanform" element={<WomanForm />} />
+        <Route path="/womandetail" element={<WomanDetail />} />
+        <Route path="/accessoryform" element={<AccessoryProductForm />} />
+        <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
+        <Route path="/mypage/:id" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/signup3" element={<Signup3 />} />
@@ -45,9 +55,11 @@ const App = () => {
 };
 
 const AppWithRouter = () => (
-  <Router>
-    <App />
-  </Router>
+  <AuthProvider>
+    <Router>
+      <App />
+    </Router>
+  </AuthProvider>
 );
 
 export default AppWithRouter;
