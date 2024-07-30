@@ -7,13 +7,18 @@ import { CartItem } from "../Cart/CartItem";
 export const CartList = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState(new Set());
-  const [itemQuantities, setItemQuantities] = useState(cartItems.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {}));
+  const [itemQuantities, setItemQuantities] = useState(
+    cartItems.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
+  );
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
 
   const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
+    return cartItems.reduce(
+      (total, item) => total + item.price * (itemQuantities[item.id] || 1),
+      0
+    );
   };
 
   const handleNavigation = (path) => {
@@ -48,12 +53,15 @@ export const CartList = () => {
 
   const fetchCartItems = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8080/cart/items?userId=${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `http://localhost:8081/cart/items?userId=${userId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch cart items");
@@ -71,7 +79,9 @@ export const CartList = () => {
       const userId = 1; // 예시 userId
       const result = await fetchCartItems(userId);
       setCartItems(result);
-      setItemQuantities(result.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {}));
+      setItemQuantities(
+        result.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
+      );
     };
 
     loadCartItems();
@@ -91,7 +101,7 @@ export const CartList = () => {
     };
     console.log("Request Data:", JSON.stringify(requestData, null, 2));
     try {
-      const response = await fetch("http://localhost:8080/cart/delete", {
+      const response = await fetch("http://localhost:8081/cart/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +114,9 @@ export const CartList = () => {
       }
 
       // 서버에서 성공적으로 삭제되면 상태를 업데이트
-      setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
+      setCartItems((prevItems) =>
+        prevItems.filter((item) => !selectedItems.has(item.id))
+      );
       setSelectedItems(new Set());
       setSelectAll(false); // 전체 선택 체크박스도 해제
     } catch (error) {
@@ -121,7 +133,12 @@ export const CartList = () => {
       <div className="select">
         <div className="select_all">
           <div className="select_all_box">
-            <input type="checkbox" id="checkall" checked={selectAll} onChange={handleSelectAllChange} />
+            <input
+              type="checkbox"
+              id="checkall"
+              checked={selectAll}
+              onChange={handleSelectAllChange}
+            />
             <label for="checkall">전체선택</label>
           </div>
         </div>
@@ -148,23 +165,35 @@ export const CartList = () => {
         <div className="pay_member">
           {isLoggedIn ? (
             <>
-              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
+              <button
+                className="pay_member_yes"
+                onClick={() => handleNavigation("/order")}
+              >
                 회원 구매
               </button>
             </>
           ) : (
             <>
-              <button className="pay_member_no" onClick={() => handleNavigation("/order")}>
+              <button
+                className="pay_member_no"
+                onClick={() => handleNavigation("/order")}
+              >
                 비회원 구매
               </button>
-              <button className="pay_member_yes" onClick={() => handleNavigation("/login")}>
+              <button
+                className="pay_member_yes"
+                onClick={() => handleNavigation("/login")}
+              >
                 회원 구매
               </button>
             </>
           )}
         </div>
         <div className="pay_btn">
-          <button className="pay_continue" onClick={() => handleNavigation("/")}>
+          <button
+            className="pay_continue"
+            onClick={() => handleNavigation("/")}
+          >
             계속 쇼핑하기
           </button>
         </div>

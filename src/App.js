@@ -5,8 +5,8 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import axios from "axios";
 
+import { AuthProvider } from "./context/AuthContext";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -21,7 +21,6 @@ import MenForm from "./menproduct/MenForm";
 import MainForm from "./components/Main/MainForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
-
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
@@ -29,12 +28,6 @@ import Order from "./components/Order/Order";
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
-
-  const BASE_URL = "http//localhost:8081/api/users";
-
-  const api = axios.create({
-    baseURL: BASE_URL,
-  });
 
   return (
     <>
@@ -47,7 +40,7 @@ const App = () => {
         <Route path="/womandetail" element={<WomanDetail />} />
         <Route path="/accessoryform" element={<AccessoryProductForm />} />
         <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage/:id" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/signup3" element={<Signup3 />} />
@@ -62,9 +55,11 @@ const App = () => {
 };
 
 const AppWithRouter = () => (
-  <Router>
-    <App />
-  </Router>
+  <AuthProvider>
+    <Router>
+      <App />
+    </Router>
+  </AuthProvider>
 );
 
 export default AppWithRouter;
