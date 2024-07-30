@@ -13,17 +13,14 @@ import Signup2 from "./components/SignUp/SignUp2";
 import Signup3 from "./components/SignUp/SignUp3";
 import Login from "./components/Login/Login";
 import Footer from "./components/NavBar/Footer";
-import AccessoryProductForm from "./product/AccessoryProductForm";
-import AccessoryProductDetail from "./product/AccessoryProductDetail";
-import MenDetail from "./menproduct/MenDetail";
-import MenForm from "./menproduct/MenForm";
+import ViewDetail from "./components/View/ViewDetail";
+import ViewForm from "./components/View/ViewForm";
 import MainForm from "./components/Main/MainForm";
-import WomanForm from "./womanproduct/WomanForm";
-import WomanDetail from "./womanproduct/WomanDetail";
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
 import OrderComplete from "./components/Order/OrderComplete";
+import BuyOrder from "./components/Order/BuyOrder";
 
 const App = () => {
   const location = useLocation();
@@ -36,12 +33,9 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<MainForm />} />
-        <Route path="/menform" element={<MenForm />} />
-        <Route path="/menproduct/:id" element={<MenDetail />} />
-        <Route path="/womanform" element={<WomanForm />} />
-        <Route path="/womandetail" element={<WomanDetail />} />
-        <Route path="/accessoryform" element={<AccessoryProductForm />} />
-        <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
+        <Route path="/viewform" element={<ViewForm />} />
+        <Route path="/buyorder/:productId" element={<BuyOrder />} />
+        <Route path="/viewdetail/:id" element={<ViewDetail />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
