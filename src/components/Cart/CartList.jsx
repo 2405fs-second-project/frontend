@@ -7,13 +7,12 @@ import { CartItem } from "../Cart/CartItem";
 export const CartList = () => {
   const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState(new Set());
-  const [itemQuantities, setItemQuantities] = useState(
-    cartItems.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
-  );
+  const [itemQuantities, setItemQuantities] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
 
+  // 총 가격 계산
   const calculateTotalPrice = () => {
     return cartItems.reduce(
       (total, item) => total + item.price * (itemQuantities[item.id] || 1),
@@ -21,24 +20,22 @@ export const CartList = () => {
     );
   };
 
+  // 네비게이션 핸들러
   const handleNavigation = (path) => {
     navigate(path);
   };
+
+  // 전체 선택 핸들러
   const handleSelectAllChange = () => {
     setSelectAll((prevSelectAll) => {
       const newSelectAll = !prevSelectAll;
-      if (newSelectAll) {
-        // 전체 선택
-        const allItemIds = new Set(cartItems.map((item) => item.id));
-        setSelectedItems(allItemIds);
-      } else {
-        // 전체 선택 해제
-        setSelectedItems(new Set());
-      }
+      const allItemIds = new Set(cartItems.map((item) => item.id));
+      setSelectedItems(newSelectAll ? allItemIds : new Set());
       return newSelectAll;
     });
   };
 
+  // 체크박스 변경 핸들러
   const handleCheckboxChange = (itemId) => {
     setSelectedItems((prev) => {
       const newSet = new Set(prev);
@@ -51,6 +48,7 @@ export const CartList = () => {
     });
   };
 
+  // 장바구니 아이템 가져오기
   const fetchCartItems = async (userId) => {
     try {
       const response = await fetch(
@@ -64,42 +62,77 @@ export const CartList = () => {
       );
 
       if (!response.ok) {
+        const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
+        console.error(
+          `Error status: ${response.status}, Details: ${errorDetails}`
+        );
         throw new Error("Failed to fetch cart items");
       }
       const data = await response.json();
-      return data; // 데이터 반환
+      return data;
     } catch (error) {
-      console.error("Error fetching cart items:", error);
-      return []; // 에러 발생 시 빈 배열 반환
+      console.error("Error fetching cart items:", error.message);
+      return [];
     }
   };
 
+  // 컴포넌트 마운트 시 장바구니 아이템 로드
   useEffect(() => {
     const loadCartItems = async () => {
       const userId = 1; // 예시 userId
       const result = await fetchCartItems(userId);
       setCartItems(result);
       setItemQuantities(
-        result.reduce((acc, item) => ({ ...acc, [item.id]: 1 }), {})
+        result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
       );
     };
 
     loadCartItems();
   }, []);
 
-  const handleQuantityChange = (itemId, value) => {
+  // 수량 변경 핸들러
+  const handleQuantityChange = (itemId, newQuantity) => {
+    // 유효한 수량인지 확인
+    if (newQuantity <= 0) return;
+
+    // 상태 업데이트
     setItemQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [itemId]: value,
+      [itemId]: newQuantity,
     }));
+
+    // 서버에 수량 변경 요청 보내기
+    fetch("http://localhost:8081/cart/updateQuantity", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        itemId: itemId,
+        quantity: newQuantity,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update quantity");
+        }
+        return response.json(); // 서버에서 업데이트된 아이템을 반환
+      })
+      .then((updatedCartItem) => {
+        // 서버에서 반환한 수량으로 상태 업데이트
+        setItemQuantities((prevQuantities) => ({
+          ...prevQuantities,
+          [itemId]: updatedCartItem.quantity,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error updating quantity:", error);
+      });
   };
 
+  // 선택된 아이템 삭제 핸들러
   const handleDeleteSelected = async () => {
     const selectedIds = Array.from(selectedItems);
-    const requestData = {
-      ids: selectedIds,
-    };
-    console.log("Request Data:", JSON.stringify(requestData, null, 2));
     try {
       const response = await fetch("http://localhost:8081/cart/delete", {
         method: "DELETE",
@@ -113,12 +146,11 @@ export const CartList = () => {
         throw new Error("Failed to delete selected items");
       }
 
-      // 서버에서 성공적으로 삭제되면 상태를 업데이트
       setCartItems((prevItems) =>
         prevItems.filter((item) => !selectedItems.has(item.id))
       );
       setSelectedItems(new Set());
-      setSelectAll(false); // 전체 선택 체크박스도 해제
+      setSelectAll(false);
     } catch (error) {
       console.error("Error deleting selected items:", error);
     }
@@ -139,7 +171,7 @@ export const CartList = () => {
               checked={selectAll}
               onChange={handleSelectAllChange}
             />
-            <label for="checkall">전체선택</label>
+            <label htmlFor="checkall">전체선택</label>
           </div>
         </div>
         <button className="cancel_all" onClick={handleDeleteSelected}>
@@ -174,17 +206,17 @@ export const CartList = () => {
             </>
           ) : (
             <>
-              <button
+              {/* <button
                 className="pay_member_no"
                 onClick={() => handleNavigation("/order")}
               >
                 비회원 구매
-              </button>
+              </button> */}
               <button
                 className="pay_member_yes"
                 onClick={() => handleNavigation("/login")}
               >
-                회원 구매
+                구매하기
               </button>
             </>
           )}

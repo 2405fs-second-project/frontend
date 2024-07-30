@@ -26,9 +26,9 @@ const NavBar = () => {
           <a href="/" className="season_off">
             시즌오프
           </a>
-          <Link to="/menform">남성</Link>
-          <Link to="/womanform">여성</Link>
-          <Link to="/accessoryform">악세서리</Link>
+          <Link to="/viewform?gender=male">남성</Link>
+          <Link to="/viewform?gender=female">여성</Link>
+          <Link to="/viewform?gender=accessory">악세서리</Link>
           <Link to="/">룩북</Link>
           <Link to="/">기사</Link>
           <Link to="/">매장</Link>
