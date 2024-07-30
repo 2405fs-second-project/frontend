@@ -5,7 +5,8 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import axios from "axios";
+
+import { AuthProvider } from "./context/AuthContext";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -26,15 +27,12 @@ const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
 
-  const api = axios.create({});
-
   return (
     <>
       <NavBar />
       <Routes>
         <Route path="/" element={<MainForm />} />
         <Route path="/viewform" element={<ViewForm />} />
-        <Route path="/buyorder/:productId" element={<BuyOrder />} />
         <Route path="/viewdetail/:id" element={<ViewDetail />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
@@ -45,6 +43,7 @@ const App = () => {
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
         <Route path="/ordercomplete" element={<OrderComplete />} />
+        <Route path="/buyorder/:productId" element={<BuyOrder />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>
@@ -52,9 +51,11 @@ const App = () => {
 };
 
 const AppWithRouter = () => (
-  <Router>
-    <App />
-  </Router>
+  <AuthProvider>
+    <Router>
+      <App />
+    </Router>
+  </AuthProvider>
 );
 
 export default AppWithRouter;

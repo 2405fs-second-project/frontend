@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./NavBar.css";
 import logo from "../../assets/WhiteLogo.png";
 import korea from "../../assets/Korea.png";
@@ -10,38 +11,14 @@ import human from "../../assets/Human.png";
 import interesting from "../../assets/Interesting.png";
 import bag from "../../assets/Bag.png";
 
-const NavBar = ({ cartItems }) => {
-  const sellerid = 9; //userid값 기본설정
-  const renderUserLink = () => {
-    if (sellerid) {
-      return sellerid === 9 ? ( //userid값이 9인지 확인하기
-        <Link to="/product">
-          <button className="human_btn">
-            <img className="human_logo" src={human} />
-          </button>
-        </Link>
-      ) : (
-        <Link to="/mypage">
-          <button className="human_btn">
-            <img className="human_logo" src={human} />
-          </button>
-        </Link>
-      );
-    } else {
-      return (
-        <Link to="/login">
-          <button className="human_btn">
-            <img className="human_logo" src={human} />
-          </button>
-        </Link>
-      );
-    }
-  };
+const NavBar = () => {
+  const { user } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="navbar_left">
         <Link to="/">
-          <img src={logo} className="home_logo" />
+          <img src={logo} className="home_logo" alt="Home Logo" />
         </Link>
       </div>
       <div className="navbar_center">
@@ -61,24 +38,40 @@ const NavBar = ({ cartItems }) => {
       <div className="navbar_right">
         <div className="nav_icons">
           <button className="korea_btn">
-            <img className="korea_logo" src={korea} />
+            <img className="korea_logo" src={korea} alt="Korea" />
           </button>
           <button className="search_btn">
-            <img className="search_logo" src={search} />
+            <img className="search_logo" src={search} alt="Search" />
           </button>
           <button className="radio_btn">
-            <img className="radio_logo" src={radio} />
+            <img className="radio_logo" src={radio} alt="Radio" />
           </button>
           <button className="bell_btn">
-            <img className="bell_logo" src={bell} />
+            <img className="bell_logo" src={bell} alt="Bell" />
           </button>
-          {renderUserLink()}
+          {user ? (
+            <Link to={`/mypage/${user.id}`}>
+              <button className="human_btn">
+                <img className="human_logo" src={human} alt="Profile" />
+              </button>
+            </Link>
+          ) : (
+            <Link to="/login">
+              <button className="human_btn">
+                <img className="human_logo" src={human} alt="Login" />
+              </button>
+            </Link>
+          )}
           <button className="interesting_btn">
-            <img className="interesting_logo" src={interesting} />
+            <img
+              className="interesting_logo"
+              src={interesting}
+              alt="Interesting"
+            />
           </button>
           <Link to="/cart">
             <button className="bag_btn">
-              <img className="bag_logo" src={bag} />
+              <img className="bag_logo" src={bag} alt="Cart" />
             </button>
           </Link>
         </div>
