@@ -5,7 +5,8 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import axios from "axios";
+
+import { AuthProvider } from "./context/AuthContext";
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -13,26 +14,19 @@ import Signup2 from "./components/SignUp/SignUp2";
 import Signup3 from "./components/SignUp/SignUp3";
 import Login from "./components/Login/Login";
 import Footer from "./components/NavBar/Footer";
-import AccessoryProductForm from "./product/AccessoryProductForm";
-import AccessoryProductDetail from "./product/AccessoryProductDetail";
-import MenDetail from "./menproduct/MenDetail";
-import MenForm from "./menproduct/MenForm";
+import ViewDetail from "./components/View/ViewDetail";
+import ViewForm from "./components/View/ViewForm";
 import MainForm from "./components/Main/MainForm";
 import WomanForm from "./womanproduct/WomanForm";
 import WomanDetail from "./womanproduct/WomanDetail";
 import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
+import OrderComplete from "./components/Order/OrderComplete";
 
 const App = () => {
   const location = useLocation();
   const hideFooterPaths = ["/login", "/signup1", "/signup2", "/signup3"];
-
-  const BASE_URL = "http//localhost:8081/api/users";
-
-  const api = axios.create({
-    baseURL: BASE_URL,
-  });
 
   return (
     <>
@@ -45,7 +39,7 @@ const App = () => {
         <Route path="/womandetail" element={<WomanDetail />} />
         <Route path="/accessoryform" element={<AccessoryProductForm />} />
         <Route path="/accessorydetail" element={<AccessoryProductDetail />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage/:id" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/signup3" element={<Signup3 />} />
@@ -53,6 +47,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
+        <Route path="/ordercomplete" element={<OrderComplete />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>
@@ -60,9 +55,11 @@ const App = () => {
 };
 
 const AppWithRouter = () => (
-  <Router>
-    <App />
-  </Router>
+  <AuthProvider>
+    <Router>
+      <App />
+    </Router>
+  </AuthProvider>
 );
 
 export default AppWithRouter;
