@@ -214,8 +214,8 @@ const MyPage = () => {
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
-                              <p>주문 상태 : {order_item.pay_state}</p>
-                              <p>주문 번호 : {order_item.order_number}</p>
+                              <p>주문 상태 : {order_item.payState}</p>
+                              <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
                               <p>상품 가격 : {order_item.productPrice}원</p>
                             </div>
