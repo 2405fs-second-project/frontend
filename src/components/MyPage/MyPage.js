@@ -65,8 +65,10 @@ const MyPage = () => {
         }
       );
       setOrderItems(Array.isArray(response.data) ? response.data : []);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
+        `Failed to fetch order items for user with id ${userId}:`,
         `Failed to fetch order items for user with id ${userId}:`,
         error.response ? error.response.data : error.message
       );
@@ -82,6 +84,7 @@ const MyPage = () => {
   };
 
   const handleImageUpload = async (event) => {
+    //백엔드 UsersService / UsersController 보면 됩니다!
     const file = event.target.files[0];
     setSelectedFile(file);
 
