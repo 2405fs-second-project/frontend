@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../service/AuthService";
+import AuthService from "../../service/AuthService"; // AuthService import 변경
 import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,10 +21,9 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await loginUser({ email, password });
-      const { jwt, userId } = response.data;
-      localStorage.setItem("token", jwt);
-      localStorage.setItem("userId", userId);
+      const response = await AuthService.loginUser({ email, password }); // AuthService.loginUser 호출
+      const { jwt, userId, userName } = response;
+      login({ jwt, id: userId, name: userName });
       setMessage("로그인 성공");
       navigate(`/mypage/${userId}`);
     } catch (error) {

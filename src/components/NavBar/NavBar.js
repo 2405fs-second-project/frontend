@@ -1,3 +1,4 @@
+// NavBar.js
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -17,11 +18,10 @@ import bag from "../../assets/Bag.png";
 const NavBar = () => {
   const { user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // 검색 입력 값을 저장하는 상태
+  const [searchQuery, setSearchQuery] = useState(""); 
   const searchBarRef = useRef(null); 
   const navigate = useNavigate();
   
-
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -42,7 +42,6 @@ const NavBar = () => {
       setSearchQuery(""); 
       setIsSearchOpen(false); 
     } catch (error) {
-      console.error("검색 중 오류가 발생했습니다!", error);
       alert("검색 중 오류가 발생했습니다.");
     }
   };
