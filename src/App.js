@@ -21,6 +21,7 @@ import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
 import OrderComplete from "./components/Order/OrderComplete";
+import BuyOrder from "./components/Order/BuyOrder";
 
 const App = () => {
   const location = useLocation();
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
         <Route path="/ordercomplete" element={<OrderComplete />} />
+        <Route path="/buyorder/:productId" element={<BuyOrder />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>

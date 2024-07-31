@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./ViewDetail.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const ViewDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
   const [productdetail, setProductdetail] = useState(null);
+  const navigate = useNavigate(); // useNavigate 추가
   const formatNumber = (number) => {
     console.log(number); // 디버깅을 위해 숫자 출력
     return new Intl.NumberFormat().format(number);
   };
+
   useEffect(() => {
     fetch(`/api/product/detail/${id}`)
       .then((response) => response.json())
@@ -21,6 +23,7 @@ const ViewDetail = () => {
       })
       .catch((error) => console.error("Error fetching product:", error));
   }, [id]);
+
   const handleToggle = (index) => {
     setIsExpanded((prevStates) =>
       prevStates.map((state, i) => (i === index ? !state : state))
@@ -60,6 +63,18 @@ const ViewDetail = () => {
       alert("사이즈를 선택해주세요.");
     }
   };
+
+  const handleBuyClick = () => {
+    //추가
+    if (productdetail && selectedSize) {
+      navigate(`/buyorder/${productdetail.id}`, {
+        state: { size: selectedSize },
+      });
+    } else {
+      alert("사이즈를 선택해 주세요.");
+    }
+  };
+
   if (!productdetail) {
     return <div>Loading...</div>;
   }
@@ -103,7 +118,11 @@ const ViewDetail = () => {
               ))}
               {selectedSize ? (
                 <div className="action_buttons">
-                  <button className="buy_button">구매하기</button>
+                  <button className="buy_button" onClick={handleBuyClick}>
+                    {" "}
+                    추가 구매하기
+                  </button>
+
                   <button className="cart_button" onClick={handleCartInClick}>
                     장바구니 담기
                   </button>
