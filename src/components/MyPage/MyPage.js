@@ -1,48 +1,69 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./MyPage.css";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const MyPage = () => {
+  const { id: userId } = useParams();
+  const { user, logout } = useAuth();
   const [view, setView] = useState("order");
-  const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [updateName, setUpdateName] = useState("");
   const [updateAddress, setUpdateAddress] = useState("");
   const [updatePhone, setUpdatePhone] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const [orderItems, setOrderItems] = useState([]);
-  const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 사용자 ID를 가져옴
+  const navigate = useNavigate();
 
-  // 사용자 정보를 가져오는 함수
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      handleFetchUser();
+      handleFetchOrderItems();
+    }
+  }, [user, userId, navigate]);
+
   const handleFetchUser = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/users/${userId}`
+        `http://localhost:8081/api/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      setUser(response.data);
+      setUserData(response.data);
 
-      // 배송 정보 가져오기
       if (response.data) {
-        setUpdateName(response.data.updateName || "");
-        setUpdateAddress(response.data.updateAddress || "");
-        setUpdatePhone(response.data.updatePhone || "");
+        setUpdateName(response.data.name || "");
+        setUpdateAddress(response.data.address || "");
+        setUpdatePhone(response.data.phone_num || "");
         setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
       console.error(
-        `Failed to fetch user with id ${userId}:`,
+        `Failed to fetch user:`,
         error.response ? error.response.data : error.message
       );
     }
   };
 
-  // 주문 내역을 가져오는 함수
   const handleFetchOrderItems = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/order-items/user/${userId}`
+        `http://localhost:8081/api/order-items/user/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log(response.data);
       setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
@@ -52,24 +73,16 @@ const MyPage = () => {
     }
   };
 
-  // 컴포넌트 마운트 시 사용자 정보 및 주문 내역 가져오기
-  useEffect(() => {
-    handleFetchUser();
-    handleFetchOrderItems();
-  }, [userId]);
-
-  // 뷰 상태를 설정하는 함수
   const handleViewClick = (viewName) => {
     setView(viewName);
 
-    // 특정 뷰를 클릭했을 때 주문 내역을 새로 고침
     if (viewName === "order") {
       handleFetchOrderItems();
     }
   };
 
-  // 이미지 업로드 핸들러
   const handleImageUpload = async (event) => {
+    //백엔드 UsersService / UsersController 보면 됩니다!
     const file = event.target.files[0];
     setSelectedFile(file);
 
@@ -78,10 +91,16 @@ const MyPage = () => {
 
     try {
       if (user) {
+        const token = localStorage.getItem("token");
         await axios.post(
           `http://localhost:8081/api/users/${user.id}/upload`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
         );
         handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
       }
@@ -93,25 +112,30 @@ const MyPage = () => {
     }
   };
 
-  // 배송 정보 업데이트 핸들러
   const handleUpdateShip = async (event) => {
     event.preventDefault();
 
     try {
-      if (user) {
+      if (userData) {
+        const token = localStorage.getItem("token");
         const response = await axios.post(
-          `http://localhost:8081/api/users/${user.id}/shipping`,
+          `http://localhost:8081/api/users/${userData.id}/shipping`,
           {
-            updateName: updateName,
-            updateAddress: updateAddress,
-            updatePhone: updatePhone,
-            shippingInfo: shippingInfo,
+            name: updateName,
+            address: updateAddress,
+            phone_num: updatePhone,
+            shippingInfo,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
         if (response.status === 200) {
           console.log("배송 정보가 성공적으로 업데이트되었습니다.");
-          handleFetchUser(); // 정보 업데이트 후 사용자 데이터 새로 고침
+          handleFetchUser();
         }
       }
     } catch (error) {
@@ -122,17 +146,13 @@ const MyPage = () => {
     }
   };
 
-  // 주문 아이템을 order_id별로 그룹화하는 함수
   const groupByOrderId = (items) => {
-    return Array.isArray(items)
-      ? items.reduce((acc, item) => {
-          (acc[item.order_id] = acc[item.order_id] || []).push(item);
-          return acc;
-        }, {})
-      : {};
+    return items.reduce((acc, item) => {
+      (acc[item.orderId] = acc[item.orderId] || []).push(item);
+      return acc;
+    }, {});
   };
 
-  // 주문 상태에 따라 필터링
   const filterOrderItemsByState = (state) => {
     return orderItems.filter((item) => item.payState === state);
   };
@@ -140,9 +160,8 @@ const MyPage = () => {
   const groupedOrderItems = groupByOrderId(orderItems);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -182,9 +201,28 @@ const MyPage = () => {
               >
                 회원 정보
               </a>
+              <a
+                className={view === "points" ? "active" : ""}
+                onClick={() => handleViewClick("points")}
+              >
+                적립금 & 쿠폰
+              </a>
+            </div>
+            <div className="faq">
+              <a
+                className={view === "faq" ? "active" : ""}
+                onClick={() => handleViewClick("faq")}
+              >
+                자주 하는 질문
+              </a>
             </div>
             <div className="logout">
-              <a onClick={handleLogout}>로그아웃</a>
+              <a
+                className={view === "logout" ? "active" : ""}
+                onClick={handleLogout}
+              >
+                로그아웃
+              </a>
             </div>
           </div>
           <div>
@@ -207,10 +245,10 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={order_item.productFileUrl}
-                              alt="상품 이미지"
+                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
+                              alt=""
                             ></img>{" "}
-                            <div className="order_infomation">
+                            <div className="order_info">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -236,16 +274,16 @@ const MyPage = () => {
                 </div>
                 <div className="ordered_list">
                   {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("주문취소"))
+                    groupByOrderId(filterOrderItemsByState("결제취소"))
                   ).length > 0 ? (
                     Object.keys(
-                      groupByOrderId(filterOrderItemsByState("주문취소"))
+                      groupByOrderId(filterOrderItemsByState("결제취소"))
                     ).map((orderId) => (
                       <div
                         key={orderId}
                         className={`order_group order_${orderId}`}
                       >
-                        {groupByOrderId(filterOrderItemsByState("주문취소"))[
+                        {groupByOrderId(filterOrderItemsByState("결제취소"))[
                           orderId
                         ].map((order_item) => (
                           <div
@@ -254,10 +292,10 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={order_item.productFileUrl}
+                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
                               alt=""
                             ></img>{" "}
-                            <div className="order_infomation">
+                            <div className="order_info">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -311,10 +349,10 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={order_item.productFileUrl}
+                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
                               alt=""
                             ></img>{" "}
-                            <div className="order_infomation">
+                            <div className="order_info">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -333,13 +371,13 @@ const MyPage = () => {
                 </div>
               </div>
             )}
-            {view === "memberInfo" && user && (
+            {view === "memberInfo" && userData && (
               <div className="side_info_box">
                 <div className="myinfo-img-register">
                   <img
                     className="myinfo-img"
-                    src={`http://localhost:8081${user.profilePictureUrl}`}
-                    alt="프로필을 추가 하세요"
+                    src={`data:image/jpeg;base64,${userData.profilePictureUrl}`}
+                    alt="프로필을 추가 ➡️➡️➡️ "
                   />
                   <label htmlFor="file">
                     <div className="info-upload">파일 업로드</div>
@@ -361,17 +399,21 @@ const MyPage = () => {
                       <div className="edit_id">
                         <div>
                           <label>아이디(이메일)</label>
-                          <input type="text" value={user.email} readOnly />
+                          <input type="text" value={userData.email} readOnly />
                         </div>
                         <div>
                           <label>이름</label>
-                          <input type="text" value={user.name} readOnly />
+                          <input type="text" value={userData.name} readOnly />
                         </div>
                       </div>
                       <div className="phone_number">
                         <label>핸드폰 번호</label>
                         <div className="number_input">
-                          <input type="text" value={user.phoneNum} readOnly />
+                          <input
+                            type="text"
+                            value={userData.phoneNum}
+                            readOnly
+                          />
                         </div>
                       </div>
                       <div className="side_info_box_line"> </div>
