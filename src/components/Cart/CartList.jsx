@@ -14,10 +14,7 @@ export const CartList = () => {
 
   // 총 가격 계산
   const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.price * (itemQuantities[item.id] || 1),
-      0
-    );
+    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
   };
 
   // 네비게이션 핸들러
@@ -51,21 +48,16 @@ export const CartList = () => {
   // 장바구니 아이템 가져오기
   const fetchCartItems = async (userId) => {
     try {
-      const response = await fetch(
-        `http://localhost:8081/cart/items?userId=${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`http://localhost:8081/cart/items?userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
         const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
-        console.error(
-          `Error status: ${response.status}, Details: ${errorDetails}`
-        );
+        console.error(`Error status: ${response.status}, Details: ${errorDetails}`);
         throw new Error("Failed to fetch cart items");
       }
       const data = await response.json();
@@ -82,9 +74,7 @@ export const CartList = () => {
       const userId = 1; // 예시 userId
       const result = await fetchCartItems(userId);
       setCartItems(result);
-      setItemQuantities(
-        result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
-      );
+      setItemQuantities(result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}));
     };
 
     loadCartItems();
@@ -146,9 +136,7 @@ export const CartList = () => {
         throw new Error("Failed to delete selected items");
       }
 
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => !selectedItems.has(item.id))
-      );
+      setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
       setSelectedItems(new Set());
       setSelectAll(false);
     } catch (error) {
@@ -165,12 +153,7 @@ export const CartList = () => {
       <div className="select">
         <div className="select_all">
           <div className="select_all_box">
-            <input
-              type="checkbox"
-              id="checkall"
-              checked={selectAll}
-              onChange={handleSelectAllChange}
-            />
+            <input type="checkbox" id="checkall" checked={selectAll} onChange={handleSelectAllChange} />
             <label htmlFor="checkall">전체선택</label>
           </div>
         </div>
@@ -197,10 +180,7 @@ export const CartList = () => {
         <div className="pay_member">
           {isLoggedIn ? (
             <>
-              <button
-                className="pay_member_yes"
-                onClick={() => handleNavigation("/order")}
-              >
+              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
                 회원 구매
               </button>
             </>
@@ -212,20 +192,14 @@ export const CartList = () => {
               >
                 비회원 구매
               </button> */}
-              <button
-                className="pay_member_yes"
-                onClick={() => handleNavigation("/login")}
-              >
+              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
                 구매하기
               </button>
             </>
           )}
         </div>
         <div className="pay_btn">
-          <button
-            className="pay_continue"
-            onClick={() => handleNavigation("/")}
-          >
+          <button className="pay_continue" onClick={() => handleNavigation("/")}>
             계속 쇼핑하기
           </button>
         </div>
