@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import AuthService from "../service/AuthService"; // AuthService import 변경
+import AuthService from "../service/AuthService";
 
 const AuthContext = createContext();
 
@@ -8,15 +8,18 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (token && userData) {
       AuthService.validateToken(token)
         .then((response) => {
-          if (response.data) {
-            setUser(response.data);
+          if (response.valid) {
+            setUser(userData);
+          } else {
+            AuthService.logout();
           }
         })
         .catch(() => {
-          localStorage.removeItem("token");
+          AuthService.logout();
         });
     }
   }, []);
@@ -24,13 +27,12 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem("token", userData.jwt);
-    localStorage.setItem("userId", userData.id);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    AuthService.logout();
   };
 
   return (
