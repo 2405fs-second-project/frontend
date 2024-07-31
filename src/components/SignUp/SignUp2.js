@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import AuthService from "../../service/AuthService";
 import "./SignUp2.css";
 
 const SignUp2 = () => {
@@ -45,26 +45,13 @@ const SignUp2 = () => {
       return;
     }
 
-    const formDataWithDefaults = {
-      ...formData,
-      gender: "MALE", // gender 기본값 설정
-    };
-
-    console.log("Submitting form data: ", formDataWithDefaults);
     try {
-      await axios.post(
-        "https://localhost:8081/api/register",
-        formDataWithDefaults,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      await AuthService.registerUser(formData);
       setMessage("User registered successfully");
       navigate("/login");
     } catch (error) {
-      const errorMessage = error.response?.data || "Error registering user";
+      const errorMessage =
+        error.response?.data?.message || "Error registering user";
       console.error(error);
       setMessage(errorMessage);
     }

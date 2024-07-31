@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { validateToken } from "../service/AuthService";
+import AuthService from "../service/AuthService"; // AuthService import 변경
 
 const AuthContext = createContext();
 
@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      validateToken(token)
+      AuthService.validateToken(token)
         .then((response) => {
           if (response.data) {
             setUser(response.data);
@@ -21,8 +21,20 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("token", userData.jwt);
+    localStorage.setItem("userId", userData.id);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
