@@ -40,9 +40,9 @@ const MyPage = () => {
       setUserData(response.data);
 
       if (response.data) {
-        setUpdateName(response.data.name || "");
-        setUpdateAddress(response.data.address || "");
-        setUpdatePhone(response.data.phone_num || "");
+        setUpdateName(response.data.updateName || "");
+        setUpdateAddress(response.data.updateAddress || "");
+        setUpdatePhone(response.data.updatePhone || "");
         setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
@@ -65,8 +65,10 @@ const MyPage = () => {
         }
       );
       setOrderItems(Array.isArray(response.data) ? response.data : []);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
+        `Failed to fetch order items for user with id ${userId}:`,
         `Failed to fetch order items for user with id ${userId}:`,
         error.response ? error.response.data : error.message
       );
@@ -87,7 +89,7 @@ const MyPage = () => {
     setSelectedFile(file);
 
     const formData = new FormData();
-    formData.append("file", file); // 'file'이라는 이름으로 파일을 추가합니다.
+    formData.append("file", file);
 
     try {
       if (user) {
@@ -121,9 +123,9 @@ const MyPage = () => {
         const response = await axios.post(
           `http://localhost:8081/api/users/${userData.id}/shipping`,
           {
-            name: updateName,
-            address: updateAddress,
-            phone_num: updatePhone,
+            updateName,
+            updateAddress,
+            updatePhone,
             shippingInfo,
           },
           {
@@ -376,7 +378,7 @@ const MyPage = () => {
                 <div className="myinfo-img-register">
                   <img
                     className="myinfo-img"
-                    src={`data:image/jpeg;base64,${userData.profilePictureUrl}`}
+                    src={`http://localhost:8081${userData.profilePictureUrl}`}
                     alt="프로필을 추가 ➡️➡️➡️ "
                   />
                   <label htmlFor="file">
