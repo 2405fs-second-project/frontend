@@ -40,9 +40,9 @@ const MyPage = () => {
       setUserData(response.data);
 
       if (response.data) {
-        setUpdateName(response.data.name || "");
-        setUpdateAddress(response.data.address || "");
-        setUpdatePhone(response.data.phone_num || "");
+        setUpdateName(response.data.updateName || "");
+        setUpdateAddress(response.data.updateAddress || "");
+        setUpdatePhone(response.data.updatePhone || "");
         setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
@@ -64,18 +64,13 @@ const MyPage = () => {
           },
         }
       );
-      setOrderItems(response.data);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
-        `Failed to fetch order items:`,
+        `Failed to fetch order items for user with id ${userId}:`,
         error.response ? error.response.data : error.message
       );
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
   };
 
   const handleViewClick = (viewName) => {
@@ -90,35 +85,29 @@ const MyPage = () => {
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result.split(",")[1];
-      try {
-        if (userData) {
-          const token = localStorage.getItem("token");
-          await axios.post(
-            `http://localhost:8081/api/users/${userData.id}/upload`,
-            {
-              image: base64Image,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          handleFetchUser();
-        }
-      } catch (error) {
-        console.error(
-          "Failed to upload image:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
+    const formData = new FormData();
+    formData.append("file", file);
 
-    if (file) {
-      reader.readAsDataURL(file);
+    try {
+      if (user) {
+        const token = localStorage.getItem("token");
+        await axios.post(
+          `http://localhost:8081/api/users/${user.id}/upload`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
+      }
+    } catch (error) {
+      console.error(
+        "Failed to upload image:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -131,9 +120,9 @@ const MyPage = () => {
         const response = await axios.post(
           `http://localhost:8081/api/users/${userData.id}/shipping`,
           {
-            name: updateName,
-            address: updateAddress,
-            phone_num: updatePhone,
+            updateName,
+            updateAddress,
+            updatePhone,
             shippingInfo,
           },
           {
@@ -168,6 +157,11 @@ const MyPage = () => {
   };
 
   const groupedOrderItems = groupByOrderId(orderItems);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="my_page">
@@ -381,7 +375,7 @@ const MyPage = () => {
                 <div className="myinfo-img-register">
                   <img
                     className="myinfo-img"
-                    src={`data:image/jpeg;base64,${userData.profilePictureUrl}`}
+                    src={`http://localhost:8081${userData.profilePictureUrl}`}
                     alt="프로필을 추가 ➡️➡️➡️ "
                   />
                   <label htmlFor="file">

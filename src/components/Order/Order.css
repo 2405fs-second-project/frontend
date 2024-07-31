@@ -19,13 +19,22 @@
   justify-content: center;
   display: flex;
   max-width: 100%;
-  padding: 25px;
+  padding: 30px;
+  margin-left: 50px;
 }
 
 .order_info {
   position: absolute;
-  top: 100px; /* 원하는 위치로 조정 */
-  left: 80px;
+  top: 10vh;
+  left: 7vw;
+}
+
+@media (max-width: 768px) {
+  /* 화면 너비가 768px 이하일 때 */
+  .order_info {
+    top: 15vh; /* 화면 크기에 따라 조정 */
+    left: 5vw;
+  }
 }
 
 .order_form input {

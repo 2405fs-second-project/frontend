@@ -7,7 +7,6 @@ function BuyOrder() {
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
   const [order, setOrder] = useState(null);
   const [products, setProducts] = useState([]);
   const [updateAddress, setUpdateAddress] = useState("");
@@ -19,15 +18,17 @@ function BuyOrder() {
   const [userId, setUserId] = useState(1);
   const location = useLocation(); // 상태 객체 접근
   const { size } = location.state || {}; // navigate에서 전달한 상태 객체
+  const [quantity, setQuantity] = useState(1); // 기본값 1
 
   console.log("Product ID:", productId);
   console.log("Location state:", location.state); // 상태 객체를 확인합니다.
   console.log("Product ID:", productId);
 
   const fetchProduct = async () => {
+    console.log(`Fetching product with ID: ${productId} and size: ${size}`); // 로그 추가
     try {
       const response = await axios.get(
-        `http://localhost:8081/api/orders/buy-item/${productId}`
+        `http://localhost:8081/api/orders/buy-item/${productId}?size=${size}`
       );
       console.log("Product data:", response.data);
       setProducts([response.data]);
@@ -59,13 +60,11 @@ function BuyOrder() {
     if (isButtonActive) {
       try {
         const response = await axios.post(
-          `http://localhost:8081/api/orders/create/${userId}`,
+          `http://localhost:8081/api/orders/direct/${userId}`,
           {
-            // 주문 정보 포함
-            updateName,
-            updateAddress,
-            updatePhoneNum,
-            shippingInfo,
+            productId, // 실제 상품 ID
+            quantity, // 주문 수량
+            size, // 상품 사이즈
           }
         );
         if (response.status === 201) {
@@ -77,10 +76,6 @@ function BuyOrder() {
         console.error("Error creating order:", error);
       }
     }
-  };
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
   };
 
   const handleClick = (buttonId) => {
