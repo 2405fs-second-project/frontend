@@ -1,34 +1,52 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import "./Order.css";
 
 function Order() {
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
   const [order, setOrder] = useState(null);
   const [cartItems, setCartItems] = useState([]); // 상태 추가
-  const [user, setUser] = useState(null);
   const [updateAddress, setUpdateAddress] = useState("");
   const [updatePhoneNum, setUpdatePhoneNum] = useState("");
   const [updateName, setUpdateName] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
-  const [userId, setUserId] = useState(1);
+  const { id: userId } = useParams();
+  const { user, logout } = useAuth();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    } else {
+      handleFetchUserOrder();
+      handleFetchCartItems(); // Fetch cart items after fetching user order
+    }
+  }, [user, userId, navigate]);
 
   const handleFetchUserOrder = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/orders/user-info/${userId}`
+        `http://localhost:8081/api/api/orders/user-info/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      setOrder(response.data);
+      setUserData(response.data);
       // 기본값 초기화
-      setUpdateName(response.data.updateName || "");
-      setUpdateAddress(response.data.updateAddress || "");
-      setUpdatePhoneNum(response.data.updatePhoneNum || "");
-      setShippingInfo(response.data.shippingInfo || "");
+      if (response.data) {
+        setUpdateName(response.data.updateName || "");
+        setUpdateAddress(response.data.updateAddress || "");
+        setUpdatePhoneNum(response.data.updatePhoneNum || "");
+        setShippingInfo(response.data.shippingInfo || "");
+      }
     } catch (error) {
       console.error(
         `Failed to fetch user with id ${userId}:`,
@@ -40,6 +58,7 @@ function Order() {
   const handlePayment = async () => {
     if (isButtonActive) {
       try {
+        const token = localStorage.getItem("token"); // 토큰 가져오기
         const response = await axios.post(
           `http://localhost:8081/api/orders/create/${userId}`,
           {
@@ -48,6 +67,11 @@ function Order() {
             updateAddress,
             updatePhoneNum,
             shippingInfo,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // 인증 헤더 추가
+            },
           }
         );
         if (response.status === 201) {
@@ -61,10 +85,48 @@ function Order() {
     }
   };
 
+  const handleOrderAndShippingUpdate = async (event) => {
+    event.preventDefault(); // 기본 동작 방지
+    await handleUpdateShip(event); // 배송 정보 업데이트
+    await handlePayment(); // 주문하기
+  };
+
+  const handleUpdateShip = async () => {
+    try {
+      {
+        const response = await axios.post(
+          `http://localhost:8081/api/orders/${userId}/shipping`, // API 엔드포인트
+          {
+            updateName: updateName,
+            updateAddress: updateAddress,
+            updatePhone: updatePhoneNum,
+            shippingInfo: shippingInfo,
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("배송 정보가 성공적으로 업데이트되었습니다.");
+          await handleFetchUserOrder(); // 사용자 데이터 새로 고침
+        }
+      }
+    } catch (error) {
+      console.error(
+        "배송 정보 업데이트 실패:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
   const handleFetchCartItems = async () => {
     try {
+      const token = localStorage.getItem("token"); // 토큰 가져오기
       const response = await axios.get(
-        `http://localhost:8081/api/orders/cart-items/${userId}`
+        `http://localhost:8081/api/orders/cart-items/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // 인증 헤더 추가
+          },
+        }
       );
       setCartItems(response.data || []); // 응답 데이터가 배열인지 확인
     } catch (error) {
@@ -74,10 +136,6 @@ function Order() {
       );
       setCartItems([]); // 에러 발생 시 빈 배열로 설정
     }
-  };
-
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
   };
 
   const handleClick = (buttonId) => {
@@ -101,19 +159,6 @@ function Order() {
         0
       )
     : 0;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await handleFetchUserOrder();
-        await handleFetchCartItems(); // Fetch cart items after fetching user order
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [userId]); // userId 변경 시 데이터 다시 가져오기
 
   return (
     <div>
@@ -328,7 +373,7 @@ function Order() {
                 backgroundColor: isButtonActive ? "#000" : "#ccc",
                 color: isButtonActive ? "#fff" : "#000",
               }}
-              onClick={handlePayment} // Add onClick event to the button
+              onClick={handleOrderAndShippingUpdate} // Add onClick event to the button
             >
               주문하기
             </button>
