@@ -39,11 +39,17 @@ const ViewForm = () => {
           {products.map((product, index) => (
             <div className="product_wrapper" key={index}>
               <Link to={`/viewdetail/${product.id}`}>
-                <img className="product_men_img" src={product.fileUrl} alt="사진오류" />
+                <img
+                  className="product_men_img"
+                  src={product.fileUrl}
+                  alt="사진오류"
+                />
               </Link>
               <div className="product_name">{product.name}</div>
               <div className="product_color_type">{product.color}</div>
-              <div className="product_normal_price">₩{formatNumber(product.price)}</div>
+              <div className="product_normal_price">
+                ₩{formatNumber(product.price)}
+              </div>
             </div>
           ))}
         </div>
