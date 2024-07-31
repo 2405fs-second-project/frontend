@@ -206,12 +206,6 @@ export const CartList = () => {
             </>
           ) : (
             <>
-              {/* <button
-                className="pay_member_no"
-                onClick={() => handleNavigation("/order")}
-              >
-                비회원 구매
-              </button> */}
               <button
                 className="pay_member_yes"
                 onClick={() => handleNavigation("/login")}
