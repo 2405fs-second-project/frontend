@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import AuthService from "../../service/AuthService"; // AuthService import 변경
+import { useAuth } from "../../context/AuthContext";
 import "./Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,11 +21,15 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:8081/api/login", { email, password });
+      const response = await AuthService.loginUser({ email, password }); // AuthService.loginUser 호출
+      const { jwt, userId, userName } = response;
+      login({ jwt, id: userId, name: userName });
       setMessage("로그인 성공");
-      navigate("/home");
+      navigate(`/mypage/${userId}`);
     } catch (error) {
-      setMessage("아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요.");
+      setMessage(
+        "아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요."
+      );
     }
   };
 

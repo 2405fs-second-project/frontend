@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import AuthService from "../../service/AuthService";
 import "./SignUp2.css";
 
 const SignUp2 = () => {
   const [formData, setFormData] = useState({
     name: "",
-    phone: "",
+    phoneNum: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -40,19 +40,19 @@ const SignUp2 = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
+      setErrors({ ...errors, passwordMismatch: true });
       setMessage("비밀번호가 일치하지 않습니다");
       return;
     }
+
     try {
-      await axios.post("http://localhost:8081/api/register", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      await AuthService.registerUser(formData);
       setMessage("User registered successfully");
       navigate("/login");
     } catch (error) {
-      const errorMessage = error.response?.data || "Error registering user";
+      const errorMessage =
+        error.response?.data?.message || "Error registering user";
+      console.error(error);
       setMessage(errorMessage);
     }
   };
@@ -85,8 +85,8 @@ const SignUp2 = () => {
               <label>핸드폰번호</label>
               <input
                 type="text"
-                name="phone"
-                value={formData.phone}
+                name="phoneNum"
+                value={formData.phoneNum}
                 onChange={handleChange}
                 required
               />
@@ -121,11 +121,9 @@ const SignUp2 = () => {
                 onChange={handleChange}
                 required
               />
-              {errors.passwordMismatch &&
-                formData.password &&
-                formData.confirmPassword && (
-                  <div className="error">비밀번호가 일치하지 않습니다</div>
-                )}
+              {errors.passwordMismatch && (
+                <div className="error">비밀번호가 일치하지 않습니다</div>
+              )}
             </div>
             <button
               type="submit"

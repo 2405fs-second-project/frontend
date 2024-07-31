@@ -1,22 +1,40 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "./Order.css";
 
-function Order() {
+function BuyOrder() {
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [order, setOrder] = useState(null);
-  const [cartItems, setCartItems] = useState([]); // 상태 추가
-  const [user, setUser] = useState(null);
+  const [products, setProducts] = useState([]);
   const [updateAddress, setUpdateAddress] = useState("");
   const [updatePhoneNum, setUpdatePhoneNum] = useState("");
   const [updateName, setUpdateName] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const { productId } = useParams(); // Get productId from URL params
   const [userId, setUserId] = useState(1);
+  const location = useLocation(); // 상태 객체 접근
+  const { size } = location.state || {}; // navigate에서 전달한 상태 객체
+
+  console.log("Product ID:", productId);
+  console.log("Location state:", location.state); // 상태 객체를 확인합니다.
+  console.log("Product ID:", productId);
+
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/orders/buy-item/${productId}`
+      );
+      console.log("Product data:", response.data);
+      setProducts([response.data]);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
 
   const handleFetchUserOrder = async () => {
     try {
@@ -61,21 +79,6 @@ function Order() {
     }
   };
 
-  const handleFetchCartItems = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8081/api/orders/cart-items/${userId}`
-      );
-      setCartItems(response.data || []); // 응답 데이터가 배열인지 확인
-    } catch (error) {
-      console.error(
-        `Failed to fetch cart items for user with id ${userId}:`,
-        error.response ? error.response.data : error.message
-      );
-      setCartItems([]); // 에러 발생 시 빈 배열로 설정
-    }
-  };
-
   const handleChange = (event) => {
     setSelectedOption(event.target.value);
   };
@@ -94,26 +97,27 @@ function Order() {
 
   const isButtonActive = isChecked1 && isChecked2;
 
-  // Ensure cartItems is an array before using reduce
-  const totalPrice = Array.isArray(cartItems)
-    ? cartItems.reduce(
-        (total, item) => total + (item.price || 0) * (item.quantity || 0),
+  const totalPrice = Array.isArray(products)
+    ? products.reduce(
+        (total, item) =>
+          total + (item.productPrice || 0) * (item.quantity || 0), // 필드명 수정: price -> productPrice
         0
       )
-    : 0;
+    : 0; // products가 배열이 아닌 경우 총 가격 0으로 설정
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        await fetchProduct();
         await handleFetchUserOrder();
-        await handleFetchCartItems(); // Fetch cart items after fetching user order
+        // 다른 데이터 가져오기 함수 호출 가능
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [userId]); // userId 변경 시 데이터 다시 가져오기
+  }, [userId, productId]); // userId와 productId 변경 시 데이터 다시 가져오기
 
   return (
     <div>
@@ -248,25 +252,29 @@ function Order() {
         <div className="product_info_order">
           <div className="product_section_top">
             <h6 className="info_title_order">주문상품</h6>
-            <div className="order_num">{cartItems.length} 개</div>
+            <div className="order_num"> 1개</div>
           </div>
-          {cartItems.map((item) => (
-            <div key={item.productId} className="product_section">
+          {products.map((product) => (
+            <div key={product.productId} className="product_section">
               <div className="order_summary">
                 <div className="order_image">
                   <img
                     className="order_image_size"
-                    src={`http://localhost:8081/${item.productFileUrl}`}
+                    src={product.productFileUrl}
                     alt=""
                   />
                 </div>
                 <div className="order_info_total">
-                  <div className="order_info_name">{item.productName}</div>
-                  <div className="order_info_sub">{item.productColor}</div>
-                  <div className="order_info_sub">사이즈 {item.size}</div>
-                  <div className="order_info_sub">수량 {item.quantity} 개</div>
+                  <div className="order_info_name">{product.productName}</div>
+                  <div className="order_info_sub">{product.productColor}</div>
+                  <div className="order_info_sub">
+                    사이즈 {product.productSize}
+                  </div>
+                  <div className="order_info_sub">
+                    수량 {product.quantity} 개
+                  </div>
                 </div>
-                <div className="order_price">{item.price} 원</div>
+                <div className="order_price">{product.productPrice} 원</div>
               </div>
             </div>
           ))}
@@ -339,4 +347,4 @@ function Order() {
   );
 }
 
-export default Order;
+export default BuyOrder;
