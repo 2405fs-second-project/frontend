@@ -162,6 +162,10 @@
   outline: none;
 }
 
+.search_input::placeholder {
+  color: rgb(51, 61, 75);
+}
+
 .search_icon {
   width: 18px;
   padding-left: 5px;

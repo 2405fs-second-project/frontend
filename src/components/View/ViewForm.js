@@ -4,33 +4,40 @@ import "./ViewForm.css";
 
 const ViewForm = () => {
   const [products, setProducts] = useState([]);
+  const location = useLocation();
   const gender = new URLSearchParams(useLocation().search).get("gender");
+  const searchQuery = new URLSearchParams(useLocation().search).get("search");
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat().format(number);
   };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/product/${gender}`);
+        let url = `/api/product/${gender}`;
+        if (searchQuery) {
+          url = `/api/product/search?name=${encodeURIComponent(searchQuery)}`;
+        }
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
 
-        // data.content에서 실제 제품 목록을 추출
-        const productList = data.content || [];
+        // Ensure data is an array
+        const productList = Array.isArray(data) ? data : data.content || [];
         setProducts(productList);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setProducts([]); // 오류 발생 시 빈 배열로 설정
+        setProducts([]); // Set to empty array on error
       }
     };
 
-    if (gender) {
+    if (gender || searchQuery) {
       fetchProducts();
     }
-  }, [gender]);
+  }, [gender, searchQuery]);
 
   return (
     <>

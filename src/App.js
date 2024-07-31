@@ -21,6 +21,7 @@ import Cart from "./components/Cart/Cart";
 import Product from "./components/Product/Product";
 import Order from "./components/Order/Order";
 import OrderComplete from "./components/Order/OrderComplete";
+import BuyOrder from "./components/Order/BuyOrder";
 
 const App = () => {
   const location = useLocation();
@@ -31,9 +32,9 @@ const App = () => {
       <NavBar />
       <Routes>
         <Route path="/" element={<MainForm />} />
-        <Route path="/menform" element={<ViewForm />} />
-        <Route path="/menproduct/:id" element={<ViewDetail />} />
-        <Route path="/mypage/:id" element={<MyPage />} />
+        <Route path="/viewform" element={<ViewForm />} />
+        <Route path="/viewdetail/:id" element={<ViewDetail />} />
+        <Route path="/mypage" element={<MyPage />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/signup3" element={<Signup3 />} />
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
         <Route path="/ordercomplete" element={<OrderComplete />} />
+        <Route path="/buyorder/:productId" element={<BuyOrder />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>

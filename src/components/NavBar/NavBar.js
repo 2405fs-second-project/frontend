@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios"; // 추가된 부분
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./NavBar.css";
 import logo from "../../assets/WhiteLogo.png";
@@ -19,7 +18,9 @@ const NavBar = () => {
   const { user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // 검색 입력 값을 저장하는 상태
-  const [searchResults, setSearchResults] = useState([]); // 검색 결과를 저장하는 상태
+  const searchBarRef = useRef(null); 
+  const navigate = useNavigate();
+  
 
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -29,7 +30,6 @@ const NavBar = () => {
     setIsSearchOpen(false);
   };
 
-  // 추가된 부분
   const handleLogoClick = () => {
     setIsSearchOpen(false);
   };
@@ -38,27 +38,14 @@ const NavBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.get(
-        `http://localhost:8081/api/product/search`,
-        {
-          params: {
-            name: searchQuery,
-          },
-        }
-      );
-      console.log("검색 결과:", response.data);
-      setSearchResults(response.data);
-      setSearchQuery(""); // 검색 후 입력 창 초기화
-
-      if (response.data.length === 0) {
-        alert("검색 결과가 없습니다.");
-      }
+      navigate(`/viewform?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery(""); 
+      setIsSearchOpen(false); 
     } catch (error) {
       console.error("검색 중 오류가 발생했습니다!", error);
       alert("검색 중 오류가 발생했습니다.");
     }
   };
-
   // 추가된 부분: 엔터 키를 눌렀을 때 검색을 실행하는 함수
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -66,7 +53,17 @@ const NavBar = () => {
     }
   };
 
-
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+  }, [])
 
   return (
     <nav className="navbar">
@@ -94,7 +91,7 @@ const NavBar = () => {
           <button className="korea_btn">
             <img className="korea_logo" src={korea} alt="Korea" />
           </button>
-          <button className="search_btn">
+          <button className="search_btn" onClick={handleSearchClick}>
             <img className="search_logo" src={search} alt="Search" />
           </button>
           <button className="radio_btn">
@@ -131,7 +128,7 @@ const NavBar = () => {
         </div>
       </div>
       {isSearchOpen && (
-        <div className={`search_bar ${isSearchOpen ? "open" : ""}`}>
+        <div className={`search_bar ${isSearchOpen ? "open" : ""}`} ref={searchBarRef}>
           <div onClick={handleLogoClick}>
             <Link to="/">
               <img src={blackLogo} className="home_logo_search" />
@@ -143,7 +140,7 @@ const NavBar = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown} // 추가된 부분
+              onKeyDown={handleKeyDown}
               placeholder="검색하기"
               className="search_input"
             />
@@ -152,15 +149,6 @@ const NavBar = () => {
             닫기
             <img src={xLogo} className="close_icon" />
           </button>
-        </div>
-      )}
-      {isSearchOpen && searchResults.length > 0 && (
-        <div className="search_results">
-          <ul>
-            {searchResults.map((product) => (
-              <li key={product.code}>{product.name}</li>
-            ))}
-          </ul>
         </div>
       )}
     </nav>
