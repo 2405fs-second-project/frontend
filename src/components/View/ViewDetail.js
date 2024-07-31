@@ -67,7 +67,7 @@ const ViewDetail = () => {
   const handleBuyClick = () => {
     //추가
     if (productdetail && selectedSize) {
-      navigate(`/buyorder/${productdetail.id}`, {
+      navigate(`/buyorder/${productdetail.productId}`, {
         state: { size: selectedSize },
       });
     } else {

@@ -64,18 +64,13 @@ const MyPage = () => {
           },
         }
       );
-      setOrderItems(response.data);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error(
-        `Failed to fetch order items:`,
+        `Failed to fetch order items for user with id ${userId}:`,
         error.response ? error.response.data : error.message
       );
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
   };
 
   const handleViewClick = (viewName) => {
@@ -87,38 +82,33 @@ const MyPage = () => {
   };
 
   const handleImageUpload = async (event) => {
+    //백엔드 UsersService / UsersController 보면 됩니다!
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result.split(",")[1];
-      try {
-        if (userData) {
-          const token = localStorage.getItem("token");
-          await axios.post(
-            `http://localhost:8081/api/users/${userData.id}/upload`,
-            {
-              image: base64Image,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          handleFetchUser();
-        }
-      } catch (error) {
-        console.error(
-          "Failed to upload image:",
-          error.response ? error.response.data : error.message
-        );
-      }
-    };
+    const formData = new FormData();
+    formData.append("file", file); // 'file'이라는 이름으로 파일을 추가합니다.
 
-    if (file) {
-      reader.readAsDataURL(file);
+    try {
+      if (user) {
+        const token = localStorage.getItem("token");
+        await axios.post(
+          `http://localhost:8081/api/users/${user.id}/upload`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
+      }
+    } catch (error) {
+      console.error(
+        "Failed to upload image:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -168,6 +158,11 @@ const MyPage = () => {
   };
 
   const groupedOrderItems = groupByOrderId(orderItems);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="my_page">
