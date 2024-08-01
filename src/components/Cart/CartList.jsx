@@ -16,7 +16,7 @@ export const CartList = () => {
 
   // 총 가격 계산
   const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + item.price * (itemQuantities[item.id] || 1), 0);
+    return cartItems.reduce((total, item) => total + item.itemPrice * (itemQuantities[item.id] || 1), 0);
   };
 
   // 네비게이션 핸들러
@@ -54,7 +54,7 @@ export const CartList = () => {
   // 장바구니 아이템 가져오기
   const fetchCartItems = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8081/cart/items?userId=${userId}`, {
+      const response = await fetch(`http://localhost:8081/api/cart/items/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -83,7 +83,7 @@ export const CartList = () => {
 
     console.log("User from useAuth:", user); // 디버깅 로그
     const loadCartItems = async () => {
-      const userId = 1; // 예시 userId
+      const userId = user.id; // 예시 userId
       const result = await fetchCartItems(userId);
       setCartItems(result);
       setItemQuantities(result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {}));
@@ -141,7 +141,7 @@ export const CartList = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ids: selectedIds }),
+        body: JSON.stringify({ id: selectedIds }),
       });
 
       if (!response.ok) {

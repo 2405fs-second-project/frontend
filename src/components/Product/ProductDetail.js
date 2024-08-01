@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext"; //주은추가
 import "./ProductDetail.css";
+import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const ProductDetail = () => {
@@ -17,51 +18,63 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    fetch(`/api/product/detail/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchProductDetails = async () => {
+      try {
+        const response = await fetch(`/api/product/detail/${id}`);
+        const data = await response.json();
+
         if (Array.isArray(data) && data.length > 0) {
-          setProductdetail(data[0]); // 배열의 첫 번째 객체로 설정
+          const product = data[0];
+          // sizes를 배열로 변환
+          const sizesArray = convertSizesToArray(product.sizes);
+          // 변환된 배열을 product 객체에 추가
+          setProductdetail({ ...product, sizes: sizesArray });
         }
-      })
-      .catch((error) => console.error("Error fetching product:", error));
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
+
+    fetchProductDetails();
   }, [id]);
+
+  const convertSizesToArray = (sizes) => {
+    return Object.entries(sizes).map(([id, size]) => ({
+      id: parseInt(id), // 키를 정수로 변환
+      size: size,
+    }));
+  };
 
   const handleToggle = (index) => {
     setIsExpanded((prevStates) => prevStates.map((state, i) => (i === index ? !state : state)));
   };
 
-  const handleSizeClick = (size) => {
-    setSelectedSize(size);
+  const handleSizeClick = (sizeId) => {
+    setSelectedSize(sizeId);
   };
 
   const handleCartInClick = async () => {
-    if (productdetail && selectedSize) {
+    if (userId == null) {
+      alert(`로그인을 해주세요! 현재 userID는 ${userId}입니다.`);
+    } else {
+      const data = {
+        usersid: userId,
+        itemSizeid: selectedSize,
+      };
+
       try {
-        const response = await fetch("http://localhost:8081/cart/add", {
-          method: "POST",
+        const response = await axios.post("http://localhost:8081/api/cart/add", data, {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            userId: 1, // Replace with the actual user ID
-            productId: productdetail.id,
-            size: selectedSize,
-            quantity: 1,
-          }),
         });
-
-        if (response.ok) {
-          alert("장바구니에 상품이 추가되었습니다.");
-        } else {
-          alert("장바구니 추가에 실패했습니다.");
-        }
+        console.log(response.data);
+        alert("장바구니에 담겼습니다.");
       } catch (error) {
-        console.error("Error adding to cart:", error);
-        alert("장바구니 추가 중 오류가 발생했습니다.");
+        console.log(data);
+        console.error("장바구니에 담는 중 오류 발생:", error);
+        alert("장바구니에 담는 중 오류가 발생했습니다.");
       }
-    } else {
-      alert("사이즈를 선택해주세요.");
     }
   };
 
@@ -104,11 +117,11 @@ const ProductDetail = () => {
               상품 정보 고시
             </div>
             <div className="size_buttons">
-              {["S", "M", "L", "XL", "XXL"].map((size) => (
+              {productdetail.sizes.map(({ id, size }) => (
                 <div
-                  key={size}
-                  className={`size_button ${selectedSize === size ? "size_button__selected" : ""}`}
-                  onClick={() => handleSizeClick(size)}
+                  key={id}
+                  className={`size_button ${selectedSize === id ? "size_button__selected" : ""}`}
+                  onClick={() => handleSizeClick(id)}
                 >
                   {size}
                 </div>

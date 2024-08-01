@@ -17,11 +17,12 @@ import bag from "../../assets/Bag.png";
 
 const NavBar = () => {
   const { user } = useAuth();
+  const userId = user ? user.id : null; // 사용자 ID 설정
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const searchBarRef = useRef(null); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchBarRef = useRef(null);
   const navigate = useNavigate();
-  
+
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -38,9 +39,9 @@ const NavBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      navigate(`/viewform?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery(""); 
-      setIsSearchOpen(false); 
+      navigate(`/productform?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setIsSearchOpen(false);
     } catch (error) {
       alert("검색 중 오류가 발생했습니다.");
     }
@@ -56,13 +57,13 @@ const NavBar = () => {
     const handleClickOutside = (event) => {
       if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
         setIsSearchOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-  }, [])
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
@@ -100,7 +101,7 @@ const NavBar = () => {
             <img className="bell_logo" src={bell} alt="Bell" />
           </button>
           {user ? (
-            user.id === 9 ? (
+            userId === 9 ? (
               <Link to="/seller">
                 <button className="human_btn">
                   <img className="human_logo" src={human} alt="Seller Page" />
