@@ -45,3 +45,12 @@ body {
 .products:last-child {
   margin-bottom: 100px;
 }
+
+.no_products_message{
+  margin-top: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  font-size: 20px;
+  color: rgb(51, 61, 75);
+  font-family: Pretendard, Karla, sans-serif;
+}
