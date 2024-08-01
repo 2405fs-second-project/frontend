@@ -27,9 +27,9 @@ const NavBar = () => {
           <a href="/" className="season_off">
             시즌오프
           </a>
-          <Link to="/viewform?gender=male">남성</Link>
-          <Link to="/viewform?gender=female">여성</Link>
-          <Link to="/viewform?gender=accessory">악세서리</Link>
+          <Link to="/productform?gender=MALE">남성</Link>
+          <Link to="/productform?gender=FEMALE">여성</Link>
+          <Link to="/productform?gender=UNKNOWN">악세서리</Link>
           <Link to="/">룩북</Link>
           <Link to="/">기사</Link>
           <Link to="/">매장</Link>
@@ -51,11 +51,19 @@ const NavBar = () => {
             <img className="bell_logo" src={bell} alt="Bell" />
           </button>
           {user ? (
-            <Link to={`/mypage/${user.id}`}>
-              <button className="human_btn">
-                <img className="human_logo" src={human} alt="Profile" />
-              </button>
-            </Link>
+            user.id === 9 ? (
+              <Link to="/seller">
+                <button className="human_btn">
+                  <img className="human_logo" src={human} alt="Seller Page" />
+                </button>
+              </Link>
+            ) : (
+              <Link to={`/mypage/${user.id}`}>
+                <button className="human_btn">
+                  <img className="human_logo" src={human} alt="Profile" />
+                </button>
+              </Link>
+            )
           ) : (
             <Link to="/login">
               <button className="human_btn">
@@ -64,11 +72,7 @@ const NavBar = () => {
             </Link>
           )}
           <button className="interesting_btn">
-            <img
-              className="interesting_logo"
-              src={interesting}
-              alt="Interesting"
-            />
+            <img className="interesting_logo" src={interesting} alt="Interesting" />
           </button>
           <Link to="/cart">
             <button className="bag_btn">

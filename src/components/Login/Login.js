@@ -25,11 +25,14 @@ const Login = () => {
       const { jwt, userId, userName } = response;
       login({ jwt, id: userId, name: userName });
       setMessage("로그인 성공");
-      navigate(`/mypage/${userId}`);
+      // userId가 9이면 /product 페이지로 이동, 그렇지 않으면 /mypage/{userId}로 이동
+      if (userId === 9) {
+        navigate(`/seller`);
+      } else {
+        navigate(`/mypage/${userId}`);
+      }
     } catch (error) {
-      setMessage(
-        "아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요."
-      );
+      setMessage("아이디 또는 비밀번호를 잘못 입력하셨습니다. 다시 시도해주세요.");
     }
   };
 

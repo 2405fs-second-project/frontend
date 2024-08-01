@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./ViewDetail.css";
+import "./ProductDetail.css";
 import { useParams, useNavigate } from "react-router-dom";
 
-const ViewDetail = () => {
+const ProductDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
@@ -184,4 +184,4 @@ const ViewDetail = () => {
   );
 };
 
-export default ViewDetail;
+export default ProductDetail;
