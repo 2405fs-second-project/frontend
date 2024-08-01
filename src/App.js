@@ -6,7 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext"; // useAuth도 import
 import NavBar from "./components/NavBar/NavBar";
 import MyPage from "./components/MyPage/MyPage";
 import Signup1 from "./components/SignUp/SignUp1";
@@ -43,7 +43,7 @@ const App = () => {
         <Route path="/product" element={<Product />} />
         <Route path="/order" element={<Order />} />
         <Route path="/ordercomplete" element={<OrderComplete />} />
-        <Route path="/buyorder/:productId" element={<BuyOrder />} />
+        <Route path="/buyorder/:id/:productId" element={<BuyOrder />} />
       </Routes>
       {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </>

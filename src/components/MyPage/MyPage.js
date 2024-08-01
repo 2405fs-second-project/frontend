@@ -247,10 +247,10 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
+                              src={order_item.productFileUrl}
+                              alt="상품 이미지"
                             ></img>{" "}
-                            <div className="order_info">
+                            <div className="order_infomation">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -276,16 +276,16 @@ const MyPage = () => {
                 </div>
                 <div className="ordered_list">
                   {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("결제취소"))
+                    groupByOrderId(filterOrderItemsByState("주문취소"))
                   ).length > 0 ? (
                     Object.keys(
-                      groupByOrderId(filterOrderItemsByState("결제취소"))
+                      groupByOrderId(filterOrderItemsByState("주문취소"))
                     ).map((orderId) => (
                       <div
                         key={orderId}
                         className={`order_group order_${orderId}`}
                       >
-                        {groupByOrderId(filterOrderItemsByState("결제취소"))[
+                        {groupByOrderId(filterOrderItemsByState("주문취소"))[
                           orderId
                         ].map((order_item) => (
                           <div
@@ -294,10 +294,10 @@ const MyPage = () => {
                           >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
+                              src={order_item.productFileUrl}
+                              alt="상품 이미지"
                             ></img>{" "}
-                            <div className="order_info">
+                            <div className="order_infomation">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -311,7 +311,7 @@ const MyPage = () => {
                       </div>
                     ))
                   ) : (
-                    <p id="product_cancel">주문 취소 내역이 없습니다.</p>
+                    <p id="buy_null">취소된 구매 내역이 없습니다.</p>
                   )}
                 </div>
               </div>
@@ -323,38 +323,28 @@ const MyPage = () => {
                 </div>
                 <div className="ordered_list">
                   {Object.keys(
-                    groupByOrderId(
-                      filterOrderItemsByState("교환완료").concat(
-                        filterOrderItemsByState("반품완료")
-                      )
-                    )
+                    groupByOrderId(filterOrderItemsByState("교환반품"))
                   ).length > 0 ? (
                     Object.keys(
-                      groupByOrderId(
-                        filterOrderItemsByState("교환완료").concat(
-                          filterOrderItemsByState("반품완료")
-                        )
-                      )
+                      groupByOrderId(filterOrderItemsByState("교환반품"))
                     ).map((orderId) => (
                       <div
                         key={orderId}
                         className={`order_group order_${orderId}`}
                       >
-                        {groupByOrderId(
-                          filterOrderItemsByState("교환완료").concat(
-                            filterOrderItemsByState("반품완료")
-                          )
-                        )[orderId].map((order_item) => (
+                        {groupByOrderId(filterOrderItemsByState("교환반품"))[
+                          orderId
+                        ].map((order_item) => (
                           <div
                             key={order_item.productId}
                             className="order_item"
                           >
                             <img
                               className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
+                              src={order_item.productFileUrl}
+                              alt="상품 이미지"
                             ></img>{" "}
-                            <div className="order_info">
+                            <div className="order_infomation">
                               <p id="order_date">
                                 결제 : {order_item.orderDate}
                               </p>
@@ -368,7 +358,7 @@ const MyPage = () => {
                       </div>
                     ))
                   ) : (
-                    <p id="return_cancel">교환 및 반품 내역이 없습니다.</p>
+                    <p id="buy_null">교환 · 반품 내역이 없습니다.</p>
                   )}
                 </div>
               </div>
