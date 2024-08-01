@@ -48,7 +48,7 @@ const SignUp2 = () => {
     try {
       await AuthService.registerUser(formData);
       setMessage("User registered successfully");
-      navigate("/login");
+      navigate("/signup3");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Error registering user";

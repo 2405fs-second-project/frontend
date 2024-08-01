@@ -17,7 +17,8 @@ class AuthService {
   async loginUser(credentials) {
     try {
       const response = await axios.post(`${API_URL}/login`, credentials);
-      if (response.data.token) {
+      if (response.data.jwt) {
+        localStorage.setItem("token", response.data.jwt);
         localStorage.setItem("user", JSON.stringify(response.data));
       }
       return response.data;
@@ -42,6 +43,12 @@ class AuthService {
     } catch (error) {
       throw error.response?.data || "토큰 검증 중 오류가 발생했습니다.";
     }
+  }
+
+  // 로그아웃
+  logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 }
 
