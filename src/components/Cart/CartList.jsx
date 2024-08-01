@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CartList.css";
 import { CartPrice } from "./CartPrice";
 import { CartItem } from "../Cart/CartItem";
+import { useAuth } from "../../context/AuthContext"; // useAuth를 추가하여 로그인 상태 확인
 
 export const CartList = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,6 +12,7 @@ export const CartList = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth(); // useAuth에서 사용자 정보 가져오기
 
   // 총 가격 계산
   const calculateTotalPrice = () => {
@@ -21,8 +23,12 @@ export const CartList = () => {
   };
 
   // 네비게이션 핸들러
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleNavigation = () => {
+    if (user) {
+      navigate("/order", { state: { userId: user.id } });
+    } else {
+      navigate("/login");
+    }
   };
 
   // 전체 선택 핸들러
@@ -62,7 +68,7 @@ export const CartList = () => {
       );
 
       if (!response.ok) {
-        const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
+        const errorDetails = await response.text();
         console.error(
           `Error status: ${response.status}, Details: ${errorDetails}`
         );
@@ -80,7 +86,7 @@ export const CartList = () => {
   useEffect(() => {
     const loadCartItems = async () => {
       const userId = 1; // 예시 userId
-      const result = await fetchCartItems(userId);
+      const result = await fetchCartItems(user.id);
       setCartItems(result);
       setItemQuantities(
         result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
@@ -88,7 +94,7 @@ export const CartList = () => {
     };
 
     loadCartItems();
-  }, []);
+  }, [user]);
 
   // 수량 변경 핸들러
   const handleQuantityChange = (itemId, newQuantity) => {
@@ -206,15 +212,9 @@ export const CartList = () => {
             </>
           ) : (
             <>
-              {/* <button
-                className="pay_member_no"
-                onClick={() => handleNavigation("/order")}
-              >
-                비회원 구매
-              </button> */}
               <button
                 className="pay_member_yes"
-                onClick={() => handleNavigation("/login")}
+                onClick={() => handleNavigation("/order")}
               >
                 구매하기
               </button>
