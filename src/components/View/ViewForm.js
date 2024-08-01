@@ -43,28 +43,26 @@ const ViewForm = () => {
     <>
       <div className="container">
         {products.length === 0 ? (
-          <div className="no_products_message">
-            검색된 상품이 없습니다.
-            </div>
+          <div className="no_products_message">검색된 상품이 없습니다.</div>
         ) : (
-        <div className="products">
-          {products.map((product, index) => (
-            <div className="product_wrapper" key={index}>
-              <Link to={`/viewdetail/${product.id}`}>
-                <img
-                  className="product_men_img"
-                  src={product.fileUrl}
-                  alt="사진오류"
-                />
-              </Link>
-              <div className="product_name">{product.name}</div>
-              <div className="product_color_type">{product.color}</div>
-              <div className="product_normal_price">
-                ₩{formatNumber(product.price)}
+          <div className="products">
+            {products.map((product, index) => (
+              <div className="product_wrapper" key={index}>
+                <Link to={`/viewdetail/${product.id}`}>
+                  <img
+                    className="product_men_img"
+                    src={product.fileUrl}
+                    alt="사진오류"
+                  />
+                </Link>
+                <div className="product_name">{product.name}</div>
+                <div className="product_color_type">{product.color}</div>
+                <div className="product_normal_price">
+                  ₩{formatNumber(product.price)}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
         )}
       </div>
     </>
