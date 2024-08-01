@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./ViewDetail.css";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext"; //주은추가
 import { useParams, useNavigate } from "react-router-dom";
 
 const ViewDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
-  const { user } = useAuth(); // 사용자 정보 가져오기
+  const { user } = useAuth(); //주은추가
   const userId = user ? user.id : null; // 사용자 ID 설정
   const [productdetail, setProductdetail] = useState(null);
   const navigate = useNavigate(); // useNavigate 추가
@@ -70,6 +70,7 @@ const ViewDetail = () => {
   const handleBuyClick = () => {
     if (productdetail && selectedSize) {
       navigate(`/buyorder/${userId}/${productdetail.productId}`, {
+        //주은추가
         state: { size: selectedSize },
       });
     } else {

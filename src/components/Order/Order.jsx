@@ -24,20 +24,31 @@ function Order() {
   useEffect(() => {
     const validateUserToken = async () => {
       const token = localStorage.getItem("token");
+      console.log("Retrieved token:", token);
+
       if (token) {
         try {
           const response = await axios.post(
             `http://localhost:8081/api/auth/validateToken`,
-            { token },
-            { headers: { Authorization: `Bearer ${token}` } }
+            null, // 요청 본문은 비워도 됩니다
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
           );
-          if (!response.data.isValid) {
+
+          console.log("Token validation response:", response.data);
+
+          if (!response.data.valid) {
             logout();
             navigate("/login");
           } else {
             fetchData();
           }
         } catch (error) {
+          console.error(
+            "Token validation error:",
+            error.response ? error.response.data : error.message
+          );
           logout();
           navigate("/login");
         }

@@ -82,19 +82,31 @@ export const CartList = () => {
     }
   };
 
-  // 컴포넌트 마운트 시 장바구니 아이템 로드
   useEffect(() => {
+    // `user`가 null일 때 로딩을 방지
+    if (!user || !user.id) {
+      console.error("User is not logged in or user ID is missing");
+      return;
+    }
+
+    console.log("User from useAuth:", user); // 디버깅 로그
     const loadCartItems = async () => {
-      const userId = 1; // 예시 userId
-      const result = await fetchCartItems(user.id);
-      setCartItems(result);
-      setItemQuantities(
-        result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
-      );
+      try {
+        const result = await fetchCartItems(user.id);
+        setCartItems(result);
+        setItemQuantities(
+          result.reduce(
+            (acc, item) => ({ ...acc, [item.id]: item.quantity }),
+            {}
+          )
+        );
+      } catch (error) {
+        console.error("Error loading cart items:", error);
+      }
     };
 
     loadCartItems();
-  }, [user]);
+  }, [user]); // user가 업데이트될 때만 실행
 
   // 수량 변경 핸들러
   const handleQuantityChange = (itemId, newQuantity) => {
