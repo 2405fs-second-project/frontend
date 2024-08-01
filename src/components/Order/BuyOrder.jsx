@@ -5,8 +5,8 @@ import "./Order.css";
 import { useAuth } from "../../context/AuthContext";
 
 function BuyOrder() {
-  const { id: userId, productId } = useParams(); // URL 파라미터에서 userId 가져오기
-  const { user, logout } = useAuth();
+  const { id: userId, productId } = useParams(); // URL 파라미터에서 productId 가져오기
+  const { user, logout } = useAuth(); // 로그인한 사용자 정보 가져오기
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
@@ -68,14 +68,10 @@ function BuyOrder() {
 
   const fetchData = async () => {
     await fetchProduct(); // 상품 정보 가져오기
-    await handleFetchUserOrder(); // 사용자 주문 정보 가져오기
-  };
-
-  useEffect(() => {
     if (user) {
-      handleFetchUserOrder(); // 사용자 주문 정보 가져오기
+      await handleFetchUserOrder(user.id); // 사용자 ID를 user 객체에서 가져오기
     }
-  }, [user]);
+  };
 
   const fetchProduct = async () => {
     try {

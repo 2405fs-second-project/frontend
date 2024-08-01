@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import "./Order.css";
 
@@ -15,43 +15,67 @@ function Order() {
   const [updateName, setUpdateName] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const navigate = useNavigate(); // Initialize useNavigate
-  const { id: userId } = useParams();
+  // const { id: userId } = useParams();
   const { user, logout } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const location = useLocation(); // 상태 객체 접근
+
+  const userId = location.state?.userId;
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    } else {
-      handleFetchUserOrder();
-      handleFetchCartItems(); // Fetch cart items after fetching user order
+    const validateUserToken = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await axios.post(
+            `http://localhost:8081/api/auth/validateToken`,
+            { token },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          if (!response.data.isValid) {
+            logout();
+            navigate("/login");
+          } else {
+            fetchData();
+          }
+        } catch (error) {
+          logout();
+          navigate("/login");
+        }
+      } else {
+        navigate("/login");
+      }
+    };
+
+    validateUserToken();
+  }, [logout, navigate]);
+
+  const fetchData = async () => {
+    const { cartItems: initialCartItems, userId } = location.state || {};
+    if (userId && user) {
+      await handleFetchCartItems(); // 장바구니 아이템을 가져옵니다.
+      await handleFetchUserOrder(); // 사용자 주문 정보를 가져옵니다.
     }
-  }, [user, userId, navigate]);
+  };
 
   const handleFetchUserOrder = async () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/api/orders/user-info/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        `http://localhost:8081/api/orders/user-info/${userId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      setUserData(response.data);
-      // 기본값 초기화
-      if (response.data) {
-        setUpdateName(response.data.updateName || "");
-        setUpdateAddress(response.data.updateAddress || "");
-        setUpdatePhoneNum(response.data.updatePhoneNum || "");
-        setShippingInfo(response.data.shippingInfo || "");
-      }
+      const data = response.data;
+      setOrder(data);
+      setUpdateName(data.updateName || "");
+      setUpdateAddress(data.updateAddress || "");
+      setUpdatePhoneNum(data.updatePhoneNum || "");
+      setShippingInfo(data.shippingInfo || "");
     } catch (error) {
       console.error(
         `Failed to fetch user with id ${userId}:`,
         error.response ? error.response.data : error.message
       );
+      // 초기화 상태 추가 (필요 시)
     }
   };
 
@@ -87,28 +111,29 @@ function Order() {
 
   const handleOrderAndShippingUpdate = async (event) => {
     event.preventDefault(); // 기본 동작 방지
-    await handleUpdateShip(event); // 배송 정보 업데이트
+    await handleUpdateShipping(event); // 배송 정보 업데이트
     await handlePayment(); // 주문하기
   };
 
-  const handleUpdateShip = async () => {
+  const handleUpdateShipping = async (event) => {
+    event.preventDefault();
     try {
-      {
-        const response = await axios.post(
-          `http://localhost:8081/api/orders/${userId}/shipping`, // API 엔드포인트
-          {
-            updateName: updateName,
-            updateAddress: updateAddress,
-            updatePhone: updatePhoneNum,
-            shippingInfo: shippingInfo,
-          }
-        );
-
-        if (response.status === 200) {
-          console.log("배송 정보가 성공적으로 업데이트되었습니다.");
-          await handleFetchUserOrder(); // 사용자 데이터 새로 고침
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `http://localhost:8081/api/orders/${userId}/shipping`,
+        {
+          updateName,
+          updateAddress,
+          updatePhone: updatePhoneNum,
+          shippingInfo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      }
+      );
+      await handleFetchUserOrder();
     } catch (error) {
       console.error(
         "배송 정보 업데이트 실패:",

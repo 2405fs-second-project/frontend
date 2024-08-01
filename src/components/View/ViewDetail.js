@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./ViewDetail.css";
+import { useAuth } from "../../context/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
 
 const ViewDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
+  const { user } = useAuth(); // 사용자 정보 가져오기
+  const userId = user ? user.id : null; // 사용자 ID 설정
   const [productdetail, setProductdetail] = useState(null);
   const navigate = useNavigate(); // useNavigate 추가
   const formatNumber = (number) => {
@@ -66,7 +69,7 @@ const ViewDetail = () => {
 
   const handleBuyClick = () => {
     if (productdetail && selectedSize) {
-      navigate(`/buyorder/${id}/${productdetail.productId}`, {
+      navigate(`/buyorder/${userId}/${productdetail.productId}`, {
         state: { size: selectedSize },
       });
     } else {
