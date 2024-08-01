@@ -22,47 +22,41 @@ function BuyOrder() {
   const [quantity, setQuantity] = useState(1); // 기본값 1
 
   useEffect(() => {
-    // 사용자 토큰을 검증하는 비동기 함수
     const validateUserToken = async () => {
-      // 로컬 스토리지에서 토큰을 가져옴
       const token = localStorage.getItem("token");
       console.log("Retrieved token:", token);
 
-      // 토큰이 존재하는지 확인
       if (token) {
         try {
-          // 토큰을 서버에 전송하여 검증 요청
           const response = await axios.post(
             `http://localhost:8081/api/auth/validateToken`,
-            { token }, // 토큰을 요청 본문에 포함
-            { headers: { Authorization: `Bearer ${token}` } } // Authorization 헤더에 Bearer 토큰 추가
+            null, // 요청 본문은 비워도 됩니다
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
           );
 
-          // 서버의 응답 데이터 출력
           console.log("Token validation response:", response.data);
 
-          // 응답 데이터에서 isValid 체크
-          if (!response.data.isValid) {
-            // 토큰이 유효하지 않은 경우 로그아웃 처리 및 로그인 페이지로 이동
+          if (!response.data.valid) {
             logout();
             navigate("/login");
           } else {
-            // 토큰이 유효한 경우 데이터를 가져오는 함수 호출
-            fetchData(); // 토큰이 유효하면 fetchData 호출
+            fetchData();
           }
         } catch (error) {
-          // 오류 발생 시 로그아웃 처리 및 로그인 페이지로 이동
-          console.error("Token validation error:", error);
+          console.error(
+            "Token validation error:",
+            error.response ? error.response.data : error.message
+          );
           logout();
           navigate("/login");
         }
       } else {
-        // 토큰이 존재하지 않는 경우 로그인 페이지로 이동
         navigate("/login");
       }
     };
 
-    // validateUserToken 함수를 실행
     validateUserToken();
   }, [logout, navigate]);
 
