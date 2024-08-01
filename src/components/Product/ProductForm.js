@@ -4,37 +4,56 @@ import "./ProductForm.css";
 
 const ProductForm = () => {
   const [products, setProducts] = useState([]);
+  const location = useLocation();
   const gender = new URLSearchParams(useLocation().search).get("gender");
+  const searchQuery = new URLSearchParams(useLocation().search).get("search");
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat().format(number);
   };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(`/api/product/${gender}`);
+        let url;
+
+        // 수정된 부분: searchQuery로 검색 쿼리를 처리하고, gender에 따른 필터링도 지원
+        if (searchQuery) {
+          url = `/api/product/search?searchQuery=${encodeURIComponent(searchQuery)}`;
+        } else if (gender) {
+          url = `/api/product/${gender}`;
+        } else {
+          return;
+        }
+
+
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Failed to fetch products");
         }
         const data = await response.json();
 
-        // data.content에서 실제 제품 목록을 추출
-        const productList = data.content || [];
+        // Ensure data is an array
+        const productList = Array.isArray(data) ? data : data.content || [];
         setProducts(productList);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setProducts([]); // 오류 발생 시 빈 배열로 설정
+        setProducts([]); // Set to empty array on error
       }
     };
 
-    if (gender) {
+    // 수정된 부분: gender나 searchQuery가 있을 경우에만 fetchProduct를 호출
       fetchProducts();
-    }
-  }, [gender]);
+  }, [gender, searchQuery]);
 
   return (
     <>
       <div className="container">
+        {products.length === 0 ? (
+          <div className="no_products_message">
+            검색된 상품이 없습니다.
+            </div>
+        ) : (
         <div className="products">
           {products.map((product, index) => (
             <div className="product_wrapper" key={index}>
@@ -47,6 +66,7 @@ const ProductForm = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
     </>
   );

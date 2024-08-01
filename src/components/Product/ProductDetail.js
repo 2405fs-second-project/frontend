@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext"; //주은추가
 import "./ProductDetail.css";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -6,6 +7,8 @@ const ProductDetail = () => {
   const [isExpanded, setIsExpanded] = useState(Array(5).fill(false));
   const [selectedSize, setSelectedSize] = useState(null);
   const { id } = useParams();
+  const { user } = useAuth(); //주은추가
+  const userId = user ? user.id : null; // 사용자 ID 설정
   const [productdetail, setProductdetail] = useState(null);
   const navigate = useNavigate(); // useNavigate 추가
   const formatNumber = (number) => {
@@ -63,9 +66,9 @@ const ProductDetail = () => {
   };
 
   const handleBuyClick = () => {
-    //추가
     if (productdetail && selectedSize) {
-      navigate(`/buyorder/${productdetail.id}`, {
+      navigate(`/buyorder/${userId}/${productdetail.productId}`, {
+        //주은추가
         state: { size: selectedSize },
       });
     } else {

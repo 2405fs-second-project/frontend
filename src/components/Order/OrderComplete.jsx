@@ -7,7 +7,7 @@ const OrderComplete = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // 주문 완료 후 전달된 주문 번호를 쿼리 파라미터로부터 받아옵니다.
+    // 주문 완료 후 전달된 주문 번호를 쿼리 파라미터로부터 받아옴
     const searchParams = new URLSearchParams(location.search);
     const orderNumber = searchParams.get("orderNumber");
     setOrderNumber(orderNumber);

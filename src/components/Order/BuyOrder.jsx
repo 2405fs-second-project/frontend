@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import "./Order.css";
+import { useAuth } from "../../context/AuthContext";
 
 function BuyOrder() {
+  const { id: userId, productId } = useParams(); // URL 파라미터에서 productId 가져오기
+  const { user, logout } = useAuth(); // 로그인한 사용자 정보 가져오기
   const [activeButton, setActiveButton] = useState(null);
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
   const [order, setOrder] = useState(null);
   const [products, setProducts] = useState([]);
   const [updateAddress, setUpdateAddress] = useState("");
@@ -15,21 +17,67 @@ function BuyOrder() {
   const [updateName, setUpdateName] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const navigate = useNavigate();
-  const { productId } = useParams(); // Get productId from URL params
-  const [userId, setUserId] = useState(1);
   const location = useLocation(); // 상태 객체 접근
   const { size } = location.state || {}; // navigate에서 전달한 상태 객체
+  const [quantity, setQuantity] = useState(1); // 기본값 1
 
-  console.log("Product ID:", productId);
-  console.log("Location state:", location.state); // 상태 객체를 확인합니다.
-  console.log("Product ID:", productId);
+  useEffect(() => {
+    const validateUserToken = async () => {
+      const token = localStorage.getItem("token");
+      console.log("Retrieved token:", token);
+
+      if (token) {
+        try {
+          const response = await axios.post(
+            `http://localhost:8081/api/auth/validateToken`,
+            null, // 요청 본문은 비워도 됩니다
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          console.log("Token validation response:", response.data);
+
+          if (!response.data.valid) {
+            logout();
+            navigate("/login");
+          } else {
+            fetchData();
+          }
+        } catch (error) {
+          console.error(
+            "Token validation error:",
+            error.response ? error.response.data : error.message
+          );
+          logout();
+          navigate("/login");
+        }
+      } else {
+        navigate("/login");
+      }
+    };
+
+    validateUserToken();
+  }, [logout, navigate]);
+
+  const fetchData = async () => {
+    await fetchProduct(); // 상품 정보 가져오기
+    if (user) {
+      await handleFetchUserOrder(user.id); // 사용자 ID를 user 객체에서 가져오기
+    }
+  };
 
   const fetchProduct = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/orders/buy-item/${productId}`
+        `http://localhost:8081/api/orders/buy-item/${productId}?size=${size}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      console.log("Product data:", response.data);
       setProducts([response.data]);
     } catch (error) {
       console.error("Error fetching product:", error);
@@ -38,11 +86,16 @@ function BuyOrder() {
 
   const handleFetchUserOrder = async () => {
     try {
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:8081/api/orders/user-info/${userId}`
+        `http://localhost:8081/api/orders/user-info/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setOrder(response.data);
-      // 기본값 초기화
       setUpdateName(response.data.updateName || "");
       setUpdateAddress(response.data.updateAddress || "");
       setUpdatePhoneNum(response.data.updatePhoneNum || "");
@@ -56,31 +109,64 @@ function BuyOrder() {
   };
 
   const handlePayment = async () => {
-    if (isButtonActive) {
+    if (isChecked1 && isChecked2) {
       try {
+        const token = localStorage.getItem("token");
         const response = await axios.post(
-          `http://localhost:8081/api/orders/create/${userId}`,
+          `http://localhost:8081/api/orders/direct/${userId}`,
           {
-            // 주문 정보 포함
-            updateName,
-            updateAddress,
-            updatePhoneNum,
-            shippingInfo,
+            productId,
+            quantity,
+            size,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
         if (response.status === 201) {
-          console.log("Order created successfully:", response.data);
-          const orderNumber = response.data.orderNumber; // 주문 번호를 응답에서 추출
-          navigate(`/ordercomplete?orderNumber=${orderNumber}`); // 쿼리 파라미터로 주문 번호 전달
+          const orderNumber = response.data.orderNumber;
+          navigate(`/ordercomplete?orderNumber=${orderNumber}`);
         }
       } catch (error) {
         console.error("Error creating order:", error);
+        alert("주문 생성 중 오류가 발생했습니다.");
       }
     }
   };
 
-  const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+  const handleOrderAndShippingUpdate = async (event) => {
+    event.preventDefault();
+    await handleUpdateShipping(event);
+    await handlePayment();
+  };
+
+  const handleUpdateShipping = async (event) => {
+    event.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `http://localhost:8081/api/orders/${userId}/shipping`,
+        {
+          updateName,
+          updateAddress,
+          updatePhone: updatePhoneNum,
+          shippingInfo,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      await handleFetchUserOrder();
+    } catch (error) {
+      console.error(
+        "배송 정보 업데이트 실패:",
+        error.response ? error.response.data : error.message
+      );
+    }
   };
 
   const handleClick = (buttonId) => {
@@ -100,24 +186,10 @@ function BuyOrder() {
   const totalPrice = Array.isArray(products)
     ? products.reduce(
         (total, item) =>
-          total + (item.productPrice || 0) * (item.quantity || 0), // 필드명 수정: price -> productPrice
+          total + (item.productPrice || 0) * (item.quantity || 0),
         0
       )
-    : 0; // products가 배열이 아닌 경우 총 가격 0으로 설정
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetchProduct();
-        await handleFetchUserOrder();
-        // 다른 데이터 가져오기 함수 호출 가능
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [userId, productId]); // userId와 productId 변경 시 데이터 다시 가져오기
+    : 0;
 
   return (
     <div>
@@ -336,7 +408,7 @@ function BuyOrder() {
                 backgroundColor: isButtonActive ? "#000" : "#ccc",
                 color: isButtonActive ? "#fff" : "#000",
               }}
-              onClick={handlePayment} // Add onClick event to the button
+              onClick={handleOrderAndShippingUpdate} // Add onClick event to the button
             >
               주문하기
             </button>

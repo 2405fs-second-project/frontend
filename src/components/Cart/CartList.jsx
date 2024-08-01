@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CartList.css";
 import { CartPrice } from "./CartPrice";
 import { CartItem } from "../Cart/CartItem";
+import { useAuth } from "../../context/AuthContext"; // useAuth를 추가하여 로그인 상태 확인
 
 export const CartList = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -11,6 +12,7 @@ export const CartList = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth(); // useAuth에서 사용자 정보 가져오기
 
   // 총 가격 계산
   const calculateTotalPrice = () => {
@@ -18,8 +20,12 @@ export const CartList = () => {
   };
 
   // 네비게이션 핸들러
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleNavigation = () => {
+    if (user) {
+      navigate("/order", { state: { userId: user.id } });
+    } else {
+      navigate("/login");
+    }
   };
 
   // 전체 선택 핸들러
@@ -68,8 +74,14 @@ export const CartList = () => {
     }
   };
 
-  // 컴포넌트 마운트 시 장바구니 아이템 로드
   useEffect(() => {
+    // `user`가 null일 때 로딩을 방지
+    if (!user || !user.id) {
+      console.error("User is not logged in or user ID is missing");
+      return;
+    }
+
+    console.log("User from useAuth:", user); // 디버깅 로그
     const loadCartItems = async () => {
       const userId = 1; // 예시 userId
       const result = await fetchCartItems(userId);
@@ -78,7 +90,7 @@ export const CartList = () => {
     };
 
     loadCartItems();
-  }, []);
+  }, [user]); // user가 업데이트될 때만 실행
 
   // 수량 변경 핸들러
   const handleQuantityChange = (itemId, newQuantity) => {
@@ -192,7 +204,7 @@ export const CartList = () => {
               >
                 비회원 구매
               </button> */}
-              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
+              <button className="pay_member_yes" onClick={() => handleNavigation("/login")}>
                 구매하기
               </button>
             </>

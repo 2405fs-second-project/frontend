@@ -37,9 +37,9 @@ const MyPage = () => {
       setUserData(response.data);
 
       if (response.data) {
-        setUpdateName(response.data.name || "");
-        setUpdateAddress(response.data.address || "");
-        setUpdatePhone(response.data.phone_num || "");
+        setUpdateName(response.data.updateName || "");
+        setUpdateAddress(response.data.updateAddress || "");
+        setUpdatePhone(response.data.updatePhone || "");
         setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
@@ -55,15 +55,15 @@ const MyPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setOrderItems(response.data);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
+      setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
-      console.error(`Failed to fetch order items:`, error.response ? error.response.data : error.message);
+      console.error(
+        `Failed to fetch order items for user with id ${userId}:`,
+        `Failed to fetch order items for user with id ${userId}:`,
+        error.response ? error.response.data : error.message
+      );
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
   };
 
   const handleViewClick = (viewName) => {
@@ -75,35 +75,26 @@ const MyPage = () => {
   };
 
   const handleImageUpload = async (event) => {
+    //백엔드 UsersService / UsersController 보면 됩니다!
     const file = event.target.files[0];
     setSelectedFile(file);
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      const base64Image = reader.result.split(",")[1];
-      try {
-        if (userData) {
-          const token = localStorage.getItem("token");
-          await axios.post(
-            `http://localhost:8081/api/users/${userData.id}/upload`,
-            {
-              image: base64Image,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          handleFetchUser();
-        }
-      } catch (error) {
-        console.error("Failed to upload image:", error.response ? error.response.data : error.message);
-      }
-    };
+    const formData = new FormData();
+    formData.append("file", file);
 
-    if (file) {
-      reader.readAsDataURL(file);
+    try {
+      if (user) {
+        const token = localStorage.getItem("token");
+        await axios.post(`http://localhost:8081/api/users/${user.id}/upload`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
+      }
+    } catch (error) {
+      console.error("Failed to upload image:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -116,9 +107,9 @@ const MyPage = () => {
         const response = await axios.post(
           `http://localhost:8081/api/users/${userData.id}/shipping`,
           {
-            name: updateName,
-            address: updateAddress,
-            phone_num: updatePhone,
+            updateName,
+            updateAddress,
+            updatePhone,
             shippingInfo,
           },
           {
@@ -150,6 +141,11 @@ const MyPage = () => {
   };
 
   const groupedOrderItems = groupByOrderId(orderItems);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <div className="my_page">
@@ -203,12 +199,8 @@ const MyPage = () => {
                       <div key={orderId} className={`order_group order_${orderId}`}>
                         {groupedOrderItems[orderId].map((order_item) => (
                           <div key={order_item.productId} className="order_item">
-                            <img
-                              className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
-                            ></img>{" "}
-                            <div className="order_info">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
+                            <div className="order_infomation">
                               <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
@@ -231,17 +223,13 @@ const MyPage = () => {
                   <div className="side_header_1">주문 취소 내역</div>
                 </div>
                 <div className="ordered_list">
-                  {Object.keys(groupByOrderId(filterOrderItemsByState("결제취소"))).length > 0 ? (
-                    Object.keys(groupByOrderId(filterOrderItemsByState("결제취소"))).map((orderId) => (
+                  {Object.keys(groupByOrderId(filterOrderItemsByState("주문취소"))).length > 0 ? (
+                    Object.keys(groupByOrderId(filterOrderItemsByState("주문취소"))).map((orderId) => (
                       <div key={orderId} className={`order_group order_${orderId}`}>
-                        {groupByOrderId(filterOrderItemsByState("결제취소"))[orderId].map((order_item) => (
+                        {groupByOrderId(filterOrderItemsByState("주문취소"))[orderId].map((order_item) => (
                           <div key={order_item.productId} className="order_item">
-                            <img
-                              className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
-                            ></img>{" "}
-                            <div className="order_info">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
+                            <div className="order_infomation">
                               <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
@@ -253,7 +241,7 @@ const MyPage = () => {
                       </div>
                     ))
                   ) : (
-                    <p id="product_cancel">주문 취소 내역이 없습니다.</p>
+                    <p id="buy_null">취소된 구매 내역이 없습니다.</p>
                   )}
                 </div>
               </div>
@@ -264,23 +252,13 @@ const MyPage = () => {
                   <div className="side_header_1">교환 · 반품 내역</div>
                 </div>
                 <div className="ordered_list">
-                  {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료")))
-                  ).length > 0 ? (
-                    Object.keys(
-                      groupByOrderId(filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료")))
-                    ).map((orderId) => (
+                  {Object.keys(groupByOrderId(filterOrderItemsByState("교환반품"))).length > 0 ? (
+                    Object.keys(groupByOrderId(filterOrderItemsByState("교환반품"))).map((orderId) => (
                       <div key={orderId} className={`order_group order_${orderId}`}>
-                        {groupByOrderId(
-                          filterOrderItemsByState("교환완료").concat(filterOrderItemsByState("반품완료"))
-                        )[orderId].map((order_item) => (
+                        {groupByOrderId(filterOrderItemsByState("교환반품"))[orderId].map((order_item) => (
                           <div key={order_item.productId} className="order_item">
-                            <img
-                              className="order_img"
-                              src={`data:image/jpeg;base64,${order_item.productFileUrl}`}
-                              alt=""
-                            ></img>{" "}
-                            <div className="order_info">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
+                            <div className="order_infomation">
                               <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
@@ -292,7 +270,7 @@ const MyPage = () => {
                       </div>
                     ))
                   ) : (
-                    <p id="return_cancel">교환 및 반품 내역이 없습니다.</p>
+                    <p id="buy_null">교환 · 반품 내역이 없습니다.</p>
                   )}
                 </div>
               </div>
@@ -302,7 +280,7 @@ const MyPage = () => {
                 <div className="myinfo-img-register">
                   <img
                     className="myinfo-img"
-                    src={`data:image/jpeg;base64,${userData.profilePictureUrl}`}
+                    src={`http://localhost:8081${userData.profilePictureUrl}`}
                     alt="프로필을 추가 ➡️➡️➡️ "
                   />
                   <label htmlFor="file">
