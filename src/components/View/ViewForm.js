@@ -42,6 +42,11 @@ const ViewForm = () => {
   return (
     <>
       <div className="container">
+        {products.length === 0 ? (
+          <div className="no_products_message">
+            검색된 상품이 없습니다.
+            </div>
+        ) : (
         <div className="products">
           {products.map((product, index) => (
             <div className="product_wrapper" key={index}>
@@ -60,6 +65,7 @@ const ViewForm = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
     </>
   );
