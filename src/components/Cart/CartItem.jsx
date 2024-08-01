@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./CartItem.css";
 
-export const CartItem = ({
-  item,
-  quantity,
-  onQuantityChange,
-  isSelected,
-  onCheckboxChange,
-}) => {
+export const CartItem = ({ item, quantity, onQuantityChange, isSelected, onCheckboxChange }) => {
   const [currentQuantity, setCurrentQuantity] = useState(quantity);
-
+  const deleteCartItem = () => {};
   // 컴포넌트 마운트 시 초기 수량 설정
   useEffect(() => {
     setCurrentQuantity(quantity); // 전달받은 초기 quantity 설정
@@ -67,16 +61,16 @@ export const CartItem = ({
           checked={isSelected}
           onChange={() => onCheckboxChange(item.id)}
         />
-        <label htmlFor={`checkrow_${item.id}`}></label>
+        <label for={`checkrow_${item.id}`}></label>
       </div>
-      <img className="item_file" src={`/${item.fileUrl}`} alt="사진오류" />
+      <img className="item_file" src={`${item.itemUrl}`} alt="사진오류" />
       <div className="item_des">
         <div className="item_des_bold">
-          <div className="item_title">{item.name}</div>
+          <div className="item_title">{item.itemName}</div>
         </div>
         <div className="item_des_thin">
-          <div className="item_color">{item.color},</div>
-          <div className="item_size">사이즈 {item.size}</div>
+          <div className="item_color">{item.itemColor},</div>
+          <div className="item_size">사이즈 {item.itemSize}</div>
         </div>
       </div>
       <div className="item_quantity">
@@ -89,11 +83,9 @@ export const CartItem = ({
         />
       </div>
       <div className="item_delete">
-        <button>삭제</button>
+        <button onChange={deleteCartItem}>삭제</button>
       </div>
-      <div className="item_price">
-        {new Intl.NumberFormat().format(item.price * currentQuantity)} 원
-      </div>
+      <div className="item_price">{item.itemPrice * currentQuantity} 원</div>
     </div>
   );
 };

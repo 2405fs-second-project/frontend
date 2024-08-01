@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import "./ViewForm.css";
+import "./ProductForm.css";
 
-const ViewForm = () => {
+const ProductForm = () => {
   const [products, setProducts] = useState([]);
   const location = useLocation();
   const gender = new URLSearchParams(useLocation().search).get("gender");
@@ -57,18 +57,12 @@ const ViewForm = () => {
         <div className="products">
           {products.map((product, index) => (
             <div className="product_wrapper" key={index}>
-              <Link to={`/viewdetail/${product.id}`}>
-                <img
-                  className="product_men_img"
-                  src={product.fileUrl}
-                  alt="사진오류"
-                />
+              <Link to={`/productdetail/${product.id}`}>
+                <img className="product_men_img" src={product.fileUrl} alt="사진오류" />
               </Link>
               <div className="product_name">{product.name}</div>
               <div className="product_color_type">{product.color}</div>
-              <div className="product_normal_price">
-                ₩{formatNumber(product.price)}
-              </div>
+              <div className="product_normal_price">₩{formatNumber(product.price)}</div>
             </div>
           ))}
         </div>
@@ -78,4 +72,4 @@ const ViewForm = () => {
   );
 };
 
-export default ViewForm;
+export default ProductForm;

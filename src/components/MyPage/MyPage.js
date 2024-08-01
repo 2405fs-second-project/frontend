@@ -29,14 +29,11 @@ const MyPage = () => {
   const handleFetchUser = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `http://localhost:8081/api/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`http://localhost:8081/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setUserData(response.data);
 
       if (response.data) {
@@ -46,24 +43,18 @@ const MyPage = () => {
         setShippingInfo(response.data.shippingInfo || "");
       }
     } catch (error) {
-      console.error(
-        `Failed to fetch user:`,
-        error.response ? error.response.data : error.message
-      );
+      console.error(`Failed to fetch user:`, error.response ? error.response.data : error.message);
     }
   };
 
   const handleFetchOrderItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `http://localhost:8081/api/order-items/user/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`http://localhost:8081/api/order-items/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setOrderItems(Array.isArray(response.data) ? response.data : []);
       setOrderItems(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
@@ -94,23 +85,16 @@ const MyPage = () => {
     try {
       if (user) {
         const token = localStorage.getItem("token");
-        await axios.post(
-          `http://localhost:8081/api/users/${user.id}/upload`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        await axios.post(`http://localhost:8081/api/users/${user.id}/upload`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
         handleFetchUser(); // 이미지 업로드 후 사용자 데이터 새로 고침
       }
     } catch (error) {
-      console.error(
-        "Failed to upload image:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("Failed to upload image:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -141,10 +125,7 @@ const MyPage = () => {
         }
       }
     } catch (error) {
-      console.error(
-        "배송 정보 업데이트 실패:",
-        error.response ? error.response.data : error.message
-      );
+      console.error("배송 정보 업데이트 실패:", error.response ? error.response.data : error.message);
     }
   };
 
@@ -176,53 +157,32 @@ const MyPage = () => {
           <div className="info_box">
             <h6>나의 주문</h6>
             <div className="order_box">
-              <a
-                className={view === "order" ? "active" : ""}
-                onClick={() => handleViewClick("order")}
-              >
+              <a className={view === "order" ? "active" : ""} onClick={() => handleViewClick("order")}>
                 전체 주문 내역
               </a>
-              <a
-                className={view === "cancel" ? "active" : ""}
-                onClick={() => handleViewClick("cancel")}
-              >
+              <a className={view === "cancel" ? "active" : ""} onClick={() => handleViewClick("cancel")}>
                 주문 취소 내역
               </a>
-              <a
-                className={view === "exchange" ? "active" : ""}
-                onClick={() => handleViewClick("exchange")}
-              >
+              <a className={view === "exchange" ? "active" : ""} onClick={() => handleViewClick("exchange")}>
                 교환 · 반품 내역
               </a>
             </div>
             <h6>나의 정보</h6>
             <div className="member_box">
-              <a
-                className={view === "memberInfo" ? "active" : ""}
-                onClick={() => handleViewClick("memberInfo")}
-              >
+              <a className={view === "memberInfo" ? "active" : ""} onClick={() => handleViewClick("memberInfo")}>
                 회원 정보
               </a>
-              <a
-                className={view === "points" ? "active" : ""}
-                onClick={() => handleViewClick("points")}
-              >
+              <a className={view === "points" ? "active" : ""} onClick={() => handleViewClick("points")}>
                 적립금 & 쿠폰
               </a>
             </div>
             <div className="faq">
-              <a
-                className={view === "faq" ? "active" : ""}
-                onClick={() => handleViewClick("faq")}
-              >
+              <a className={view === "faq" ? "active" : ""} onClick={() => handleViewClick("faq")}>
                 자주 하는 질문
               </a>
             </div>
             <div className="logout">
-              <a
-                className={view === "logout" ? "active" : ""}
-                onClick={handleLogout}
-              >
+              <a className={view === "logout" ? "active" : ""} onClick={handleLogout}>
                 로그아웃
               </a>
             </div>
@@ -236,24 +196,12 @@ const MyPage = () => {
                 <div className="ordered_list">
                   {Object.keys(groupedOrderItems).length > 0 ? (
                     Object.keys(groupedOrderItems).map((orderId) => (
-                      <div
-                        key={orderId}
-                        className={`order_group order_${orderId}`}
-                      >
+                      <div key={orderId} className={`order_group order_${orderId}`}>
                         {groupedOrderItems[orderId].map((order_item) => (
-                          <div
-                            key={order_item.productId}
-                            className="order_item"
-                          >
-                            <img
-                              className="order_img"
-                              src={order_item.productFileUrl}
-                              alt="상품 이미지"
-                            ></img>{" "}
+                          <div key={order_item.productId} className="order_item">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
                             <div className="order_infomation">
-                              <p id="order_date">
-                                결제 : {order_item.orderDate}
-                              </p>
+                              <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
@@ -275,32 +223,14 @@ const MyPage = () => {
                   <div className="side_header_1">주문 취소 내역</div>
                 </div>
                 <div className="ordered_list">
-                  {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("주문취소"))
-                  ).length > 0 ? (
-                    Object.keys(
-                      groupByOrderId(filterOrderItemsByState("주문취소"))
-                    ).map((orderId) => (
-                      <div
-                        key={orderId}
-                        className={`order_group order_${orderId}`}
-                      >
-                        {groupByOrderId(filterOrderItemsByState("주문취소"))[
-                          orderId
-                        ].map((order_item) => (
-                          <div
-                            key={order_item.productId}
-                            className="order_item"
-                          >
-                            <img
-                              className="order_img"
-                              src={order_item.productFileUrl}
-                              alt="상품 이미지"
-                            ></img>{" "}
+                  {Object.keys(groupByOrderId(filterOrderItemsByState("주문취소"))).length > 0 ? (
+                    Object.keys(groupByOrderId(filterOrderItemsByState("주문취소"))).map((orderId) => (
+                      <div key={orderId} className={`order_group order_${orderId}`}>
+                        {groupByOrderId(filterOrderItemsByState("주문취소"))[orderId].map((order_item) => (
+                          <div key={order_item.productId} className="order_item">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
                             <div className="order_infomation">
-                              <p id="order_date">
-                                결제 : {order_item.orderDate}
-                              </p>
+                              <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
@@ -322,32 +252,14 @@ const MyPage = () => {
                   <div className="side_header_1">교환 · 반품 내역</div>
                 </div>
                 <div className="ordered_list">
-                  {Object.keys(
-                    groupByOrderId(filterOrderItemsByState("교환반품"))
-                  ).length > 0 ? (
-                    Object.keys(
-                      groupByOrderId(filterOrderItemsByState("교환반품"))
-                    ).map((orderId) => (
-                      <div
-                        key={orderId}
-                        className={`order_group order_${orderId}`}
-                      >
-                        {groupByOrderId(filterOrderItemsByState("교환반품"))[
-                          orderId
-                        ].map((order_item) => (
-                          <div
-                            key={order_item.productId}
-                            className="order_item"
-                          >
-                            <img
-                              className="order_img"
-                              src={order_item.productFileUrl}
-                              alt="상품 이미지"
-                            ></img>{" "}
+                  {Object.keys(groupByOrderId(filterOrderItemsByState("교환반품"))).length > 0 ? (
+                    Object.keys(groupByOrderId(filterOrderItemsByState("교환반품"))).map((orderId) => (
+                      <div key={orderId} className={`order_group order_${orderId}`}>
+                        {groupByOrderId(filterOrderItemsByState("교환반품"))[orderId].map((order_item) => (
+                          <div key={order_item.productId} className="order_item">
+                            <img className="order_img" src={order_item.productFileUrl} alt="상품 이미지"></img>{" "}
                             <div className="order_infomation">
-                              <p id="order_date">
-                                결제 : {order_item.orderDate}
-                              </p>
+                              <p id="order_date">결제 : {order_item.orderDate}</p>
                               <p>주문 상태 : {order_item.payState}</p>
                               <p>주문 번호 : {order_item.orderNumber}</p>
                               <p>상품명 : {order_item.productName}</p>
@@ -374,12 +286,7 @@ const MyPage = () => {
                   <label htmlFor="file">
                     <div className="info-upload">파일 업로드</div>
                   </label>
-                  <input
-                    type="file"
-                    name="file"
-                    id="file"
-                    onChange={handleImageUpload}
-                  />
+                  <input type="file" name="file" id="file" onChange={handleImageUpload} />
                 </div>
                 <div className="side_info_box_line"> </div>
                 <form onSubmit={handleUpdateShip}>
@@ -401,11 +308,7 @@ const MyPage = () => {
                       <div className="phone_number">
                         <label>핸드폰 번호</label>
                         <div className="number_input">
-                          <input
-                            type="text"
-                            value={userData.phoneNum}
-                            readOnly
-                          />
+                          <input type="text" value={userData.phoneNum} readOnly />
                         </div>
                       </div>
                       <div className="side_info_box_line"> </div>
@@ -418,33 +321,21 @@ const MyPage = () => {
                       <div className="delivery_info">
                         <div className="delivery_name">
                           <label>수령인 이름</label>
-                          <input
-                            type="text"
-                            value={updateName}
-                            onChange={(e) => setUpdateName(e.target.value)}
-                          />
+                          <input type="text" value={updateName} onChange={(e) => setUpdateName(e.target.value)} />
                         </div>
                         <div className="delivery_number_info">
                           <div className="delivery_number_text">
                             <label>수령인 전화번호</label>
                           </div>
                           <div className="delivery_number">
-                            <input
-                              type="text"
-                              value={updatePhone}
-                              onChange={(e) => setUpdatePhone(e.target.value)}
-                            />
+                            <input type="text" value={updatePhone} onChange={(e) => setUpdatePhone(e.target.value)} />
                           </div>
                         </div>
                       </div>
                       <div className="input_address">
                         <label>기본 주소</label>
                         <div className="detail_address">
-                          <input
-                            type="text"
-                            value={updateAddress}
-                            onChange={(e) => setUpdateAddress(e.target.value)}
-                          />
+                          <input type="text" value={updateAddress} onChange={(e) => setUpdateAddress(e.target.value)} />
                         </div>
                       </div>
                       <div className="delivery_request">

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./ProductList.css";
-export const ProductList = () => {
+import "./SellerList.css";
+export const SellerList = () => {
   // products 상태를 정의하고 초기값을 빈 배열로 설정
   const [products, setProducts] = useState([]);
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("/products/list");
+      const response = await fetch("/api/sale/9");
       if (!response.ok) {
         throw new Error("Failed to fetch products");
       }
@@ -40,8 +40,8 @@ export const ProductList = () => {
           {products.length > 0 ? (
             products.map((product) => (
               <tr key={product.id}>
-                <td>{product.category_gender}</td>
-                <td>{product.category_kind}</td>
+                <td>{product.gender}</td>
+                <td>{product.kind}</td>
                 <td>{product.name}</td>
                 <td>{product.color}</td>
                 <td>{product.fullname}</td>
@@ -49,8 +49,8 @@ export const ProductList = () => {
                 <td>{product.stock}</td>
                 <td>{product.price}</td>
                 <td>
-                  {product.image && (
-                    <img src={product.fileUrl} alt={product.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />
+                  {product.fileurl && (
+                    <img src={product.fileurl} alt={product.name} style={{ maxWidth: "100px", maxHeight: "100px" }} />
                   )}
                 </td>
               </tr>
