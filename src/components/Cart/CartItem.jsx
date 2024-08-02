@@ -1,61 +1,45 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./CartItem.css";
 
-export const CartItem = ({
-  item,
-  quantity,
-  onQuantityChange,
-  isSelected,
-  onCheckboxChange,
-}) => {
-  const [currentQuantity, setCurrentQuantity] = useState(quantity);
-  const deleteCartItem = () => {};
-  // 컴포넌트 마운트 시 초기 수량 설정
-  useEffect(() => {
-    setCurrentQuantity(quantity); // 전달받은 초기 quantity 설정
-  }, [quantity]);
+export const CartItem = ({ item, quantity, isSelected, onCheckboxChange, deleteCartItem }) => {
+  const [id, initialQuantity] = quantity;
+  const [itemQuantity, setItemQuantity] = useState(initialQuantity || 0);
 
-  // 수량 변경 핸들러
-  const handleQuantityChange = (event) => {
-    const newQuantity = parseInt(event.target.value, 10);
-
-    // 유효하지 않은 수량 처리
-    if (isNaN(newQuantity) || newQuantity <= 0) {
-      return;
-    }
-
-    // 상태 업데이트 (최적화를 위해 바로 업데이트)
-    setCurrentQuantity(newQuantity);
-
-    // 서버에 수량 변경 요청 보내기
-    fetch("http://localhost:8081/cart/updateQuantity", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        itemId: item.id,
-        quantity: newQuantity,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to update quantity");
-        }
-        return response.json(); // 서버에서 업데이트된 아이템을 반환
-      })
-      .then((updatedCartItem) => {
-        // 서버에서 반환한 수량으로 상태 업데이트
-        if (updatedCartItem && updatedCartItem.quantity !== undefined) {
-          onQuantityChange(item.id, updatedCartItem.quantity); // 부모 컴포넌트에 변경 사항 알림
-        } else {
-          console.error("Invalid data structure received:", updatedCartItem);
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating quantity:", error);
-      });
+  // 수량 증가 함수
+  const handleIncrease = () => {
+    setItemQuantity((prev) => prev + 1); // 상태 업데이트는 이전 상태를 기반으로 합니다.
   };
+
+  // 수량 감소 함수
+  const handleDecrease = () => {
+    setItemQuantity((prev) => Math.max(prev - 1, 1)); // 최소값 1로 설정
+  };
+
+  // 수량 직접 입력 시 처리 함수
+  const handleChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    if (!isNaN(value)) {
+      setItemQuantity(value);
+    }
+  };
+  // itemQuantity가 변경될 때마다 API에 PUT 요청을 보냅니다.
+  useEffect(() => {
+    const updateQuantity = async () => {
+      try {
+        await axios.put("http://localhost:8081/api/cart/quantity", {
+          id: id,
+          itemQuantity: itemQuantity,
+        });
+        console.log(`Successfully updated quantity to ${itemQuantity}`);
+      } catch (error) {
+        console.error("Error updating quantity:", error);
+      }
+    };
+
+    // 상태가 변경될 때마다 API 요청을 보냅니다.
+    updateQuantity();
+  }, [itemQuantity, id]); // itemQuantity 또는 id가 변경될 때마다 호출됩니다.
 
   return (
     <div className="item_rows">
@@ -80,18 +64,19 @@ export const CartItem = ({
         </div>
       </div>
       <div className="item_quantity">
-        <label htmlFor={`quantity_${item.id}`}>수량:</label>
-        <input
-          type="number"
-          id={`quantity_${item.id}`}
-          value={currentQuantity} // 현재 수량으로 수정
-          onChange={handleQuantityChange}
-        />
+        <label for={id}>수량:</label>
+        <button type="button" onClick={handleDecrease}>
+          -
+        </button>
+        <input type="number" id={id} value={itemQuantity} onChange={handleChange} min="1" />
+        <button type="button" onClick={handleIncrease}>
+          +
+        </button>
       </div>
       <div className="item_delete">
-        <button onChange={deleteCartItem}>삭제</button>
+        <button onClick={deleteCartItem}>삭제</button>
       </div>
-      <div className="item_price">{item.itemPrice * currentQuantity} 원</div>
+      <div className="item_price">{new Intl.NumberFormat().format(item.itemPrice * itemQuantity)} 원</div>
     </div>
   );
 };
