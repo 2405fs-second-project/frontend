@@ -55,7 +55,10 @@ const NavBar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target)
+      ) {
         setIsSearchOpen(false);
       }
     };
@@ -122,7 +125,11 @@ const NavBar = () => {
             </Link>
           )}
           <button className="interesting_btn">
-            <img className="interesting_logo" src={interesting} alt="Interesting" />
+            <img
+              className="interesting_logo"
+              src={interesting}
+              alt="Interesting"
+            />
           </button>
           <Link to="/cart">
             <button className="bag_btn">
@@ -132,7 +139,10 @@ const NavBar = () => {
         </div>
       </div>
       {isSearchOpen && (
-        <div className={`search_bar ${isSearchOpen ? "open" : ""}`} ref={searchBarRef}>
+        <div
+          className={`search_bar ${isSearchOpen ? "open" : ""}`}
+          ref={searchBarRef}
+        >
           <div onClick={handleLogoClick}>
             <Link to="/">
               <img src={blackLogo} className="home_logo_search" />

@@ -19,13 +19,14 @@ const ProductForm = () => {
 
         // 수정된 부분: searchQuery로 검색 쿼리를 처리하고, gender에 따른 필터링도 지원
         if (searchQuery) {
-          url = `/api/product/search?searchQuery=${encodeURIComponent(searchQuery)}`;
+          url = `/api/product/search?searchQuery=${encodeURIComponent(
+            searchQuery
+          )}`;
         } else if (gender) {
           url = `/api/product/${gender}`;
         } else {
           return;
         }
-
 
         const response = await fetch(url);
         if (!response.ok) {
@@ -43,29 +44,33 @@ const ProductForm = () => {
     };
 
     // 수정된 부분: gender나 searchQuery가 있을 경우에만 fetchProduct를 호출
-      fetchProducts();
+    fetchProducts();
   }, [gender, searchQuery]);
 
   return (
     <>
       <div className="container">
         {products.length === 0 ? (
-          <div className="no_products_message">
-            검색된 상품이 없습니다.
-            </div>
+          <div className="no_products_message">검색된 상품이 없습니다.</div>
         ) : (
-        <div className="products">
-          {products.map((product, index) => (
-            <div className="product_wrapper" key={index}>
-              <Link to={`/productdetail/${product.id}`}>
-                <img className="product_men_img" src={product.fileUrl} alt="사진오류" />
-              </Link>
-              <div className="product_name">{product.name}</div>
-              <div className="product_color_type">{product.color}</div>
-              <div className="product_normal_price">₩{formatNumber(product.price)}</div>
-            </div>
-          ))}
-        </div>
+          <div className="products">
+            {products.map((product, index) => (
+              <div className="product_wrapper" key={index}>
+                <Link to={`/productdetail/${product.id}`}>
+                  <img
+                    className="product_men_img"
+                    src={product.fileUrl}
+                    alt="사진오류"
+                  />
+                </Link>
+                <div className="product_name">{product.name}</div>
+                <div className="product_color_type">{product.color}</div>
+                <div className="product_normal_price">
+                  ₩{formatNumber(product.price)}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </>

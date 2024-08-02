@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./CartItem.css";
 
-export const CartItem = ({ item, quantity, onQuantityChange, isSelected, onCheckboxChange }) => {
+export const CartItem = ({
+  item,
+  quantity,
+  onQuantityChange,
+  isSelected,
+  onCheckboxChange,
+}) => {
   const [currentQuantity, setCurrentQuantity] = useState(quantity);
   const deleteCartItem = () => {};
   // 컴포넌트 마운트 시 초기 수량 설정
