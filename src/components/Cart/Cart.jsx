@@ -4,11 +4,10 @@ import { CartList } from "./CartList.jsx";
 import "./Cart.css";
 
 const Cart = () => {
-  let cart_page = "홈,장바구니";
   return (
     <div>
       <div className="cart_page">
-        <p>{cart_page}</p>
+        <p>홈,장바구니</p>
       </div>
       <div className="cart_form">
         <CartList />

@@ -17,7 +17,7 @@ export const CartList = () => {
   // 총 가격 계산
   const calculateTotalPrice = () => {
     return cartItems.reduce(
-      (total, item) => total + item.price * (itemQuantities[item.id] || 1),
+      (total, item) => total + item.itemPrice * (itemQuantities[item.id] || 1),
       0
     );
   };
@@ -58,7 +58,7 @@ export const CartList = () => {
   const fetchCartItems = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8081/cart/items?userId=${userId}`,
+        `http://localhost:8081/api/cart/items/${userId}`,
         {
           method: "GET",
           headers: {
@@ -68,7 +68,7 @@ export const CartList = () => {
       );
 
       if (!response.ok) {
-        const errorDetails = await response.text();
+        const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
         console.error(
           `Error status: ${response.status}, Details: ${errorDetails}`
         );
@@ -91,18 +91,12 @@ export const CartList = () => {
 
     console.log("User from useAuth:", user); // 디버깅 로그
     const loadCartItems = async () => {
-      try {
-        const result = await fetchCartItems(user.id);
-        setCartItems(result);
-        setItemQuantities(
-          result.reduce(
-            (acc, item) => ({ ...acc, [item.id]: item.quantity }),
-            {}
-          )
-        );
-      } catch (error) {
-        console.error("Error loading cart items:", error);
-      }
+      const userId = user.id; // 예시 userId
+      const result = await fetchCartItems(userId);
+      setCartItems(result);
+      setItemQuantities(
+        result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
+      );
     };
 
     loadCartItems();
@@ -157,7 +151,7 @@ export const CartList = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ids: selectedIds }),
+        body: JSON.stringify({ id: selectedIds }),
       });
 
       if (!response.ok) {
@@ -224,9 +218,15 @@ export const CartList = () => {
             </>
           ) : (
             <>
+              {/* <button
+                className="pay_member_no"
+                onClick={() => handleNavigation("/order")}
+              >
+                비회원 구매
+              </button> */}
               <button
                 className="pay_member_yes"
-                onClick={() => handleNavigation("/order")}
+                onClick={() => handleNavigation("/login")}
               >
                 구매하기
               </button>

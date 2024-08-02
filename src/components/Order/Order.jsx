@@ -337,8 +337,8 @@ function Order() {
                 <div className="order_image">
                   <img
                     className="order_image_size"
-                    src={`http://localhost:8081/${item.productFileUrl}`}
-                    alt=""
+                    src={`http://localhost:8081${item.productFileUrl}`}
+                    alt={item.productName}
                   />
                 </div>
                 <div className="order_info_total">
@@ -351,6 +351,7 @@ function Order() {
               </div>
             </div>
           ))}
+
           <div className="product_payment">
             <div>
               <div className="price_detail">

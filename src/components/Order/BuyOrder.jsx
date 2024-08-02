@@ -17,8 +17,9 @@ function BuyOrder() {
   const [updateName, setUpdateName] = useState("");
   const [shippingInfo, setShippingInfo] = useState("");
   const navigate = useNavigate();
-  const location = useLocation(); // 상태 객체 접근
-  const { size } = location.state || {}; // navigate에서 전달한 상태 객체
+  const query = new URLSearchParams(useLocation().search);
+  const size = query.get("size");
+  console.log("Fetched size:", size); // 디버깅
   const [quantity, setQuantity] = useState(1); // 기본값 1
 
   useEffect(() => {
@@ -59,6 +60,11 @@ function BuyOrder() {
 
     validateUserToken();
   }, [logout, navigate]);
+
+  useEffect(() => {
+    console.log("Current URL:", window.location.href);
+    console.log("Fetched size:", size); // size가 null인 경우 확인
+  }, [size]);
 
   const fetchData = async () => {
     await fetchProduct(); // 상품 정보 가져오기
@@ -326,30 +332,40 @@ function BuyOrder() {
             <h6 className="info_title_order">주문상품</h6>
             <div className="order_num"> 1개</div>
           </div>
-          {products.map((product) => (
-            <div key={product.productId} className="product_section">
-              <div className="order_summary">
-                <div className="order_image">
-                  <img
-                    className="order_image_size"
-                    src={product.productFileUrl}
-                    alt=""
-                  />
-                </div>
-                <div className="order_info_total">
-                  <div className="order_info_name">{product.productName}</div>
-                  <div className="order_info_sub">{product.productColor}</div>
-                  <div className="order_info_sub">
-                    사이즈 {product.productSize}
+          {products.map((product) => {
+            // 이미지 URL에서 '/img/products/' 부분 제거
+            const imageUrl = product.productImageUrl.startsWith(
+              "/img/products/"
+            )
+              ? product.productImageUrl.replace("/img/products/", "")
+              : product.productImageUrl;
+
+            return (
+              <div key={product.productId} className="product_section">
+                <div className="order_summary">
+                  <div className="order_image">
+                    <img
+                      className="order_image_size"
+                      src={`http://localhost:8081/img/products/${imageUrl}`} // 최종 이미지 URL
+                      alt={product.productName}
+                    />
                   </div>
-                  <div className="order_info_sub">
-                    수량 {product.quantity} 개
+                  <div className="order_info_total">
+                    <div className="order_info_name">{product.productName}</div>
+                    <div className="order_info_sub">{product.productColor}</div>
+                    <div className="order_info_sub">
+                      사이즈 {product.productSize}
+                    </div>
+                    <div className="order_info_sub">
+                      수량 {product.quantity} 개
+                    </div>
                   </div>
+                  <div className="order_price">{product.productPrice} 원</div>
                 </div>
-                <div className="order_price">{product.productPrice} 원</div>
               </div>
-            </div>
-          ))}
+            );
+          })}
+
           <div className="product_payment">
             <div>
               <div className="price_detail">

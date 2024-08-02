@@ -203,12 +203,6 @@ const MyPage = () => {
               >
                 회원 정보
               </a>
-              <a
-                className={view === "points" ? "active" : ""}
-                onClick={() => handleViewClick("points")}
-              >
-                적립금 & 쿠폰
-              </a>
             </div>
             <div className="faq">
               <a

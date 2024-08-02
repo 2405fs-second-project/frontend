@@ -1,56 +1,47 @@
-.form_page {
-  padding-left: 5px;
-}
-.form_group {
+body {
   font-family: "Pretendard", "Karla", sans-serif;
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  margin-bottom: 50px;
 }
-
-.label {
-  margin-right: 10px;
-  margin-bottom: 15px;
-}
-
-.input_text {
-  height: 20px;
-  margin-bottom: 8px;
-  width: 263px;
-}
-.input_select {
-  height: 25px;
-  margin-bottom: 10px;
-}
-
-.input_number {
-  height: 20px;
-  margin-bottom: 10px;
-  width: 50px;
-  text-align: center;
-}
-
-.input_file {
-  height: 20px;
+.product_wrapper {
+  width: 361px;
+  height: 662px;
   margin-bottom: 20px;
+  margin-right: 0.5rem;
+}
+.container {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 
-.submit_btn {
-  all: unset;
-  font-weight: 700;
-  width: 280px;
-  height: 48px;
-  padding: 0px 16px 0px 16px;
-  background-color: #363636;
-  color: white;
-  font-size: 14px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-align: center;
+.products {
+  padding-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
 
-  &:hover {
-    background-color: rgb(242 244 246);
-    color: black;
-  }
+.product_men_img {
+  width: 361px;
+  height: 542px;
+}
+
+.product_name,
+.product_color_type,
+.product_normal_price {
+  color: #333d4b;
+  font-size: 15px;
+  padding-bottom: 5px;
+  font-weight: bolder;
+}
+
+.product_normal_price {
+  padding-bottom: 3px;
+  font-size: 15px;
+}
+
+.products:last-child {
+  margin-bottom: 100px;
 }

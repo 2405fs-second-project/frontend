@@ -17,11 +17,12 @@ import bag from "../../assets/Bag.png";
 
 const NavBar = () => {
   const { user } = useAuth();
+  const userId = user ? user.id : null; // 사용자 ID 설정
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); 
-  const searchBarRef = useRef(null); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchBarRef = useRef(null);
   const navigate = useNavigate();
-  
+
   const handleSearchClick = () => {
     setIsSearchOpen(!isSearchOpen);
   };
@@ -38,9 +39,9 @@ const NavBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     try {
-      navigate(`/viewform?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery(""); 
-      setIsSearchOpen(false); 
+      navigate(`/productform?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery("");
+      setIsSearchOpen(false);
     } catch (error) {
       alert("검색 중 오류가 발생했습니다.");
     }
@@ -54,15 +55,18 @@ const NavBar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+      if (
+        searchBarRef.current &&
+        !searchBarRef.current.contains(event.target)
+      ) {
         setIsSearchOpen(false);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-  }, [])
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="navbar">
@@ -76,9 +80,9 @@ const NavBar = () => {
           <a href="/" className="season_off">
             시즌오프
           </a>
-          <Link to="/viewform?gender=male">남성</Link>
-          <Link to="/viewform?gender=female">여성</Link>
-          <Link to="/viewform?gender=accessory">악세서리</Link>
+          <Link to="/productform?gender=MALE">남성</Link>
+          <Link to="/productform?gender=FEMALE">여성</Link>
+          <Link to="/productform?gender=UNKNOWN">악세서리</Link>
           <Link to="/">룩북</Link>
           <Link to="/">기사</Link>
           <Link to="/">매장</Link>
@@ -100,11 +104,19 @@ const NavBar = () => {
             <img className="bell_logo" src={bell} alt="Bell" />
           </button>
           {user ? (
-            <Link to={`/mypage/${user.id}`}>
-              <button className="human_btn">
-                <img className="human_logo" src={human} alt="Profile" />
-              </button>
-            </Link>
+            userId === 9 ? (
+              <Link to="/seller">
+                <button className="human_btn">
+                  <img className="human_logo" src={human} alt="Seller Page" />
+                </button>
+              </Link>
+            ) : (
+              <Link to={`/mypage/${user.id}`}>
+                <button className="human_btn">
+                  <img className="human_logo" src={human} alt="Profile" />
+                </button>
+              </Link>
+            )
           ) : (
             <Link to="/login">
               <button className="human_btn">
@@ -127,7 +139,10 @@ const NavBar = () => {
         </div>
       </div>
       {isSearchOpen && (
-        <div className={`search_bar ${isSearchOpen ? "open" : ""}`} ref={searchBarRef}>
+        <div
+          className={`search_bar ${isSearchOpen ? "open" : ""}`}
+          ref={searchBarRef}
+        >
           <div onClick={handleLogoClick}>
             <Link to="/">
               <img src={blackLogo} className="home_logo_search" />
