@@ -14,12 +14,45 @@ export const CartList = () => {
   const navigate = useNavigate();
   const { user } = useAuth(); // useAuth에서 사용자 정보 가져오기
 
-  // 총 가격 계산
-  const calculateTotalPrice = () => {
-    return cartItems.reduce(
-      (total, item) => total + item.itemPrice * (itemQuantities[item.id] || 1),
-      0
-    );
+  useEffect(() => {
+    // `user`가 null일 때 로딩을 방지
+    if (!user || !user.id) {
+      console.error("User is not logged in or user ID is missing");
+      return;
+    }
+
+    console.log("User from useAuth:", user); // 디버깅 로그
+    const loadCartItems = async () => {
+      const userId = user.id; // 예시 userId
+      const result = await fetchCartItems(userId);
+      setCartItems(result);
+      setItemQuantities(result.reduce((acc, item) => ({ ...acc, [item.id]: item.itemQuantity }), {}));
+    };
+
+    loadCartItems();
+  }, [user]); // user가 업데이트될 때만 실행
+
+  // 장바구니 아이템 가져오는 api
+  const fetchCartItems = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:8081/api/cart/items/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
+        console.error(`Error status: ${response.status}, Details: ${errorDetails}`);
+        throw new Error("Failed to fetch cart items");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching cart items:", error.message);
+      return [];
+    }
   };
 
   // 네비게이션 핸들러
@@ -37,6 +70,7 @@ export const CartList = () => {
       const newSelectAll = !prevSelectAll;
       const allItemIds = new Set(cartItems.map((item) => item.id));
       setSelectedItems(newSelectAll ? allItemIds : new Set());
+      console.log("Selected item IDs:", Array.from(newSelectAll));
       return newSelectAll;
     });
   };
@@ -50,124 +84,38 @@ export const CartList = () => {
       } else {
         newSet.add(itemId);
       }
+      console.log("Selected item IDs:", Array.from(newSet));
       return newSet;
     });
   };
 
-  // 장바구니 아이템 가져오기
-  const fetchCartItems = async (userId) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8081/api/cart/items/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        const errorDetails = await response.text(); // 응답 본문을 텍스트로 읽기
-        console.error(
-          `Error status: ${response.status}, Details: ${errorDetails}`
-        );
-        throw new Error("Failed to fetch cart items");
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching cart items:", error.message);
-      return [];
-    }
-  };
-
-  useEffect(() => {
-    // `user`가 null일 때 로딩을 방지
-    if (!user || !user.id) {
-      console.error("User is not logged in or user ID is missing");
-      return;
-    }
-
-    console.log("User from useAuth:", user); // 디버깅 로그
-    const loadCartItems = async () => {
-      const userId = user.id; // 예시 userId
-      const result = await fetchCartItems(userId);
-      setCartItems(result);
-      setItemQuantities(
-        result.reduce((acc, item) => ({ ...acc, [item.id]: item.quantity }), {})
-      );
-    };
-
-    loadCartItems();
-  }, [user]); // user가 업데이트될 때만 실행
-
-  // 수량 변경 핸들러
-  const handleQuantityChange = (itemId, newQuantity) => {
-    // 유효한 수량인지 확인
-    if (newQuantity <= 0) return;
-
-    // 상태 업데이트
-    setItemQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [itemId]: newQuantity,
-    }));
-
-    // 서버에 수량 변경 요청 보내기
-    fetch("http://localhost:8081/cart/updateQuantity", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        itemId: itemId,
-        quantity: newQuantity,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to update quantity");
-        }
-        return response.json(); // 서버에서 업데이트된 아이템을 반환
-      })
-      .then((updatedCartItem) => {
-        // 서버에서 반환한 수량으로 상태 업데이트
-        setItemQuantities((prevQuantities) => ({
-          ...prevQuantities,
-          [itemId]: updatedCartItem.quantity,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error updating quantity:", error);
-      });
-  };
-
   // 선택된 아이템 삭제 핸들러
   const handleDeleteSelected = async () => {
-    const selectedIds = Array.from(selectedItems);
+    const selectedIds = Array.from(selectedItems).map((id) => ({ id }));
     try {
-      const response = await fetch("http://localhost:8081/cart/delete", {
+      const response = await fetch("http://localhost:8081/api/cart/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: selectedIds }),
+        body: JSON.stringify(selectedIds), // 배열 형태로 전송
       });
 
       if (!response.ok) {
         throw new Error("Failed to delete selected items");
       }
 
-      setCartItems((prevItems) =>
-        prevItems.filter((item) => !selectedItems.has(item.id))
-      );
+      setCartItems((prevItems) => prevItems.filter((item) => !selectedItems.has(item.id)));
       setSelectedItems(new Set());
       setSelectAll(false);
     } catch (error) {
       console.error("Error deleting selected items:", error);
     }
   };
-
+  // 총 상품 가격 합계 계산
+  const calculateTotalPrice = () => {
+    return cartItems.reduce((total, item) => total + item.itemPrice * (itemQuantities[item.id] || 1), 0);
+  };
   return (
     <div className="cart_form">
       <div className="count">
@@ -177,12 +125,7 @@ export const CartList = () => {
       <div className="select">
         <div className="select_all">
           <div className="select_all_box">
-            <input
-              type="checkbox"
-              id="checkall"
-              checked={selectAll}
-              onChange={handleSelectAllChange}
-            />
+            <input type="checkbox" id="checkall" checked={selectAll} onChange={handleSelectAllChange} />
             <label htmlFor="checkall">전체선택</label>
           </div>
         </div>
@@ -195,10 +138,10 @@ export const CartList = () => {
           <CartItem
             key={item.id}
             item={item}
-            quantity={itemQuantities[item.id]}
-            onQuantityChange={handleQuantityChange}
+            quantity={[item.id, itemQuantities[item.id]]}
             isSelected={selectedItems.has(item.id)}
             onCheckboxChange={handleCheckboxChange}
+            deleteCartItem={handleDeleteSelected}
           />
         ))}
       </div>
@@ -209,10 +152,7 @@ export const CartList = () => {
         <div className="pay_member">
           {isLoggedIn ? (
             <>
-              <button
-                className="pay_member_yes"
-                onClick={() => handleNavigation("/order")}
-              >
+              <button className="pay_member_yes" onClick={() => handleNavigation("/order")}>
                 회원 구매
               </button>
             </>
@@ -224,20 +164,14 @@ export const CartList = () => {
               >
                 비회원 구매
               </button> */}
-              <button
-                className="pay_member_yes"
-                onClick={() => handleNavigation("/login")}
-              >
+              <button className="pay_member_yes" onClick={() => handleNavigation("/login")}>
                 구매하기
               </button>
             </>
           )}
         </div>
         <div className="pay_btn">
-          <button
-            className="pay_continue"
-            onClick={() => handleNavigation("/")}
-          >
+          <button className="pay_continue" onClick={() => handleNavigation("/")}>
             계속 쇼핑하기
           </button>
         </div>
